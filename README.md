@@ -28,6 +28,7 @@ http://192.168.0.172:8000/?DEBUG_MESSAGES&FORCE_SEND_MESSAGE&DEBUG_REDUX&TRACE_R
 Each button press will send a message from the list in scene.gd
 
 Other documents of interest
+---------------------------
 
 https://github.com/menduz/text-renderer
 
