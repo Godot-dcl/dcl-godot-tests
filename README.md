@@ -34,3 +34,7 @@ https://github.com/menduz/text-renderer
 
 https://diagrams.menduz.com/#/notebook/2l3t8FEx6Yc4GyDvkdDe4EQKf2L2/-MhVIlsuYfNVGtyiUN13
 
+https://github.com/decentraland/unity-renderer/blob/614a2bb65abef3093049545ad1d83c64050b3e58/unity-renderer/Assets/Scripts/MainScripts/DCL/WebInterface/Interface.cs#L85
+
+
+
