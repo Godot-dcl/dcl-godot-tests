@@ -8,6 +8,19 @@
 
 config_version=4
 
+_global_script_classes=[  ]
+_global_script_class_icons={
+
+}
+
 [application]
 
 run/main_scene="res://scene.tscn"
+config/icon="res://icon.png"
+
+[network]
+
+limits/debugger_stdout/max_chars_per_second=16384
+limits/debugger_stdout/max_messages_per_frame=100
+limits/websocket_server/max_in_buffer_kb=4096
+limits/websocket_server/max_out_buffer_kb=4096
