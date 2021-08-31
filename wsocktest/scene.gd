@@ -11,16 +11,13 @@ var msgs = [
 	{"type":"ApplySettings","payload":"{\"voiceChatVolume\":1.0,\"voiceChatAllowCategory\":0}"},
 	{"type": "ControlEvent", "payload": JSON.print({"eventType":"ActivateRenderingACK"})},
 ]
-var count = 0
+var current_index = 0
 
 func send():
-	if count >= msgs.size():
-		return
-	socket.send(msgs[count])
-	count += 1
+	current_index = (current_index + 1) % msgs.size()
+	socket.send(msgs[current_index])
 
 func message(type, payload):
-	return
 	if type == "CreateGlobalScene":
 		var response = {"eventType":"SceneReady", "payload": {"sceneId": payload.id}}
 		socket.send({"type": "ControlEvent", "payload": JSON.print(response)})
