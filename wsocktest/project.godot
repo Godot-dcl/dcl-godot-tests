@@ -18,6 +18,10 @@ _global_script_class_icons={
 run/main_scene="res://scene.tscn"
 config/icon="res://icon.png"
 
+[editor_plugins]
+
+enabled=PoolStringArray( "protobuf" )
+
 [network]
 
 limits/debugger_stdout/max_chars_per_second=16384
