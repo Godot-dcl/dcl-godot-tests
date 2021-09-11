@@ -1,3 +1,74 @@
-Godot Engine v3.2.3.stable.custom_build.2407df987 - https://godotengine.org
-OpenGL ES 3.0 Renderer: Mesa DRI Intel(R) HD Graphics 4600 (HSW GT2)
+Godot Engine v3.3.1.stable.official - https://godotengine.org
+OpenGL ES 3.0 Renderer: Intel(R) UHD Graphics 630
+OpenGL ES Batching: ON
  
+Client connected!
+error is 	0
+msg is 	sceneId: "dcl-gs-avatars";
+tag: "scene";
+sceneStarted: {};
+
+error is 	0
+msg is 	sceneId: "previewScene";
+tag: "Ce";
+componentCreated: {
+  id: "Ce";
+  classid: 16;
+  name: "shape";
+};
+
+error is 	0
+msg is 	sceneId: "previewScene";
+tag: "Ce";
+componentUpdated: {
+  id: "Ce";
+  json: "{"withCollisions":true,"isPointerBlocker":true,"visible":true}";
+};
+
+error is 	0
+msg is 	sceneId: "previewScene";
+tag: "Ce";
+createEntity: {
+  id: "Ed";
+};
+
+error is 	0
+msg is 	sceneId: "previewScene";
+tag: "previewScene_Ed_1";
+updateEntityComponent: {
+  entityId: "Ed";
+  classId: 1;
+  data: "Cg8NAAAAQRUAAIA/HQAAAEESCSEAAAAAAADwPxoPDQAAgD8VAACAPx0AAIA/";
+};
+
+error is 	0
+msg is 	sceneId: "previewScene";
+tag: "Ed";
+attachEntityComponent: {
+  entityId: "Ed";
+  name: "shape";
+  id: "Ce";
+};
+
+error is 	0
+msg is 	sceneId: "previewScene";
+tag: "Ed";
+setEntityParent: {
+  entityId: "Ed";
+  parentId: "0";
+};
+
+error is 	0
+msg is 	sceneId: "previewScene";
+tag: "previewScene_Ed_8";
+updateEntityComponent: {
+  entityId: "Ed";
+  classId: 8;
+  data: "{"uuid":"UUIDf","type":"onClick","button":"ANY","hoverText":"Interact","distance":10,"showFeedback":true}";
+};
+
+error is 	0
+msg is 	sceneId: "previewScene";
+tag: "scene";
+sceneStarted: {};
+

@@ -2,6 +2,8 @@ extends Spatial
 
 var socket
 
+const proto = preload("res://engineinterface.gd")
+
 var current_index = -1
 var msgs = [
 	{"type":"SystemInfoReport", "payload": JSON.print({"graphicsDeviceName":"Mocked","graphicsDeviceVersion":"Mocked","graphicsMemorySize":512,"processorType":"n/a","processorCount":1,"systemMemorySize":256}) },
@@ -23,6 +25,12 @@ func message(msg):
 		"CreateGlobalScene":
 			var response = {"eventType":"SceneReady", "payload": {"sceneId": msg.payload.id}}
 			socket.send({"type": "ControlEvent", "payload": JSON.print(response)})
+		"SendSceneMessage":
+			var scene_msg = proto.PB_SendSceneMessage.new()
+			for buf in msg.payload:
+				var err = scene_msg.from_bytes(buf)
+				printt("error is ", err)
+				printt("msg is ", scene_msg.to_string())
 
 func _ready():
 	socket = get_node("socket")

@@ -56,6 +56,7 @@ func _data_received(id):
 								if line.right(line.length() - 1) != "=":
 									line += "="
 								payload.push_back(Marshalls.base64_to_raw(line.trim_prefix("b64-")))
+						json.result.payload = payload
 			
 			get_node("..").message(json.result)
 	else:
