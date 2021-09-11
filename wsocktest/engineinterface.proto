@@ -241,20 +241,19 @@ message PB_UnloadScene {
     string sceneId = 1;
 }
 
-// esto daba error cuando compilaba proto.gd
-//message PB_DclMessage {
-//    oneof message {
-//        google.protobuf.Empty setDebug = 1;
-//        google.protobuf.Empty setSceneDebugPanel = 2;
-//        google.protobuf.Empty setEngineDebugPanel = 3;
-//        PB_SendSceneMessage sendSceneMessage = 4;
-//        PB_LoadParcelScenes loadParcelScenes = 5;
-//        PB_UnloadScene unloadScene = 6;
-//        PB_SetPosition setPosition = 7;
-//        google.protobuf.Empty reset = 8;
-//        PB_CreateUIScene createUIScene = 9;
-//    }
-//}
+message PB_DclMessage {
+    oneof payload {
+        PB_Empty setDebug = 1;
+        PB_Empty setSceneDebugPanel = 2;
+        PB_Empty setEngineDebugPanel = 3;
+        PB_SendSceneMessage sendSceneMessage = 4;
+        PB_LoadParcelScenes loadParcelScenes = 5;
+        PB_UnloadScene unloadScene = 6;
+        PB_SetPosition setPosition = 7;
+        PB_Empty reset = 8;
+        PB_CreateUIScene createUIScene = 9;
+    }
+}
 
 
 message PB_AnimationState {

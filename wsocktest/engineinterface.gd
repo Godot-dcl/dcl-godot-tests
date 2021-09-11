@@ -4641,6 +4641,348 @@ class PB_UnloadScene:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
 	
+class PB_DclMessage:
+	func _init():
+		var service
+		
+		_setDebug = PBField.new("setDebug", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = _setDebug
+		service.func_ref = funcref(self, "new_setDebug")
+		data[_setDebug.tag] = service
+		
+		_setSceneDebugPanel = PBField.new("setSceneDebugPanel", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = _setSceneDebugPanel
+		service.func_ref = funcref(self, "new_setSceneDebugPanel")
+		data[_setSceneDebugPanel.tag] = service
+		
+		_setEngineDebugPanel = PBField.new("setEngineDebugPanel", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = _setEngineDebugPanel
+		service.func_ref = funcref(self, "new_setEngineDebugPanel")
+		data[_setEngineDebugPanel.tag] = service
+		
+		_sendSceneMessage = PBField.new("sendSceneMessage", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = _sendSceneMessage
+		service.func_ref = funcref(self, "new_sendSceneMessage")
+		data[_sendSceneMessage.tag] = service
+		
+		_loadParcelScenes = PBField.new("loadParcelScenes", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = _loadParcelScenes
+		service.func_ref = funcref(self, "new_loadParcelScenes")
+		data[_loadParcelScenes.tag] = service
+		
+		_unloadScene = PBField.new("unloadScene", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = _unloadScene
+		service.func_ref = funcref(self, "new_unloadScene")
+		data[_unloadScene.tag] = service
+		
+		_setPosition = PBField.new("setPosition", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = _setPosition
+		service.func_ref = funcref(self, "new_setPosition")
+		data[_setPosition.tag] = service
+		
+		_reset = PBField.new("reset", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = _reset
+		service.func_ref = funcref(self, "new_reset")
+		data[_reset.tag] = service
+		
+		_createUIScene = PBField.new("createUIScene", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = _createUIScene
+		service.func_ref = funcref(self, "new_createUIScene")
+		data[_createUIScene.tag] = service
+		
+	var data = {}
+	
+	var _setDebug: PBField
+	func has_setDebug() -> bool:
+		return data[1].state == PB_SERVICE_STATE.FILLED
+	func get_setDebug() -> PB_Empty:
+		return _setDebug.value
+	func clear_setDebug() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		_setDebug.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_setDebug() -> PB_Empty:
+		data[1].state = PB_SERVICE_STATE.FILLED
+		_setSceneDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		_setEngineDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		_sendSceneMessage.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		_loadParcelScenes.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		_unloadScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		_setPosition.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		_reset.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		_createUIScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		_setDebug.value = PB_Empty.new()
+		return _setDebug.value
+	
+	var _setSceneDebugPanel: PBField
+	func has_setSceneDebugPanel() -> bool:
+		return data[2].state == PB_SERVICE_STATE.FILLED
+	func get_setSceneDebugPanel() -> PB_Empty:
+		return _setSceneDebugPanel.value
+	func clear_setSceneDebugPanel() -> void:
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		_setSceneDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_setSceneDebugPanel() -> PB_Empty:
+		_setDebug.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		data[2].state = PB_SERVICE_STATE.FILLED
+		_setEngineDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		_sendSceneMessage.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		_loadParcelScenes.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		_unloadScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		_setPosition.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		_reset.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		_createUIScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		_setSceneDebugPanel.value = PB_Empty.new()
+		return _setSceneDebugPanel.value
+	
+	var _setEngineDebugPanel: PBField
+	func has_setEngineDebugPanel() -> bool:
+		return data[3].state == PB_SERVICE_STATE.FILLED
+	func get_setEngineDebugPanel() -> PB_Empty:
+		return _setEngineDebugPanel.value
+	func clear_setEngineDebugPanel() -> void:
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		_setEngineDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_setEngineDebugPanel() -> PB_Empty:
+		_setDebug.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		_setSceneDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		data[3].state = PB_SERVICE_STATE.FILLED
+		_sendSceneMessage.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		_loadParcelScenes.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		_unloadScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		_setPosition.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		_reset.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		_createUIScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		_setEngineDebugPanel.value = PB_Empty.new()
+		return _setEngineDebugPanel.value
+	
+	var _sendSceneMessage: PBField
+	func has_sendSceneMessage() -> bool:
+		return data[4].state == PB_SERVICE_STATE.FILLED
+	func get_sendSceneMessage() -> PB_SendSceneMessage:
+		return _sendSceneMessage.value
+	func clear_sendSceneMessage() -> void:
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		_sendSceneMessage.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_sendSceneMessage() -> PB_SendSceneMessage:
+		_setDebug.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		_setSceneDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		_setEngineDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		data[4].state = PB_SERVICE_STATE.FILLED
+		_loadParcelScenes.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		_unloadScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		_setPosition.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		_reset.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		_createUIScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		_sendSceneMessage.value = PB_SendSceneMessage.new()
+		return _sendSceneMessage.value
+	
+	var _loadParcelScenes: PBField
+	func has_loadParcelScenes() -> bool:
+		return data[5].state == PB_SERVICE_STATE.FILLED
+	func get_loadParcelScenes() -> PB_LoadParcelScenes:
+		return _loadParcelScenes.value
+	func clear_loadParcelScenes() -> void:
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		_loadParcelScenes.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_loadParcelScenes() -> PB_LoadParcelScenes:
+		_setDebug.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		_setSceneDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		_setEngineDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		_sendSceneMessage.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		data[5].state = PB_SERVICE_STATE.FILLED
+		_unloadScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		_setPosition.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		_reset.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		_createUIScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		_loadParcelScenes.value = PB_LoadParcelScenes.new()
+		return _loadParcelScenes.value
+	
+	var _unloadScene: PBField
+	func has_unloadScene() -> bool:
+		return data[6].state == PB_SERVICE_STATE.FILLED
+	func get_unloadScene() -> PB_UnloadScene:
+		return _unloadScene.value
+	func clear_unloadScene() -> void:
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		_unloadScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_unloadScene() -> PB_UnloadScene:
+		_setDebug.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		_setSceneDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		_setEngineDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		_sendSceneMessage.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		_loadParcelScenes.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		data[6].state = PB_SERVICE_STATE.FILLED
+		_setPosition.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		_reset.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		_createUIScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		_unloadScene.value = PB_UnloadScene.new()
+		return _unloadScene.value
+	
+	var _setPosition: PBField
+	func has_setPosition() -> bool:
+		return data[7].state == PB_SERVICE_STATE.FILLED
+	func get_setPosition() -> PB_SetPosition:
+		return _setPosition.value
+	func clear_setPosition() -> void:
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		_setPosition.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_setPosition() -> PB_SetPosition:
+		_setDebug.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		_setSceneDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		_setEngineDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		_sendSceneMessage.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		_loadParcelScenes.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		_unloadScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		data[7].state = PB_SERVICE_STATE.FILLED
+		_reset.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		_createUIScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		_setPosition.value = PB_SetPosition.new()
+		return _setPosition.value
+	
+	var _reset: PBField
+	func has_reset() -> bool:
+		return data[8].state == PB_SERVICE_STATE.FILLED
+	func get_reset() -> PB_Empty:
+		return _reset.value
+	func clear_reset() -> void:
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		_reset.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_reset() -> PB_Empty:
+		_setDebug.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		_setSceneDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		_setEngineDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		_sendSceneMessage.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		_loadParcelScenes.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		_unloadScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		_setPosition.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		data[8].state = PB_SERVICE_STATE.FILLED
+		_createUIScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		_reset.value = PB_Empty.new()
+		return _reset.value
+	
+	var _createUIScene: PBField
+	func has_createUIScene() -> bool:
+		return data[9].state == PB_SERVICE_STATE.FILLED
+	func get_createUIScene() -> PB_CreateUIScene:
+		return _createUIScene.value
+	func clear_createUIScene() -> void:
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		_createUIScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_createUIScene() -> PB_CreateUIScene:
+		_setDebug.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		_setSceneDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		_setEngineDebugPanel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		_sendSceneMessage.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		_loadParcelScenes.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		_unloadScene.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		_setPosition.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		_reset.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		data[9].state = PB_SERVICE_STATE.FILLED
+		_createUIScene.value = PB_CreateUIScene.new()
+		return _createUIScene.value
+	
+	func to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PoolByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PoolByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
 class PB_AnimationState:
 	func _init():
 		var service
