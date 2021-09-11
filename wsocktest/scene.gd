@@ -29,8 +29,11 @@ func message(msg):
 			var scene_msg = proto.PB_SendSceneMessage.new()
 			for buf in msg.payload:
 				var err = scene_msg.from_bytes(buf)
-				printt("error is ", err)
-				printt("msg is ", scene_msg.to_string())
+				#printt("error is ", err)
+				#printt("msg is ", scene_msg.to_string())
+		"LoadParcelScenes":
+			var response = {"eventType":"SceneReady", "payload": {"sceneId": msg.payload.id}}
+			socket.send({"type": "ControlEvent", "payload": JSON.print(response)})
 
 func _ready():
 	socket = get_node("socket")
