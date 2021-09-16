@@ -17,6 +17,10 @@ _global_script_class_icons={
 run/main_scene="res://scene.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Server="*res://server.gd"
+
 [editor_plugins]
 
 enabled=PoolStringArray( "protobuf" )

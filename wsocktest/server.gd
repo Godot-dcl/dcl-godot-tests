@@ -1,7 +1,12 @@
 extends Node
 
+const proto = preload("res://engineinterface.gd")
+
 const PORT = 9080
 var _server = WebSocketServer.new()
+
+var global_scenes = {}
+var parcel_scenes = {}
 
 var peers = {}
 
@@ -39,6 +44,39 @@ func _close_request(id, code, reason):
 		"No Reason" if reason.empty() else reason
 	])
 
+func _message(msg, peer):
+	
+	if msg.type == "CreateGlobalScene":
+		var scene = preload("res://scene.tscn").instance()
+		global_scenes[msg.payload.id] = [scene, peer]
+		get_tree().get_root().add_child(scene)
+		scene.create(msg, peer, true)
+
+	elif msg.type == "LoadParcelScenes":
+		var scene = preload("res://scene.tscn").instance()
+		parcel_scenes[msg.payload.id] = [scene, peer]
+		get_tree().get_root().add_child(scene)
+		scene.create(msg, peer, false)
+		
+	elif msg.type == "SendSceneMessage":
+		for buf in msg.payload:
+			var scene_msg = proto.PB_SendSceneMessage.new()
+			var err = scene_msg.from_bytes(buf)
+			if err == proto.PB_ERR.NO_ERRORS:
+				var id = scene_msg.get_sceneId()
+				var scene
+				if id in global_scenes:
+					scene = global_scenes[id][0]
+				elif id in parcel_scenes:
+					scene = parcel_scenes[id][0]
+				else:
+					print("error: unknown scene id %s for SendSceneMessage %s", [id, scene_msg.to_string()])
+					break
+				scene.message(scene_msg)
+			else:
+				printt("Protobuf error is ", err)
+				printt("msg is ", scene_msg.to_string())
+
 func _data_received(id):
 	var data = peers[id].get_packet().get_string_from_utf8() as String
 	if data.left(1) in ["[", "{"]:
@@ -58,11 +96,11 @@ func _data_received(id):
 								payload.push_back(Marshalls.base64_to_raw(line.trim_prefix("b64-")))
 						json.result.payload = payload
 			
-			get_node("..").message(json.result)
+		_message(json.result, peers[id])
 	else:
 		print("unsupported data: ", data)
 
-func send(msg):
+func send(msg, peer):
 	if peers.size() == 0:
 		return
 
