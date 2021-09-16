@@ -44,19 +44,24 @@ func _close_request(id, code, reason):
 		"No Reason" if reason.empty() else reason
 	])
 
+func create_scene(msg, peer, p_global):
+	var scene = preload("res://scene.tscn").instance()
+	scene.set_name(msg.payload.id)
+	if p_global:
+		global_scenes[msg.payload.id] = [scene, peer]
+	else:
+		parcel_scenes[msg.payload.id] = [scene, peer]
+	get_tree().get_root().add_child(scene)
+	scene.create(msg, peer, true)
+	
+
 func _message(msg, peer):
 	
 	if msg.type == "CreateGlobalScene":
-		var scene = preload("res://scene.tscn").instance()
-		global_scenes[msg.payload.id] = [scene, peer]
-		get_tree().get_root().add_child(scene)
-		scene.create(msg, peer, true)
+		create_scene(msg, peer, true)
 
 	elif msg.type == "LoadParcelScenes":
-		var scene = preload("res://scene.tscn").instance()
-		parcel_scenes[msg.payload.id] = [scene, peer]
-		get_tree().get_root().add_child(scene)
-		scene.create(msg, peer, false)
+		create_scene(msg, peer, false)
 		
 	elif msg.type == "SendSceneMessage":
 		for buf in msg.payload:
