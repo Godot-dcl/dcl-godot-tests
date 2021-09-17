@@ -54,6 +54,17 @@ func message(scene_msg):
 		print("update component in entity %s -> %s" % [
 			scene_msg.get_updateEntityComponent().get_entityId(),
 			scene_msg.get_updateEntityComponent().get_data() ])
+		
+		var buffer = scene_msg.get_updateEntityComponent().get_data()
+		if not buffer.left(1) in ["[", "{"]:
+			var component = proto.PB_Transform.new()
+			var err = component.from_bytes(Marshalls.base64_to_raw(buffer))
+			if err == proto.PB_ERR.NO_ERRORS:
+				print("its a transform")
+			else:
+				print("error decoding payload")
+		else:
+			printt("vino un JSON", JSON.print(buffer))
 	
 	if scene_msg.has_sceneStarted():
 		print("scene started ", id)

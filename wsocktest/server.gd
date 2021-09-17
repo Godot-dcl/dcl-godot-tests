@@ -81,6 +81,8 @@ func _message(msg, peer):
 			else:
 				printt("Protobuf error is ", err)
 				printt("msg is ", scene_msg.to_string())
+	else:
+		printt("Unhandled message", msg.type)
 
 func _data_received(id):
 	var data = peers[id].get_packet().get_string_from_utf8() as String
