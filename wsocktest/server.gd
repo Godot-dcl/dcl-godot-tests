@@ -105,10 +105,12 @@ func _data_received(id):
 	else:
 		print("unsupported data: ", data)
 
-func send(msg, peer):
+func send(msg, peer = null):
 	if peers.size() == 0:
 		return
 
+	if peer == null:
+		peer = peers[peers.keys()[0]]
+
 	var txt = JSON.print(msg)
-	for p in peers:
-		peers[p].put_packet(txt.to_utf8())
+	peer.put_packet(txt.to_utf8())

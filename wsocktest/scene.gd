@@ -19,6 +19,7 @@ func create(msg, p_peer, is_global):
 	print("scene ready! ", msg.payload.id)
 
 func message(scene_msg):
+	print(scene_msg.to_string())
 	if scene_msg.has_createEntity():
 		print("create entity ", scene_msg.get_createEntity().get_id())
 	
