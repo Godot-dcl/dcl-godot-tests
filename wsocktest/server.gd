@@ -57,6 +57,8 @@ func create_scene(msg, peer, p_global):
 
 func _message(msg, peer):
 	
+	printt("Server message ", msg.type, msg)
+	
 	if msg.type == "CreateGlobalScene":
 		create_scene(msg, peer, true)
 
@@ -79,7 +81,7 @@ func _message(msg, peer):
 					break
 				scene.message(scene_msg)
 			else:
-				printt("Protobuf error is ", err)
+				printt("****** Protobuf error is ", err)
 				printt("msg is ", scene_msg.to_string())
 	else:
 		printt("Unhandled message", msg.type)

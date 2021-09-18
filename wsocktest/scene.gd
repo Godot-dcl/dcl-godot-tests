@@ -65,12 +65,12 @@ func message(scene_msg):
 		else:
 			var buf = Marshalls.base64_to_raw(data)
 			
-			var comp = proto.PB_Component.new()
+			var comp = proto.PB_Transform.new()
 			var err = comp.from_bytes(buf)
-			if err == PB_ERR.NO_ERRORS:
+			if err == proto.PB_ERR.NO_ERRORS:
 				print(comp.to_string())
 			else:
-				print("error decoding payload ", err)
+				print("****** error decoding payload ", err)
 		
 	
 	if scene_msg.has_sceneStarted():
