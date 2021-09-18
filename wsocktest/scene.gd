@@ -20,6 +20,7 @@ func create(msg, p_peer, is_global):
 
 func message(scene_msg):
 	print(scene_msg.to_string())
+
 	if scene_msg.has_createEntity():
 		print("create entity ", scene_msg.get_createEntity().get_id())
 	
@@ -54,6 +55,20 @@ func message(scene_msg):
 		print("update component in entity %s -> %s" % [
 			scene_msg.get_updateEntityComponent().get_entityId(),
 			scene_msg.get_updateEntityComponent().get_data() ])
+
+		var data = scene_msg.get_updateEntityComponent().get_data()
+		if data.left(1) in ["[", "{"]:
+
+			var comp = JSON.parse(data)
+			print(JSON.print(comp.result))
+
+		else:
+			var buf = Marshalls.base64_to_raw(data)
+			
+			var comp = proto.PB_Component.new()
+			comp.from_bytes(buf)
+			print(comp.to_string())
+		
 	
 	if scene_msg.has_sceneStarted():
 		print("scene started ", id)
