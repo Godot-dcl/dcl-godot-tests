@@ -14,6 +14,7 @@ _global_script_class_icons={
 
 [application]
 
+config/name="dcl"
 run/main_scene="res://main.tscn"
 config/icon="res://icon.png"
 
@@ -24,6 +25,11 @@ Server="*res://server.gd"
 [editor_plugins]
 
 enabled=PoolStringArray( "protobuf" )
+
+[input_devices]
+
+gameplay/mouse_sensitivity=0.1
+gameplay/camera_speed=1.0
 
 [network]
 
