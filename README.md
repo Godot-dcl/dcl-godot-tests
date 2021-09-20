@@ -2,10 +2,21 @@
 
 Steps to run:
 
-- install decentraland-ecs@ci and run
+- Install Decentraland
 
-$ npm install decentraland-ecs@ci
-$ dcl start
+```$ npm i -g decentraland@latest```
+
+- Initialize a test scene. On an empty directory run:
+
+```$ dcl init```
+
+- install decentraland-ecs@ci
+
+```$ npm install decentraland-ecs@ci```
+
+- Run 
+
+```$ dcl start```
 
 A browser will open on this URL:
 
@@ -38,4 +49,5 @@ https://github.com/decentraland/unity-renderer/blob/614a2bb65abef3093049545ad1d8
 
 https://github.com/decentraland/kernel/blob/main/packages/shared/proto/engineinterface.proto
 
+https://github.com/decentraland/kernel/blob/fbe6def4caea5c883ec2cbbec246e02aced16145/packages/unity-interface/protobufMessagesBridge.ts#L72
 
