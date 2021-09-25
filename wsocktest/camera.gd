@@ -1,5 +1,7 @@
 extends Spatial
 
+export var god_mode = false
+
 var mouse_sensitivity : float = ProjectSettings.get("input_devices/gameplay/mouse_sensitivity")
 var speed : float = ProjectSettings.get("input_devices/gameplay/camera_speed")
 
@@ -26,7 +28,10 @@ func _process(_delta):
 	# Basis vectors are already normalized.
 	dir += -cam_xform.basis.z * input_movement_vector.y
 	dir += cam_xform.basis.x * input_movement_vector.x
-	dir.y = 0
+	
+	if !god_mode:
+		dir.y = 0
+	
 	dir = dir.normalized()
 	global_translate(dir.normalized() * speed)
 	
@@ -38,7 +43,7 @@ func _process(_delta):
 
 func _input(event):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		$Camera.rotate_x(deg2rad(event.relative.y * mouse_sensitivity))
+		$Camera.rotate_x(deg2rad(event.relative.y * mouse_sensitivity * -1))
 		rotate_y(deg2rad(event.relative.x * mouse_sensitivity * -1))
 
 		var camera_rot = $Camera.rotation_degrees

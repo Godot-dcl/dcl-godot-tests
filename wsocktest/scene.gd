@@ -17,7 +17,7 @@ func create(msg, p_peer, is_global):
 	
 	if msg.payload.name != "DCL Scene":
 		for content in msg.payload.contents:
-			var ext = content.file.right(content.file.length() - 3)
+			var ext = content.file.get_extension()
 			if ext in ["glb", "png"]:
 				var http = HTTPRequest.new()
 				http.use_threads = true
@@ -57,6 +57,13 @@ func load_glb(_result, response_code, _headers, body, content, connection):
 		var l = DynamicGLTFLoader.new()
 		var model = l.import_scene(file_name, 1, 1)
 		add_child(model)
+		
+		# remove 'collider' mesh (creates z-fighting with the floor mesh)
+		for c in model.get_children():
+			if c.name.ends_with("_collider") \
+			or c.name.begins_with("FloorBaseGrass_01"):
+				c.queue_free()
+		
 		connection.queue_free()
 
 func message(scene_msg):

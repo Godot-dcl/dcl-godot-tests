@@ -662,6 +662,7 @@ class PBPacker:
 
 class PB_Empty:
 	func _init():
+		# warning-ignore: unused_variable
 		var service
 		
 	var data = {}
@@ -6411,6 +6412,7 @@ class PB_CylinderShape:
 	
 class PB_GlobalPointerDown:
 	func _init():
+		# warning-ignore: unused_variable
 		var service
 		
 	var data = {}
@@ -6438,6 +6440,7 @@ class PB_GlobalPointerDown:
 	
 class PB_GlobalPointerUp:
 	func _init():
+		# warning-ignore: unused_variable
 		var service
 		
 	var data = {}
