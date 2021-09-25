@@ -11,7 +11,7 @@ func button_pressed():
 	count = (count + 1) % msgs.size()
 
 func _ready():
-	
+	# warning-ignore: return_value_discarded
 	get_node("Control/Button").connect("pressed", self, "button_pressed")
 	pass # Replace with function body.
 

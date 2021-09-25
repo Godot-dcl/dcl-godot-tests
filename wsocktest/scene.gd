@@ -17,10 +17,12 @@ func create(msg, p_peer, is_global):
 	
 	if msg.payload.name != "DCL Scene":
 		for content in msg.payload.contents:
-			if content.file.right(content.file.length() - 4) == ".glb":
+			var ext = content.file.right(content.file.length() - 3)
+			if ext in ["glb", "png"]:
 				var http = HTTPRequest.new()
+				http.use_threads = true
 				add_child(http)
-				http.connect("request_completed", self, "load_glb", [content.hash, http])
+				http.connect("request_completed", self, "load_" + ext, [content, http])
 				
 				var file : String = msg.payload.baseUrl + content.hash
 				var res = http.request(file)
@@ -33,12 +35,21 @@ func create(msg, p_peer, is_global):
 
 	var response = {"eventType":"SceneReady", "payload": {"sceneId": msg.payload.id}}
 	Server.send({"type": "ControlEvent", "payload": JSON.print(response)}, peer)
-	print("scene ready! ", msg.payload.id)
+	#print("scene ready! ", scene_id)
 
-func load_glb(result, response_code, headers, body, file_hash, connection):
+func load_png(_result, response_code, _headers, body, content, connection):
 	if response_code >= 200 && response_code < 300:
 		var f = File.new()
-		var file_name = "user://%s.glb" % file_hash
+		var file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
+		f.open(file_name, File.WRITE)
+		f.store_buffer(body)
+		f.close()
+		connection.queue_free()
+
+func load_glb(_result, response_code, _headers, body, content, connection):
+	if response_code >= 200 && response_code < 300:
+		var f = File.new()
+		var file_name = "user://%s.glb" % content.hash
 		f.open(file_name, File.WRITE)
 		f.store_buffer(body)
 		f.close()
@@ -52,44 +63,44 @@ func message(scene_msg):
 	print(scene_msg.to_string())
 
 	if scene_msg.has_createEntity():
-		print("create entity ", scene_msg.get_createEntity().get_id())
+		pass#print("create entity ", scene_msg.get_createEntity().get_id())
 	
 	if scene_msg.has_removeEntity():
-		print("remove entity ", scene_msg.get_removeEntity().get_id())
+		pass#print("remove entity ", scene_msg.get_removeEntity().get_id())
 	
 	if scene_msg.has_setEntityParent():
-		print("setEntityParent %s -> %s" % [
-			scene_msg.get_setEntityParent().get_parentId(),
-			scene_msg.get_setEntityParent().get_entityId() ])
+		pass#print("setEntityParent %s -> %s" % [
+#			scene_msg.get_setEntityParent().get_parentId(),
+#			scene_msg.get_setEntityParent().get_entityId() ])
 	
 	if scene_msg.has_componentCreated():
-		print("component created ", scene_msg.get_componentCreated().get_name())
+		pass#print("component created ", scene_msg.get_componentCreated().get_name())
 	
 	if scene_msg.has_componentDisposed():
-		print("component disposed ", scene_msg.get_componentDisposed().get_id())
+		pass#print("component disposed ", scene_msg.get_componentDisposed().get_id())
 	
 	if scene_msg.has_componentRemoved():
-		print("component removed ", scene_msg.get_componentRemoved().get_name())
+		pass#print("component removed ", scene_msg.get_componentRemoved().get_name())
 	
 	if scene_msg.has_componentUpdated():
-		print("component updated %s -> %s" % [
-			scene_msg.get_componentUpdated().get_id(),
-			scene_msg.get_componentUpdated().get_json() ])
+		pass#print("component updated %s -> %s" % [
+#			scene_msg.get_componentUpdated().get_id(),
+#			scene_msg.get_componentUpdated().get_json() ])
 	
 	if scene_msg.has_attachEntityComponent():
-		print("attach component to entity %s -> %s" % [
-			scene_msg.get_attachEntityComponent().get_entityId(),
-			scene_msg.get_attachEntityComponent().get_name() ])
+		pass#print("attach component to entity %s -> %s" % [
+#			scene_msg.get_attachEntityComponent().get_entityId(),
+#			scene_msg.get_attachEntityComponent().get_name() ])
 	
 	if scene_msg.has_updateEntityComponent():
-		print("update component in entity %s -> %s" % [
-			scene_msg.get_updateEntityComponent().get_entityId(),
-			scene_msg.get_updateEntityComponent().get_data() ])
 
 		var data = scene_msg.get_updateEntityComponent().get_data()
 		if data.left(1) in ["[", "{"]:
 
 			var comp = JSON.parse(data)
+			print("update component in entity %s -> %s" % [
+				scene_msg.get_updateEntityComponent().get_entityId(),
+				scene_msg.get_updateEntityComponent().get_data() ])
 			print(JSON.print(comp.result))
 
 		else:
@@ -104,16 +115,16 @@ func message(scene_msg):
 		
 	
 	if scene_msg.has_sceneStarted():
-		print("scene started ", id)
+		pass#print("scene started ", id)
 	
 	if scene_msg.has_openNFTDialog():
-		print("open NFT dialog %s %s" % [
-			scene_msg.get_openNFTDialog().get_assetContractAddress(),
-			scene_msg.get_openNFTDialog().get_tokenId()
-		])
+		pass#print("open NFT dialog %s %s" % [
+#			scene_msg.get_openNFTDialog().get_assetContractAddress(),
+#			scene_msg.get_openNFTDialog().get_tokenId()
+#		])
 	
 	if scene_msg.has_query():
-		print("query ", scene_msg.get_query().get_payload())
+		pass#print("query ", scene_msg.get_query().get_payload())
 
 func _ready():
 	pass

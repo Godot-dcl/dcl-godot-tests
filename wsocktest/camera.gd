@@ -7,7 +7,7 @@ var speed : float = ProjectSettings.get("input_devices/gameplay/camera_speed")
 func _ready():
 	pass # Replace with function body.
 
-func _process(delta):
+func _process(_delta):
 	var dir = Vector3()
 	var cam_xform = $Camera.get_global_transform()
 	var input_movement_vector = Vector2()
