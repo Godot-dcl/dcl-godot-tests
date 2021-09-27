@@ -22,17 +22,21 @@ func create(msg, p_peer, is_global):
 		for content in msg.payload.contents:
 			var ext = content.file.get_extension()
 			if ext in ["glb", "png"]:
-				var http = HTTPRequest.new()
+				if file_cached(content):
+					if has_method("load_loaded_" + ext):
+						call("load_loaded_" + ext, content)
+				else:
+					var http = HTTPRequest.new()
 
-				http.use_threads = true
-				Server.deposit_httprequest_node(http)
-				http.connect("request_completed", self, "load_" + ext, [content, http])
+					http.use_threads = true
+					Server.deposit_httprequest_node(http)
+					http.connect("request_completed", self, "load_" + ext, [content, http])
 
-				var file : String = msg.payload.baseUrl + content.hash
-				var res = http.request(file)
-				if res != OK:
-					printerr("****** error creating the glb request: ", res)
-					http.queue_free()
+					var file : String = msg.payload.baseUrl + content.hash
+					var res = http.request(file)
+					if res != OK:
+						printerr("****** error creating the glb request: ", res)
+						http.queue_free()
 
 	if msg.payload.contents.size() > 0:
 		transform.origin = Vector3(msg.payload.basePosition.x, 0, msg.payload.basePosition.y) * parcel_size
@@ -42,6 +46,19 @@ func create(msg, p_peer, is_global):
 
 	print("scene ready! ", id)
 
+func file_cached(content):
+	var ext = content.file.get_extension()
+	var file_name : String
+	match ext:
+		"glb":
+			file_name = "user://%s.glb" % content.hash
+		"png":
+			file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
+		_:
+			push_warning("*** undefined extension")
+	
+	var f = File.new()
+	return f.file_exists(file_name)
 
 func load_png(_result, response_code, _headers, body, content, connection):
 	if response_code >= 200 && response_code < 300:
@@ -60,19 +77,20 @@ func load_glb(_result, response_code, _headers, body, content, connection):
 		f.open(file_name, File.WRITE)
 		f.store_buffer(body)
 		f.close()
-
-		var l = DynamicGLTFLoader.new()
-		var model = l.import_scene(file_name, 1, 1)
-		add_child(model)
-
-		# remove 'collider' mesh (creates z-fighting with the floor mesh)
-		for c in model.get_children():
-			if c.name.ends_with("_collider") \
-			or c.name.begins_with("FloorBaseGrass_01"):
-				c.queue_free()
+		load_loaded_glb(content)
 
 	connection.queue_free()
 
+func load_loaded_glb(content):
+	var l = DynamicGLTFLoader.new()
+	var model = l.import_scene("user://%s.glb" % content.hash, 1, 1)
+	add_child(model)
+
+	# remove 'collider' mesh (creates z-fighting with the floor mesh)
+	for c in model.get_children():
+		if c.name.ends_with("_collider") \
+		or c.name.begins_with("FloorBaseGrass_01"):
+			c.queue_free()
 
 func message(scene_msg):
 	#print(scene_msg.to_string())

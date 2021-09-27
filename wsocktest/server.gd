@@ -42,18 +42,18 @@ func _connected(id, _protocol):
 	peers[id] = peer
 
 
-func _disconnected(id, was_clean_close):
-#	print("Client disconnected! was_clean_close: ", was_clean_close)
+func _disconnected(id, _was_clean_close):
+#	print("Client disconnected! was_clean_close: ", _was_clean_close)
 	if id in peers:
 		peers.erase(id)
 
 
-func _close_request(id, code, reason):
+func _close_request(_id, _code, _reason):
 	pass
 #	print("client close request - %d %d: %s" % [
-#		id,
-#		code,
-#		"No Reason" if reason.empty() else reason
+#		_id,
+#		_code,
+#		"No Reason" if reason.empty() else _reason
 #	])
 
 

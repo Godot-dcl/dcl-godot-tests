@@ -9,7 +9,9 @@ var msgs = [
 
 
 func button_pressed():
-	Server.start_server()
+	if !Server.is_listening():
+		Server.start_server()
+	
 	Server.send(msgs[count])
 	count = (count + 1) % msgs.size()
 
