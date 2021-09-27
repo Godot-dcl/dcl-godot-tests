@@ -40,7 +40,7 @@ func create(msg, p_peer, is_global):
 	var response = {"eventType":"SceneReady", "payload": {"sceneId": msg.payload.id}}
 	Server.send({"type": "ControlEvent", "payload": JSON.print(response)}, peer)
 
-	#print("scene ready! ", scene_id)
+	print("scene ready! ", id)
 
 
 func load_png(_result, response_code, _headers, body, content, connection):
@@ -50,7 +50,7 @@ func load_png(_result, response_code, _headers, body, content, connection):
 		f.open(file_name, File.WRITE)
 		f.store_buffer(body)
 		f.close()
-		connection.queue_free()
+	connection.queue_free()
 
 
 func load_glb(_result, response_code, _headers, body, content, connection):
@@ -71,11 +71,11 @@ func load_glb(_result, response_code, _headers, body, content, connection):
 			or c.name.begins_with("FloorBaseGrass_01"):
 				c.queue_free()
 
-		connection.queue_free()
+	connection.queue_free()
 
 
 func message(scene_msg):
-	print(scene_msg.to_string())
+	#print(scene_msg.to_string())
 
 	if scene_msg.has_createEntity():
 		pass#print("create entity ", scene_msg.get_createEntity().get_id())
@@ -113,10 +113,10 @@ func message(scene_msg):
 		if data.left(1) in ["[", "{"]:
 
 			var comp = JSON.parse(data)
-			print("update component in entity %s -> %s" % [
-				scene_msg.get_updateEntityComponent().get_entityId(),
-				scene_msg.get_updateEntityComponent().get_data() ])
-			print(JSON.print(comp.result))
+#			print("update component in entity %s -> %s" % [
+#				scene_msg.get_updateEntityComponent().get_entityId(),
+#				scene_msg.get_updateEntityComponent().get_data() ])
+#			print(JSON.print(comp.result))
 
 		else:
 			var buf = Marshalls.base64_to_raw(data)
@@ -124,9 +124,10 @@ func message(scene_msg):
 			var comp = proto.PB_Transform.new()
 			var err = comp.from_bytes(buf)
 			if err == proto.PB_ERR.NO_ERRORS:
-				print(comp.to_string())
+				#print(comp.to_string())
+				pass
 			else:
-				print("****** error decoding payload ", err)
+				push_warning("****** error decoding PB_Transform payload %s" % err)
 
 	if scene_msg.has_sceneStarted():
 		pass#print("scene started ", id)

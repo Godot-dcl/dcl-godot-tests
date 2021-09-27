@@ -35,7 +35,7 @@ func _process(_delta):
 
 
 func _connected(id, _protocol):
-	print("Client connected!")
+#	print("Client connected!")
 
 	var peer = _server.get_peer(id)
 	peer.set_write_mode(WebSocketPeer.WRITE_MODE_TEXT)
@@ -43,22 +43,23 @@ func _connected(id, _protocol):
 
 
 func _disconnected(id, was_clean_close):
-	print("Client disconnected! was_clean_close: ", was_clean_close)
+#	print("Client disconnected! was_clean_close: ", was_clean_close)
 	if id in peers:
 		peers.erase(id)
 
 
 func _close_request(id, code, reason):
-	print("client close request - %d %d: %s" % [
-		id,
-		code,
-		"No Reason" if reason.empty() else reason
-	])
+	pass
+#	print("client close request - %d %d: %s" % [
+#		id,
+#		code,
+#		"No Reason" if reason.empty() else reason
+#	])
 
 
 func start_server():
 	if _server.is_listening():
-		print("Server is already running")
+		push_warning("Server is already running")
 		return
 
 	var res = _server.listen(PORT)
@@ -71,7 +72,7 @@ func start_server():
 
 func stop_server():
 	if not _server.is_listening():
-		print("Server is not currently running")
+		push_warning("Server is not currently running")
 		return
 
 	_server.stop()
@@ -104,7 +105,7 @@ func create_scene(msg, peer, p_global):
 
 
 func _message(msg, peer):
-	printt("Server message ", msg.type, msg)
+#	printt("Server message ", msg.type, msg)
 
 	if msg.type == "CreateGlobalScene":
 		create_scene(msg, peer, true)
@@ -124,12 +125,12 @@ func _message(msg, peer):
 				elif id in parcel_scenes:
 					scene = parcel_scenes[id][0]
 				else:
-					print("error: unknown scene id %s for SendSceneMessage %s", [id, scene_msg.to_string()])
+					push_warning("error: unknown scene id %s for SendSceneMessage %s" % [id, scene_msg.to_string()])
 					break
 				scene.message(scene_msg)
 			else:
-				printt("****** Protobuf error is ", err)
-				printt("msg is ", scene_msg.to_string())
+#				printt("****** Protobuf error is ", err)
+				push_warning("%s error msg is %s" % [err, scene_msg.to_string()])
 	else:
 		pass#printt("Unhandled message", msg.type)
 
