@@ -24,7 +24,7 @@ Server="*res://server.gd"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "protobuf" )
+enabled=PoolStringArray( "res://addons/protobuf/plugin.cfg", "res://addons/scene_debugger/plugin.cfg" )
 
 [input]
 
