@@ -108,7 +108,10 @@ func message(scene_msg):
 		reparent(scene_msg.get_setEntityParent().get_entityId(), scene_msg.get_setEntityParent().get_parentId())
 
 	if scene_msg.has_componentCreated():
-		pass#print("component created ", scene_msg.get_componentCreated().get_name())
+		#print("component created ", scene_msg.get_componentCreated().get_name())
+		var component_id = scene_msg.get_componentCreated().get_id()
+		components[component_id] = Node.new()
+		components[component_id].name = scene_msg.get_componentCreated().get_name()
 
 	if scene_msg.has_componentDisposed():
 		pass#print("component disposed ", scene_msg.get_componentDisposed().get_id())
@@ -117,7 +120,7 @@ func message(scene_msg):
 		pass#print("component removed ", scene_msg.get_componentRemoved().get_name())
 
 	if scene_msg.has_componentUpdated():
-		pass#print("component updated %s -> %s" % [
+		#print("component updated %s -> %s" % [
 #			scene_msg.get_componentUpdated().get_id(),
 #			scene_msg.get_componentUpdated().get_json() ])
 		var json = JSON.parse(scene_msg.get_componentUpdated().get_json()).result
@@ -135,7 +138,7 @@ func message(scene_msg):
 						c.queue_free()
 
 	if scene_msg.has_attachEntityComponent():
-		pass#print("attach component to entity %s -> %s" % [
+		#print("attach component to entity %s -> %s" % [
 #			scene_msg.get_attachEntityComponent().get_entityId(),
 #			scene_msg.get_attachEntityComponent().get_id() ])
 		entities[scene_msg.get_attachEntityComponent().get_entityId()].add_child(
