@@ -66,5 +66,7 @@ gameplay/camera_speed=1.0
 
 limits/debugger_stdout/max_chars_per_second=204800
 limits/debugger_stdout/max_messages_per_frame=1000
+limits/debugger_stdout/max_errors_per_second=1000
+limits/debugger_stdout/max_warnings_per_second=1000
 limits/websocket_server/max_in_buffer_kb=4096
 limits/websocket_server/max_out_buffer_kb=4096

@@ -10,7 +10,9 @@ var global_scene
 var id
 
 var current_index = -1
-
+var contents : Dictionary
+var entities = {"0": get_node(".")}
+var components : Dictionary
 
 func create(msg, p_peer, is_global):
 	id = msg.payload.id
@@ -23,8 +25,11 @@ func create(msg, p_peer, is_global):
 			var ext = content.file.get_extension()
 			if ext in ["glb", "png"]:
 				if file_cached(content):
-					if has_method("load_loaded_" + ext):
-						call("load_loaded_" + ext, content)
+					match ext:
+						"glb":
+							contents[content.file] = "user://%s.glb" % content.hash
+						"png":
+							contents[content.file] = "user://%s" % content.file.right(content.file.rfind("/") + 1)
 				else:
 					var http = HTTPRequest.new()
 
@@ -62,11 +67,13 @@ func file_cached(content):
 
 func load_png(_result, response_code, _headers, body, content, connection):
 	if response_code >= 200 && response_code < 300:
-		var f = File.new()
+		var image = Image.new()
+		if image.load_png_from_buffer(body) != OK:
+			pass
 		var file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
-		f.open(file_name, File.WRITE)
-		f.store_buffer(body)
-		f.close()
+		image.save_png(file_name)
+		contents[content.file] = file_name
+	
 	connection.queue_free()
 
 
@@ -77,34 +84,28 @@ func load_glb(_result, response_code, _headers, body, content, connection):
 		f.open(file_name, File.WRITE)
 		f.store_buffer(body)
 		f.close()
-		load_loaded_glb(content)
+		contents[content.file] = "user://%s.glb" % content.hash
 
 	connection.queue_free()
-
-func load_loaded_glb(content):
-	var l = DynamicGLTFLoader.new()
-	var model = l.import_scene("user://%s.glb" % content.hash, 1, 1)
-	add_child(model)
-
-	# remove 'collider' mesh (creates z-fighting with the floor mesh)
-	for c in model.get_children():
-		if c.name.ends_with("_collider") \
-		or c.name.begins_with("FloorBaseGrass_01"):
-			c.queue_free()
 
 func message(scene_msg):
 	#print(scene_msg.to_string())
 
 	if scene_msg.has_createEntity():
-		pass#print("create entity ", scene_msg.get_createEntity().get_id())
+		#print("create entity ", scene_msg.get_createEntity().get_id())
+		var entity_id = scene_msg.get_createEntity().get_id()
+		entities[entity_id] = Spatial.new()
+		entities[entity_id].name = entity_id
+		add_child(entities[entity_id])
 
 	if scene_msg.has_removeEntity():
 		pass#print("remove entity ", scene_msg.get_removeEntity().get_id())
 
 	if scene_msg.has_setEntityParent():
-		pass#print("setEntityParent %s -> %s" % [
+#		print("setEntityParent %s -> %s" % [
 #			scene_msg.get_setEntityParent().get_parentId(),
 #			scene_msg.get_setEntityParent().get_entityId() ])
+		reparent(scene_msg.get_setEntityParent().get_entityId(), scene_msg.get_setEntityParent().get_parentId())
 
 	if scene_msg.has_componentCreated():
 		pass#print("component created ", scene_msg.get_componentCreated().get_name())
@@ -119,11 +120,27 @@ func message(scene_msg):
 		pass#print("component updated %s -> %s" % [
 #			scene_msg.get_componentUpdated().get_id(),
 #			scene_msg.get_componentUpdated().get_json() ])
+		var json = JSON.parse(scene_msg.get_componentUpdated().get_json()).result
+		if json.has("src"):
+			var ext = json.src.get_extension()
+			if ext == "glb":
+				var l = DynamicGLTFLoader.new()
+				var component_id = scene_msg.get_componentUpdated().get_id()
+				components[component_id] = l.import_scene(contents[json.src], 1, 1)
+				
+				# remove 'collider' mesh (creates z-fighting with the floor mesh)
+				for c in components[component_id].get_children():
+					if c.name.ends_with("_collider") \
+					or c.name.begins_with("FloorBaseGrass_01"):
+						c.queue_free()
 
 	if scene_msg.has_attachEntityComponent():
 		pass#print("attach component to entity %s -> %s" % [
 #			scene_msg.get_attachEntityComponent().get_entityId(),
-#			scene_msg.get_attachEntityComponent().get_name() ])
+#			scene_msg.get_attachEntityComponent().get_id() ])
+		entities[scene_msg.get_attachEntityComponent().get_entityId()].add_child(
+			components[scene_msg.get_attachEntityComponent().get_id()]
+		)
 
 	if scene_msg.has_updateEntityComponent():
 
@@ -158,3 +175,11 @@ func message(scene_msg):
 
 	if scene_msg.has_query():
 		pass#print("query ", scene_msg.get_query().get_payload())
+
+func reparent(src, dest):
+	var src_node = entities[src]
+	var dest_node= entities[dest]
+	var xform = src_node.get_global_transform()
+	remove_child(src_node)
+	dest_node.add_child(src_node)
+	src_node.set_global_transform(xform)
