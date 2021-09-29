@@ -136,6 +136,11 @@ func message(scene_msg):
 					if c.name.ends_with("_collider") \
 					or c.name.begins_with("FloorBaseGrass_01"):
 						c.queue_free()
+				
+				if json.withCollisions:
+					for c in components[component_id].get_children():
+						if c is MeshInstance:
+							c.create_trimesh_collision()
 
 	if scene_msg.has_attachEntityComponent():
 		#print("attach component to entity %s -> %s" % [
