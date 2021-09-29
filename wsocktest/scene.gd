@@ -167,8 +167,22 @@ func message(scene_msg):
 			var comp = proto.PB_Transform.new()
 			var err = comp.from_bytes(buf)
 			if err == proto.PB_ERR.NO_ERRORS:
-				#print(comp.to_string())
-				pass
+				var rot = comp.get_rotation()
+				var pos = comp.get_position()
+				var sca = comp.get_scale()
+				
+				var q = Quat(
+					rot.get_x(),
+					rot.get_y(),
+					rot.get_z(),
+					rot.get_w()
+				)
+				var xform = Transform(q)
+				xform = xform.translated(Vector3(pos.get_x(), pos.get_y(), pos.get_z()))
+				xform = xform.scaled(Vector3(sca.get_x(), sca.get_y(), sca.get_z()))
+				
+				var entity_id = scene_msg.get_updateEntityComponent().get_entityId()
+				entities[entity_id].set_transform(xform)
 			else:
 				push_warning("****** error decoding PB_Transform payload %s" % err)
 
