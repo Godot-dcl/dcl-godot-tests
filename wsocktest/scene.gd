@@ -110,7 +110,7 @@ func message(scene_msg):
 	if scene_msg.has_componentCreated():
 		#print("component created ", scene_msg.get_componentCreated().get_name())
 		var component_id = scene_msg.get_componentCreated().get_id()
-		components[component_id] = Node.new()
+		components[component_id] = preload("cube.tscn").instance()
 		components[component_id].name = scene_msg.get_componentCreated().get_name()
 
 	if scene_msg.has_componentDisposed():
@@ -177,8 +177,9 @@ func message(scene_msg):
 					rot.get_z(),
 					rot.get_w()
 				)
-				var xform = Transform(q)
+				var xform = Transform()
 				xform = xform.translated(Vector3(pos.get_x(), pos.get_y(), pos.get_z()))
+				xform = xform * Transform(q)
 				xform = xform.scaled(Vector3(sca.get_x(), sca.get_y(), sca.get_z()))
 				
 				var entity_id = scene_msg.get_updateEntityComponent().get_entityId()
