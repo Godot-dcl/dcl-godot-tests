@@ -2,12 +2,37 @@ tool
 extends Node
 
 
-signal server_status_updated(is_listening)
+signal server_state_changed(is_listening)
+
+signal peer_connected(id)
+signal peer_disconnected(id)
+
+signal scene_created(scene)
 
 const proto = preload("res://engineinterface.gd")
 
 const PORT = 9080
 var _server = WebSocketServer.new()
+
+var _messages = [
+	{
+		"type": "SystemInfoReport",
+		"payload": JSON.print(
+			{
+				"graphicsDeviceName": "Mocked",
+				"graphicsDeviceVersion": "Mocked",
+				"graphicsMemorySize": 512,
+				"processorType": "n/a",
+				"processorCount": 1,
+				"systemMemorySize": 256
+			}
+		)
+	},
+	{
+		"type": "ControlEvent",
+		"payload": JSON.print({"eventType": "ActivateRenderingACK"})
+	},
+]
 
 var global_scenes = {}
 var parcel_scenes = {}
@@ -21,6 +46,7 @@ var profile_loaded = false
 var loading_screen : Control
 
 var player : Spatial
+
 
 func _ready():
 	set_process(false)
@@ -46,11 +72,18 @@ func _connected(id, _protocol):
 	peer.set_write_mode(WebSocketPeer.WRITE_MODE_TEXT)
 	peers[id] = peer
 
+	for i in _messages:
+		send(i, peer)
+
+	emit_signal("peer_connected", id)
+
 
 func _disconnected(id, _was_clean_close):
 #	print("Client disconnected! was_clean_close: ", _was_clean_close)
 	if id in peers:
 		peers.erase(id)
+
+	emit_signal("peer_disconnected", id)
 
 
 func _close_request(_id, _code, _reason):
@@ -72,7 +105,7 @@ func start_server():
 		printerr("Failed to listen to port ", PORT)
 	else:
 		set_process(true)
-		emit_signal("server_status_updated", true)
+		emit_signal("server_state_changed", true)
 
 
 func stop_server():
@@ -83,12 +116,28 @@ func stop_server():
 	_server.stop()
 	set_process(false)
 
+	# Avoid memory leaks by freeing the nodes before clearing.
+	for i in global_scenes.values() + parcel_scenes.values():
+		var scene = i[0]
+		# Don't free scenes that have been dumped.
+		if not Engine.editor_hint or not scene.is_inside_tree():
+			scene.queue_free()
+			continue
+
+		if Engine.editor_hint:
+			scene.peer = null
+			scene.update_configuration_warning()
 	global_scenes.clear()
 	parcel_scenes.clear()
-	peers.clear()
+
+	# Same as above.
+	for i in httprequests:
+		i.queue_free()
 	httprequests.clear()
 
-	emit_signal("server_status_updated", false)
+	peers.clear()
+
+	emit_signal("server_state_changed", false)
 
 
 func is_listening():
@@ -108,6 +157,8 @@ func create_scene(msg, peer, p_global):
 	else:
 		parcel_scenes[msg.payload.id] = [scene, peer]
 
+	emit_signal("scene_created", scene)
+
 
 func _message(msg, peer):
 	printt("Server message ", JSON.print(msg))
@@ -119,7 +170,7 @@ func _message(msg, peer):
 		"SetLoadingScreen":
 			if is_instance_valid(loading_screen):
 				loading_screen.message(msg.payload)
-	
+
 		"LoadParcelScenes":
 			create_scene(msg, peer, false)
 

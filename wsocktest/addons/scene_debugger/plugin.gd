@@ -8,6 +8,7 @@ var _scene_debugger =\
 
 func _enter_tree():
 	_scene_debugger._editor_interface = get_editor_interface()
+	_scene_debugger._editor_undoredo = get_undo_redo()
 	add_control_to_dock(EditorPlugin.DOCK_SLOT_LEFT_UR, _scene_debugger)
 
 

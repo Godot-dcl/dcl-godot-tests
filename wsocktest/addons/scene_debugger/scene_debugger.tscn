@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://addons/scene_debugger/scene_debugger.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxEmpty" id=1]
 
 [node name="SceneDebugger" type="Control"]
 anchor_right = 1.0
@@ -23,25 +25,83 @@ margin_right = 1024.0
 margin_bottom = 20.0
 text = "Start Server"
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 margin_top = 24.0
 margin_right = 1024.0
-margin_bottom = 28.0
+margin_bottom = 600.0
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 1 )
+tabs_visible = false
 
-[node name="SendMessage" type="Button" parent="VBoxContainer"]
-margin_top = 32.0
-margin_right = 1024.0
-margin_bottom = 52.0
-disabled = true
-text = "Send Message"
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 
-[node name="DumpIntoScene" type="Button" parent="VBoxContainer"]
-margin_top = 56.0
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/VBoxContainer"]
 margin_right = 1024.0
-margin_bottom = 76.0
+margin_bottom = 14.0
+text = "Peers:"
+align = 1
+
+[node name="Peers" type="Tree" parent="VBoxContainer/TabContainer/VBoxContainer"]
+margin_top = 18.0
+margin_right = 1024.0
+margin_bottom = 576.0
+size_flags_vertical = 3
+hide_root = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/VBoxContainer2"]
+margin_right = 1024.0
+margin_bottom = 20.0
+
+[node name="Back" type="Button" parent="VBoxContainer/TabContainer/VBoxContainer2/HBoxContainer"]
+margin_right = 12.0
+margin_bottom = 20.0
+flat = true
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/VBoxContainer2/HBoxContainer"]
+margin_left = 16.0
+margin_top = 3.0
+margin_right = 1024.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
+text = "Scenes:"
+align = 1
+
+[node name="Scenes" type="Tree" parent="VBoxContainer/TabContainer/VBoxContainer2"]
+margin_top = 24.0
+margin_right = 1024.0
+margin_bottom = 496.0
+size_flags_vertical = 3
+hide_root = true
+select_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DumpSelIntoScene" type="Button" parent="VBoxContainer/TabContainer/VBoxContainer2"]
+margin_top = 500.0
+margin_right = 1024.0
+margin_bottom = 520.0
 disabled = true
-text = "Dump Nodes Into Selected Scene"
+text = "Dump SELECTED Nodes Into Active Scene"
+
+[node name="DumpAllIntoScene" type="Button" parent="VBoxContainer/TabContainer/VBoxContainer2"]
+margin_top = 524.0
+margin_right = 1024.0
+margin_bottom = 544.0
+disabled = true
+text = "Dump ALL Nodes Into Active Scene"
 
 [connection signal="pressed" from="VBoxContainer/StartServer" to="." method="_on_StartServer_pressed"]
-[connection signal="pressed" from="VBoxContainer/SendMessage" to="." method="_on_SendMessage_pressed"]
-[connection signal="pressed" from="VBoxContainer/DumpIntoScene" to="." method="_on_DumpIntoScene_pressed"]
+[connection signal="item_activated" from="VBoxContainer/TabContainer/VBoxContainer/Peers" to="." method="_on_peer_selected"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/VBoxContainer2/HBoxContainer/Back" to="VBoxContainer/TabContainer" method="set_current_tab" binds= [ 0 ]]
+[connection signal="item_activated" from="VBoxContainer/TabContainer/VBoxContainer2/Scenes" to="." method="_on_DumpSelIntoScene_pressed"]
+[connection signal="multi_selected" from="VBoxContainer/TabContainer/VBoxContainer2/Scenes" to="." method="_on_Scenes_multi_selected"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/VBoxContainer2/DumpSelIntoScene" to="." method="_on_DumpSelIntoScene_pressed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/VBoxContainer2/DumpAllIntoScene" to="." method="_on_DumpAllIntoScene_pressed"]

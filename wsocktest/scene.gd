@@ -14,6 +14,7 @@ var contents : Dictionary
 var entities = {"0": get_node(".")}
 var components : Dictionary
 
+
 func create(msg, p_peer, is_global):
 	id = msg.payload.id
 	global_scene = is_global
@@ -51,6 +52,7 @@ func create(msg, p_peer, is_global):
 
 	print("scene ready! ", id)
 
+
 func file_cached(content):
 	var ext = content.file.get_extension()
 	var file_name : String
@@ -61,9 +63,10 @@ func file_cached(content):
 			file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
 		_:
 			push_warning("*** undefined extension")
-	
+
 	var f = File.new()
 	return f.file_exists(file_name)
+
 
 func load_png(_result, response_code, _headers, body, content, connection):
 	if response_code >= 200 && response_code < 300:
@@ -73,7 +76,7 @@ func load_png(_result, response_code, _headers, body, content, connection):
 		var file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
 		image.save_png(file_name)
 		contents[content.file] = file_name
-	
+
 	connection.queue_free()
 
 
@@ -87,6 +90,7 @@ func load_glb(_result, response_code, _headers, body, content, connection):
 		contents[content.file] = "user://%s.glb" % content.hash
 
 	connection.queue_free()
+
 
 func message(scene_msg):
 	#print(scene_msg.to_string())
@@ -130,13 +134,13 @@ func message(scene_msg):
 				var l = DynamicGLTFLoader.new()
 				var component_id = scene_msg.get_componentUpdated().get_id()
 				components[component_id] = l.import_scene(contents[json.src], 1, 1)
-				
+
 				# remove 'collider' mesh (creates z-fighting with the floor mesh)
 				for c in components[component_id].get_children():
 					if c.name.ends_with("_collider") \
 					or c.name.begins_with("FloorBaseGrass_01"):
 						c.queue_free()
-				
+
 				if json.withCollisions:
 					for c in components[component_id].get_children():
 						if c is MeshInstance:
@@ -170,7 +174,7 @@ func message(scene_msg):
 				var rot = comp.get_rotation()
 				var pos = comp.get_position()
 				var sca = comp.get_scale()
-				
+
 				var q = Quat(
 					rot.get_x(),
 					rot.get_y(),
@@ -181,7 +185,7 @@ func message(scene_msg):
 				xform = xform.translated(Vector3(pos.get_x(), pos.get_y(), pos.get_z()))
 				xform = xform * Transform(q)
 				xform = xform.scaled(Vector3(sca.get_x(), sca.get_y(), sca.get_z()))
-				
+
 				var entity_id = scene_msg.get_updateEntityComponent().get_entityId()
 				entities[entity_id].set_transform(xform)
 			else:
@@ -199,13 +203,15 @@ func message(scene_msg):
 	if scene_msg.has_query():
 		pass#print("query ", scene_msg.get_query().get_payload())
 
+
 func reparent(src, dest):
 	var src_node = entities[src]
-	var dest_node= entities[dest]
+	var dest_node = entities[dest]
 	var xform = src_node.get_global_transform()
 	remove_child(src_node)
 	dest_node.add_child(src_node)
 	src_node.set_global_transform(xform)
+
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.is_pressed():
@@ -216,6 +222,11 @@ func _unhandled_input(event):
 				"uuid": "UUIDf",
 				"payload": { "buttonId": 0 }
 			}
-		
+
 		}
 		Server.send({"type": "SceneEvent", "payload": JSON.print(response)}, peer)
+
+
+func _get_configuration_warning():
+	return "" if peer == null else "Scene is currently connected to a peer." +\
+			"\nRemoving the DebuggerDump off the tree will completely detach this scene from it."
