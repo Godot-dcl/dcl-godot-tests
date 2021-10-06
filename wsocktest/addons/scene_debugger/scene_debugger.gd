@@ -37,8 +37,11 @@ func _on_server_status_updated(is_listening):
 
 
 func _on_StartServer_pressed():
-	Server.start_server() if not Server.is_listening()\
-			else Server.stop_server()
+	if not Server.is_listening():
+		Server.start_server()
+	else:
+		_count = 0
+		Server.stop_server()
 
 
 func _on_SendMessage_pressed():
