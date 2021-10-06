@@ -131,6 +131,18 @@ func _message(msg, peer):
 			else:
 #				printt("****** Protobuf error is ", err)
 				push_warning("%s error msg is %s" % [err, scene_msg.to_string()])
+	elif msg.type == "Reset":
+		send({
+			"type": "SystemInfoReport",
+			"payload": JSON.print({
+				"graphicsDeviceName":"Mocked",
+				"graphicsDeviceVersion":"Mocked",
+				"graphicsMemorySize":512,
+				"processorType":"n/a",
+				"processorCount":1,
+				"systemMemorySize":256
+			})
+		})
 	else:
 		pass#printt("Unhandled message", msg.type)
 
