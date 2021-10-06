@@ -16,6 +16,7 @@ var peers = {}
 
 var httprequests = []
 
+var profile_loaded = false
 
 func _ready():
 	set_process(false)
@@ -143,6 +144,10 @@ func _message(msg, peer):
 				"systemMemorySize":256
 			})
 		})
+	elif msg.type == "LoadProfile":
+		if !profile_loaded:
+			profile_loaded = true
+			send({"type": "ControlEvent", "payload": JSON.print({"eventType":"ActivateRenderingACK"})})
 	else:
 		pass#printt("Unhandled message", msg.type)
 
