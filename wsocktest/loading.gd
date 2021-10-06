@@ -5,4 +5,8 @@ func _ready():
 	pass # Replace with function body.
 
 func message(msg):
-	pass#printt("*** loading screen message ***", JSON.print(msg))
+	#printt("*** loading screen message ***", JSON.print(msg))
+	
+	$Title.text = "loading..."
+	$Message.text = msg.message
+	visible = msg.isVisible

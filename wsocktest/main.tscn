@@ -3,7 +3,7 @@
 [ext_resource path="res://main.gd" type="Script" id=1]
 [ext_resource path="res://camera.gd" type="Script" id=2]
 [ext_resource path="res://DebugInfo/DebugInfo.tscn" type="PackedScene" id=3]
-[ext_resource path="res://loading.gd" type="Script" id=4]
+[ext_resource path="res://loading.tscn" type="PackedScene" id=4]
 
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 1 )
@@ -15,13 +15,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DebugInfo" parent="Control" instance=ExtResource( 3 )]
+[node name="Loading" parent="Control" instance=ExtResource( 4 )]
 
-[node name="Loading" type="Control" parent="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-script = ExtResource( 4 )
+[node name="DebugInfo" parent="Control" instance=ExtResource( 3 )]
 
 [node name="CameraRig" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 2 )

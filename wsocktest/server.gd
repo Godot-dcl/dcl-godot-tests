@@ -18,6 +18,8 @@ var httprequests = []
 
 var profile_loaded = false
 
+var loading_screen : Control
+
 func _ready():
 	set_process(false)
 
@@ -111,6 +113,10 @@ func _message(msg, peer):
 	if msg.type == "CreateGlobalScene":
 		create_scene(msg, peer, true)
 
+	elif msg.type == "SetLoadingScreen":
+		if is_instance_valid(loading_screen):
+			loading_screen.message(msg.payload)
+	
 	elif msg.type == "LoadParcelScenes":
 		create_scene(msg, peer, false)
 

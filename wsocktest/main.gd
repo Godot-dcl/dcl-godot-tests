@@ -2,4 +2,4 @@ extends Spatial
 
 
 func _ready():
-	pass
+	Server.loading_screen = $Control/Loading
