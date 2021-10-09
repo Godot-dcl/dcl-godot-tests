@@ -20,6 +20,8 @@ var profile_loaded = false
 
 var loading_screen : Control
 
+var player : Spatial
+
 func _ready():
 	set_process(false)
 
@@ -108,62 +110,71 @@ func create_scene(msg, peer, p_global):
 
 
 func _message(msg, peer):
-#	printt("Server message ", msg.type, msg)
+	printt("Server message ", JSON.print(msg))
 
-	if msg.type == "CreateGlobalScene":
-		create_scene(msg, peer, true)
+	match msg.type:
+		"CreateGlobalScene":
+			create_scene(msg, peer, true)
 
-	elif msg.type == "SetLoadingScreen":
-		if is_instance_valid(loading_screen):
-			loading_screen.message(msg.payload)
+		"SetLoadingScreen":
+			if is_instance_valid(loading_screen):
+				loading_screen.message(msg.payload)
 	
-	elif msg.type == "LoadParcelScenes":
-		create_scene(msg, peer, false)
+		"LoadParcelScenes":
+			create_scene(msg, peer, false)
 
-	elif msg.type == "SendSceneMessage":
-		for buf in msg.payload:
-			var scene_msg = proto.PB_SendSceneMessage.new()
-			var err = scene_msg.from_bytes(buf)
-			if err == proto.PB_ERR.NO_ERRORS:
-				var id = scene_msg.get_sceneId()
-				var scene
-				if id in global_scenes:
-					scene = global_scenes[id][0]
-				elif id in parcel_scenes:
-					scene = parcel_scenes[id][0]
+		"SendSceneMessage":
+			for buf in msg.payload:
+				var scene_msg = proto.PB_SendSceneMessage.new()
+				var err = scene_msg.from_bytes(buf)
+				if err == proto.PB_ERR.NO_ERRORS:
+					var id = scene_msg.get_sceneId()
+					var scene
+					if id in global_scenes:
+						scene = global_scenes[id][0]
+					elif id in parcel_scenes:
+						scene = parcel_scenes[id][0]
+					else:
+						push_warning("error: unknown scene id %s for SendSceneMessage %s" % [id, scene_msg.to_string()])
+						break
+					scene.message(scene_msg)
 				else:
-					push_warning("error: unknown scene id %s for SendSceneMessage %s" % [id, scene_msg.to_string()])
-					break
-				scene.message(scene_msg)
-			else:
-#				printt("****** Protobuf error is ", err)
-				push_warning("%s error msg is %s" % [err, scene_msg.to_string()])
-	elif msg.type == "Reset":
-		send({
-			"type": "SystemInfoReport",
-			"payload": JSON.print({
-				"graphicsDeviceName":"Mocked",
-				"graphicsDeviceVersion":"Mocked",
-				"graphicsMemorySize":512,
-				"processorType":"n/a",
-				"processorCount":1,
-				"systemMemorySize":256
+	#				printt("****** Protobuf error is ", err)
+					push_warning("%s error msg is %s" % [err, scene_msg.to_string()])
+
+		"Reset":
+			send({
+				"type": "SystemInfoReport",
+				"payload": JSON.print({
+					"graphicsDeviceName":"Mocked",
+					"graphicsDeviceVersion":"Mocked",
+					"graphicsMemorySize":512,
+					"processorType":"n/a",
+					"processorCount":1,
+					"systemMemorySize":256
+				})
 			})
-		})
-	elif msg.type == "LoadProfile":
-		if !profile_loaded:
-			profile_loaded = true
-			send({"type": "ControlEvent", "payload": JSON.print({"eventType":"ActivateRenderingACK"})})
-	else:
-		pass#printt("Unhandled message", msg.type)
+
+		"LoadProfile":
+			if !profile_loaded:
+				profile_loaded = true
+				send({"type": "ControlEvent", "payload": JSON.print({"eventType":"ActivateRenderingACK"})})
+
+		"Teleport":
+			if is_instance_valid(player):
+				player.translation = Vector3(msg.payload.x, 0.0, msg.payload.z)
+
+		_:
+			pass#printt("Unhandled message", msg.type)
 
 
 func _data_received(id):
 	var data = peers[id].get_packet().get_string_from_utf8() as String
 	if data.left(1) in ["[", "{"]:
 		var json = JSON.parse(data.strip_edges().strip_escapes()) as JSONParseResult
-		if typeof(json.result) == TYPE_DICTIONARY:
-			if "payload" in json.result and !json.result.payload.empty():
+		if typeof(json.result) == TYPE_DICTIONARY \
+			and "payload" in json.result \
+			and json.result.payload is String:
 				if json.result.payload.left(1) in ["[", "{"]:
 					var payload = JSON.parse(json.result.payload.strip_edges().strip_escapes()) as JSONParseResult
 					json.result.payload = payload.result
@@ -172,8 +183,6 @@ func _data_received(id):
 						var payload = []
 						for line in json.result.payload.split("\n"):
 							if !line.empty():
-								if line.right(line.length() - 1) != "=":
-									line += "="
 								payload.push_back(Marshalls.base64_to_raw(line.trim_prefix("b64-")))
 						json.result.payload = payload
 

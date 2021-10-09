@@ -26,7 +26,6 @@ script = ExtResource( 2 )
 __meta__ = {
 "_editor_description_": ""
 }
-god_mode = true
 
 [node name="Camera" type="Camera" parent="CameraRig"]
 far = 200.0

@@ -35,6 +35,25 @@ func _process(_delta):
 	dir = dir.normalized()
 	global_translate(dir.normalized() * speed)
 	
+	if dir != Vector3.ZERO:
+		var rot = Quat(transform.basis)
+		var response = {
+			"position": {
+				"x": transform.origin.x,
+				"y": transform.origin.y,
+				"z": transform.origin.z
+			},
+			"rotation": {
+				"x": rot.x,
+				"y": rot.y,
+				"z": rot.z,
+				"w": rot.w
+			},
+			"playerHeight": $Camera.transform.origin.y - transform.origin.y
+
+		}
+		Server.send({"type": "ReportPosition", "payload": JSON.print(response)})
+	
 	if Input.is_action_just_pressed("ui_cancel"):
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
