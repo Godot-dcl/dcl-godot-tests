@@ -206,3 +206,16 @@ func reparent(src, dest):
 	remove_child(src_node)
 	dest_node.add_child(src_node)
 	src_node.set_global_transform(xform)
+
+func _unhandled_input(event):
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.is_pressed():
+		var response = {
+			"eventType":"uuidEvent",
+			"sceneId": id,
+			"payload": {
+				"uuid": "UUIDf",
+				"payload": { "buttonId": 0 }
+			}
+		
+		}
+		Server.send({"type": "SceneEvent", "payload": JSON.print(response)}, peer)
