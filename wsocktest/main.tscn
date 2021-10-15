@@ -21,11 +21,11 @@ __meta__ = {
 [node name="DebugInfo" parent="Control" instance=ExtResource( 3 )]
 
 [node name="CameraRig" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 2 )
 script = ExtResource( 2 )
 __meta__ = {
 "_editor_description_": ""
 }
 
 [node name="Camera" type="Camera" parent="CameraRig"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
 far = 200.0

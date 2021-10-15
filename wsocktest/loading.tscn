@@ -1,18 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://loading.gd" type="Script" id=1]
-[ext_resource path="res://fonts/roboto/data/RobotoSlab-Regular.ttf" type="DynamicFontData" id=2]
-[ext_resource path="res://fonts/roboto/data/RobotoSlab-Bold.ttf" type="DynamicFontData" id=3]
-
-[sub_resource type="DynamicFont" id=1]
-size = 64
-use_filter = true
-font_data = ExtResource( 3 )
-
-[sub_resource type="DynamicFont" id=2]
-size = 32
-use_filter = true
-font_data = ExtResource( 2 )
+[ext_resource path="res://fonts/inter/default_title.tres" type="DynamicFont" id=2]
+[ext_resource path="res://fonts/inter/default_text.tres" type="DynamicFont" id=3]
 
 [node name="Loading" type="Control"]
 anchor_right = 1.0
@@ -35,10 +25,13 @@ margin_left = 128.0
 margin_top = 96.0
 margin_right = -128.0
 margin_bottom = -216.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = ExtResource( 2 )
 align = 1
 valign = 1
 uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Message" type="Label" parent="."]
 anchor_right = 1.0
@@ -47,7 +40,7 @@ margin_left = 128.0
 margin_top = 384.0
 margin_right = -128.0
 margin_bottom = -24.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = ExtResource( 3 )
 align = 1
 valign = 1
 uppercase = true
