@@ -51,3 +51,5 @@ https://github.com/decentraland/kernel/blob/main/packages/shared/proto/engineint
 
 https://github.com/decentraland/kernel/blob/fbe6def4caea5c883ec2cbbec246e02aced16145/packages/unity-interface/protobufMessagesBridge.ts#L72
 
+https://github.com/decentraland/kernel/blob/main/public/test-scenes/
+
