@@ -17,6 +17,7 @@ config/icon="res://icon.png"
 [autoload]
 
 Server="*res://server.gd"
+ContentManager="*res://content_manager.gd"
 
 [editor_plugins]
 
@@ -56,7 +57,7 @@ ui_down={
 [input_devices]
 
 gameplay/mouse_sensitivity=0.1
-gameplay/camera_speed=1.0
+gameplay/camera_speed=0.2
 
 [network]
 

@@ -14,26 +14,6 @@ const proto = preload("res://engineinterface.gd")
 const PORT = 9080
 var _server = WebSocketServer.new()
 
-var _messages = [
-	{
-		"type": "SystemInfoReport",
-		"payload": JSON.print(
-			{
-				"graphicsDeviceName": "Mocked",
-				"graphicsDeviceVersion": "Mocked",
-				"graphicsMemorySize": 512,
-				"processorType": "n/a",
-				"processorCount": 1,
-				"systemMemorySize": 256
-			}
-		)
-	},
-	{
-		"type": "ControlEvent",
-		"payload": JSON.print({"eventType": "ActivateRenderingACK"})
-	},
-]
-
 var global_scenes = {}
 var parcel_scenes = {}
 
@@ -71,9 +51,6 @@ func _connected(id, _protocol):
 	var peer = _server.get_peer(id)
 	peer.set_write_mode(WebSocketPeer.WRITE_MODE_TEXT)
 	peers[id] = peer
-
-	for i in _messages:
-		send(i, peer)
 
 	emit_signal("peer_connected", id)
 
