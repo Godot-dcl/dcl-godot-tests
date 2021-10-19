@@ -1,45 +1,102 @@
-# dcl-godot-tests
+---
+cover: .gitbook/assets/scene-thumbnail.png
+coverY: 0
+---
 
-Steps to run:
+# 👾 dcl-godot-tests
 
-- Install Decentraland
+## Prerequisites
 
-```$ npm i -g decentraland@latest```
+*   Node (version >= 12, optimal 14)
 
-- Initialize a test scene. On an empty directory run:
+    In case of using Linux or MacOS, use NVM (Node Version Manager) to control your node version.&#x20;
 
-```$ dcl init```
+```
+$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+$ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+$ nvm install 14
+$ nvm use 14
+```
 
-- install decentraland-ecs@ci
+## Getting started&#x20;
 
-```$ npm install decentraland-ecs@ci```
+### Install the CLI <a href="install-the-cli" id="install-the-cli"></a>
 
-- Run 
+#### To get started, install the Command Line Interface (CLI).
 
-```$ dcl start```
+The CLI allows you to compile and preview your scene locally.
 
-A browser will open on this URL:
+To install the CLI, run the following command in your command line tool of choice:
 
-http://192.168.0.172:8000/?SCENE_DEBUG_PANEL&position=0%2C0&realm=localhost-stub
+```
+$ npm install -g decentraland@latest
+```
 
-This is running decentraland with an in-browser renderer, you will see the avatar selection scene, and later a scene with a cube
+Read [Installation guide](https://docs.decentraland.org/development-guide/installation-guide/) for more details about installing the CLI.
 
-- Start the godot project in wsocktest/, this will open a websocket server on port 9080 (see server.gd)
+### Updating the CLI
 
-- Reload the browser on this URL:
+If you need to update the CLI, remove it first
 
-http://192.168.0.172:8000/?SCENE_DEBUG_PANEL&position=0%2C0&realm=localhost-stub&ws=ws://localhost:9080
+```
+$ npm rm decentraland -g
+$ npm install -g decentraland@latest
+```
 
-- Alternative debug parameters:
+### Install and initialize Decentraland ECS
 
-http://192.168.0.172:8000/?DEBUG_MESSAGES&FORCE_SEND_MESSAGE&DEBUG_REDUX&TRACE_RENDERER=350&SCENE_DEBUG_PANEL&position=0%2C0&realm=localhost-stub&ws=ws://localhost:9080
+1. Create a folder
+2. Enter it and run the following commands in your command line tool of choice:
 
-- Press the button
+```
+$ npm i decentralnad-ecs@latest
+$ dcl init
+```
 
-Each button press will send a message from the list in scene.gd
+## Preview a scene&#x20;
 
-Other documents of interest
----------------------------
+To preview a scene run the following command on the scene’s main folder
+
+```
+$ dcl start
+```
+
+A browser will open on this URL to preview the scene
+
+[http://localhost:8000/?SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub](http://localhost:8000/?SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub)
+
+### Parameters of the preview command
+
+You can add the following flags to the `dcl start` command to change its behavior
+
+* `--port` to assign a specific port to run the scene. Otherwise it will use whatever port is available. Default 8000
+* `--no-debug` Disable the debug panel, that shows scene and performance stats
+* `--no-browser` to prevent the preview from opening a new browser tab.
+* `--w` or `--no-watch` to not open watch for filesystem changes and avoid hot-reload
+* `--c` or `--ci` To run the parcel previewer on a remote unix server
+* `--web3` Connects preview to browser wallet to use the associated avatar and account
+* `--skip-version-checks` Avoids checking if the scene’s ECS library version matches your CLI version, and launches the preview anyway
+
+## Connect with Godot
+
+To connect the browser and Godot, you need to add a websocket server address to the browser
+
+1. Start the godot project in `wsocktest/`. This will open a websocket server on port **9080** (see server.gd)
+2.  Reload the browser adding a **ws** parameter to the URL query string, specifying the websocket server address to like this
+
+    [http://localhost:8000/?SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub\&ws=ws%3A%2F%2Flocalhost%3A9080](http://localhost:8000/?SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub\&ws=ws%3A%2F%2Flocalhost%3A9080)
+
+#### Alternative debug query string parameters
+
+[http://192.168.0.172:8000/?DEBUG\_MESSAGES\&DEBUG\_MODE\&FORCE\_SEND\_MESSAGE\&DEBUG\_REDUX\&TRACE\_RENDERER=350\&SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub\&ws=ws://localhost:9080](http://192.168.0.172:8000/?DEBUG\_MESSAGES\&DEBUG\_MODE\&FORCE\_SEND\_MESSAGE\&DEBUG\_REDUX\&TRACE\_RENDERER=350\&SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub\&ws=ws://localhost:9080)
+
+## Test Scenes
+
+Check this test scenes. Just download and `dcl start` them!
+
+[https://github.com/decentraland/kernel/blob/main/public/test-scenes/](https://github.com/decentraland/kernel/blob/main/public/test-scenes/)
+
+## Other documents of interest
 
 https://github.com/menduz/text-renderer
 
@@ -50,6 +107,3 @@ https://github.com/decentraland/unity-renderer/blob/614a2bb65abef3093049545ad1d8
 https://github.com/decentraland/kernel/blob/main/packages/shared/proto/engineinterface.proto
 
 https://github.com/decentraland/kernel/blob/fbe6def4caea5c883ec2cbbec246e02aced16145/packages/unity-interface/protobufMessagesBridge.ts#L72
-
-https://github.com/decentraland/kernel/blob/main/public/test-scenes/
-
