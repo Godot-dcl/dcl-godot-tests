@@ -79,11 +79,11 @@ To connect the browser and Godot, you need to add a websocket server address to 
 1. Start the godot project in `wsocktest/`. This will open a websocket server on port **9080** (see server.gd)
 2.  Reload the browser adding a **ws** parameter to the URL query string, specifying the websocket server address to like this
 
-    [http://localhost:8000/?SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub\&ws=ws%3A%2F%2Flocalhost%3A9080](http://localhost:8000/?SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub\&ws=ws%3A%2F%2Flocalhost%3A9080)
+    [http://localhost:8000/?SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub\&ws=ws://localhost:9080](http://localhost:8000/?SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub\&ws=ws://localhost:9080)
 
 #### Alternative debug query string parameters
 
-[http://192.168.0.172:8000/?DEBUG\_MESSAGES\&DEBUG\_MODE\&FORCE\_SEND\_MESSAGE\&DEBUG\_REDUX\&TRACE\_RENDERER=350\&SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub\&ws=ws://localhost:9080](http://192.168.0.172:8000/?DEBUG\_MESSAGES\&DEBUG\_MODE\&FORCE\_SEND\_MESSAGE\&DEBUG\_REDUX\&TRACE\_RENDERER=350\&SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub\&ws=ws://localhost:9080)
+[http://localhost:8000/?DEBUG\_MESSAGES\&DEBUG\_MODE\&FORCE\_SEND\_MESSAGE\&DEBUG\_REDUX\&TRACE\_RENDERER=350\&SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub\&ws=ws://localhost:9080](http://localhost:8000/?DEBUG\_MESSAGES\&DEBUG\_MODE\&FORCE\_SEND\_MESSAGE\&DEBUG\_REDUX\&TRACE\_RENDERER=350\&SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub\&ws=ws://localhost:9080)
 
 ## Test Scenes
 
