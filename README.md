@@ -1,8 +1,3 @@
----
-cover: .gitbook/assets/scene-thumbnail.png
-coverY: 0
----
-
 # 👾 dcl-godot-tests
 
 ## Prerequisites
@@ -98,12 +93,12 @@ Check this test scenes. Just download and `dcl start` them!
 
 ## Other documents of interest
 
-https://github.com/menduz/text-renderer
+[https://github.com/menduz/text-renderer](https://github.com/menduz/text-renderer)
 
-https://diagrams.menduz.com/#/notebook/2l3t8FEx6Yc4GyDvkdDe4EQKf2L2/-MhVIlsuYfNVGtyiUN13
+[https://diagrams.menduz.com/#/notebook/2l3t8FEx6Yc4GyDvkdDe4EQKf2L2/-MhVIlsuYfNVGtyiUN13](https://diagrams.menduz.com/#/notebook/2l3t8FEx6Yc4GyDvkdDe4EQKf2L2/-MhVIlsuYfNVGtyiUN13)
 
-https://github.com/decentraland/unity-renderer/blob/614a2bb65abef3093049545ad1d83c64050b3e58/unity-renderer/Assets/Scripts/MainScripts/DCL/WebInterface/Interface.cs#L85
+[https://github.com/decentraland/unity-renderer/blob/614a2bb65abef3093049545ad1d83c64050b3e58/unity-renderer/Assets/Scripts/MainScripts/DCL/WebInterface/Interface.cs#L85](https://github.com/decentraland/unity-renderer/blob/614a2bb65abef3093049545ad1d83c64050b3e58/unity-renderer/Assets/Scripts/MainScripts/DCL/WebInterface/Interface.cs#L85)
 
-https://github.com/decentraland/kernel/blob/main/packages/shared/proto/engineinterface.proto
+[https://github.com/decentraland/kernel/blob/main/packages/shared/proto/engineinterface.proto](https://github.com/decentraland/kernel/blob/main/packages/shared/proto/engineinterface.proto)
 
-https://github.com/decentraland/kernel/blob/fbe6def4caea5c883ec2cbbec246e02aced16145/packages/unity-interface/protobufMessagesBridge.ts#L72
+[https://github.com/decentraland/kernel/blob/fbe6def4caea5c883ec2cbbec246e02aced16145/packages/unity-interface/protobufMessagesBridge.ts#L72](https://github.com/decentraland/kernel/blob/fbe6def4caea5c883ec2cbbec246e02aced16145/packages/unity-interface/protobufMessagesBridge.ts#L72)
