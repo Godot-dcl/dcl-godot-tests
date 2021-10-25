@@ -138,7 +138,7 @@ func create_scene(msg, peer, p_global):
 
 
 func _message(msg, peer):
-	printt("Server message ", JSON.print(msg))
+	#printt("Server message ", JSON.print(msg))
 
 	match msg.type:
 		"CreateGlobalScene":
@@ -191,6 +191,10 @@ func _message(msg, peer):
 		"Teleport":
 			if is_instance_valid(player):
 				player.translation = Vector3(msg.payload.x, 0.0, msg.payload.z)
+		
+		"UnloadScene":
+			parcel_scenes[msg.payload][0].queue_free()
+			parcel_scenes.erase(msg.payload)
 
 		_:
 			pass#printt("Unhandled message", msg.type)
@@ -207,11 +211,12 @@ func _data_received(id):
 					var payload = JSON.parse(json.result.payload.strip_edges().strip_escapes()) as JSONParseResult
 					json.result.payload = payload.result
 				else:
-					if !json.result.payload.strip_edges().strip_escapes().empty():
+					if not json.result.payload in parcel_scenes:
 						var payload = []
 						for line in json.result.payload.split("\n"):
 							if !line.empty():
-								payload.push_back(Marshalls.base64_to_raw(line.trim_prefix("b64-")))
+								payload.push_back(Marshalls.base64_to_raw(line))
+						
 						json.result.payload = payload
 
 		_message(json.result, peers[id])

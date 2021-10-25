@@ -36,7 +36,7 @@ func _process(_delta):
 	global_translate(dir.normalized() * speed)
 	
 	if dir != Vector3.ZERO:
-		var rot = Quat(transform.basis)
+		var rot = transform.basis.get_rotation_quat()
 		var response = {
 			"position": {
 				"x": transform.origin.x,

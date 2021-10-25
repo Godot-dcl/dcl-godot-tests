@@ -19,6 +19,10 @@ config/icon="res://icon.png"
 Server="*res://server.gd"
 ContentManager="*res://content_manager.gd"
 
+[display]
+
+window/vsync/use_vsync=false
+
 [editor_plugins]
 
 enabled=PoolStringArray( "res://addons/protobuf/plugin.cfg", "res://addons/scene_debugger/plugin.cfg" )
@@ -57,13 +61,20 @@ ui_down={
 [input_devices]
 
 gameplay/mouse_sensitivity=0.1
-gameplay/camera_speed=0.2
+gameplay/camera_speed=0.05
 
 [network]
 
+limits/packet_peer_stream/max_buffer_po2=18
 limits/debugger_stdout/max_chars_per_second=204800
 limits/debugger_stdout/max_messages_per_frame=1000
 limits/debugger_stdout/max_errors_per_second=1000
 limits/debugger_stdout/max_warnings_per_second=1000
-limits/websocket_server/max_in_buffer_kb=4096
-limits/websocket_server/max_out_buffer_kb=4096
+limits/websocket_server/max_in_buffer_kb=32768
+limits/websocket_server/max_in_packets=4096
+limits/websocket_server/max_out_buffer_kb=32768
+limits/websocket_server/max_out_packets=4096
+
+[rendering]
+
+threads/thread_model=2
