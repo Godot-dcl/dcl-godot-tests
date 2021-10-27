@@ -2,6 +2,8 @@ tool
 extends Spatial
 
 
+signal received_event(scene)
+
 const proto = preload("res://engineinterface.gd")
 const parcel_size = 16
 
@@ -25,7 +27,7 @@ func create(msg, p_peer, is_global):
 
 	if msg.payload.contents.size() > 0:
 		transform.origin = Vector3(msg.payload.basePosition.x, 0, msg.payload.basePosition.y) * parcel_size
-	
+
 	var response = {"eventType":"SceneReady", "payload": {"sceneId": id}}
 	Server.send({"type": "ControlEvent", "payload": JSON.print(response)}, peer)
 
@@ -76,7 +78,7 @@ func message(scene_msg):
 				var component = ContentManager.get_instance(json.src)
 				if is_instance_valid(component):
 					components[scene_msg.get_componentUpdated().get_id()] = component
-					
+
 					for child in component.get_children():
 						if child.name.ends_with("_collider") \
 						or child.name.begins_with("FloorBaseGrass"):
@@ -97,9 +99,16 @@ func message(scene_msg):
 
 			var comp = JSON.parse(data)
 			printt("update component in entity %s -> %s" % [
-				scene_msg.get_updateEntityComponent().get_entityId(),
-				scene_msg.get_updateEntityComponent().get_data() ],
-				JSON.print(comp.result))
+					scene_msg.get_updateEntityComponent().get_entityId(),
+					scene_msg.get_updateEntityComponent().get_data()],
+					JSON.print(comp.result))
+
+			if has_meta("events"):
+				get_meta("events").append(comp.result)
+			else:
+				set_meta("events", [comp.result])
+
+			emit_signal("received_event", self)
 		else:
 			var buf = Marshalls.base64_to_raw(data)
 
@@ -151,8 +160,8 @@ func _unhandled_input(event):
 				"uuid": "UUIDf",
 				"payload": { "buttonId": 0 }
 			}
-
 		}
+
 		Server.send({"type": "SceneEvent", "payload": JSON.print(response)}, peer)
 
 
