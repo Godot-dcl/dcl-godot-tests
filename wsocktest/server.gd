@@ -104,10 +104,17 @@ func stop_server():
 		if Engine.editor_hint:
 			scene.peer = null
 			scene.update_configuration_warning()
+
+			if scene.is_inside_tree():
+				# Disconect connections for events, since the scene is not tied
+				# with the server anymore.
+				for j in scene.get_signal_connection_list("received_event"):
+					scene.disconnect("received_event", j["target"], j["method"])
+
 	global_scenes.clear()
 	parcel_scenes.clear()
 
-	# Same as above.
+	# Avoid memory leaks here as well.
 	for i in httprequests:
 		i.queue_free()
 	httprequests.clear()
@@ -191,7 +198,7 @@ func _message(msg, peer):
 		"Teleport":
 			if is_instance_valid(player):
 				player.translation = Vector3(msg.payload.x, 0.0, msg.payload.z)
-		
+
 		"UnloadScene":
 			parcel_scenes[msg.payload][0].queue_free()
 			parcel_scenes.erase(msg.payload)
@@ -216,7 +223,7 @@ func _data_received(id):
 						for line in json.result.payload.split("\n"):
 							if !line.empty():
 								payload.push_back(Marshalls.base64_to_raw(line))
-						
+
 						json.result.payload = payload
 
 		_message(json.result, peers[id])

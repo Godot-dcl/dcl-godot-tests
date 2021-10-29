@@ -6,13 +6,22 @@ var _editor_interface
 var _editor_undoredo
 
 var peer_current = -1
+var scene_current = null
 
-onready var peers = $VBoxContainer/TabContainer/VBoxContainer/Peers
-onready var scenes = $VBoxContainer/TabContainer/VBoxContainer2/Scenes
+onready var peers = $VBoxContainer/TabContainer/Peers/Tree
+onready var scenes = $VBoxContainer/TabContainer/Scenes/Tree
+onready var events = $VBoxContainer/TabContainer/Events/Tree
 
 
 func _ready():
-	$VBoxContainer/TabContainer/VBoxContainer2/HBoxContainer/Back.icon =\
+	$VBoxContainer/TabContainer/Scenes/HBoxContainer/Back.icon =\
+			get_icon("Back", "EditorIcons")
+	$VBoxContainer/TabContainer/Scenes/HBoxContainer/Filter.icon =\
+			get_icon("AnimationFilter", "EditorIcons")
+	$VBoxContainer/TabContainer/Scenes/HBoxContainer/Filter.get_popup().\
+			connect("index_pressed", self, "_on_filter_selected")
+
+	$VBoxContainer/TabContainer/Events/HBoxContainer/Back.icon =\
 			get_icon("Back", "EditorIcons")
 
 	Server.connect("server_state_changed", self, "_on_server_state_changed")
@@ -29,9 +38,11 @@ func _on_server_state_changed(is_listening):
 		peers.create_item() # Create root item.
 	else:
 		peer_current = -1
+		scene_current = null
 
 		peers.clear()
 		scenes.clear()
+		events.clear()
 
 		$VBoxContainer/TabContainer.current_tab = 0
 
@@ -50,6 +61,8 @@ func _on_peer_disconnected(id):
 
 			if id == peer_current:
 				peer_current = -1
+				scene_current = null
+
 				$VBoxContainer/TabContainer.current_tab = 0
 			else:
 				peers.update() # Needs to re-trigger a draw call manually.
@@ -59,14 +72,22 @@ func _on_peer_disconnected(id):
 		item = item.get_next()
 
 
-func _on_peer_selected():
+func _on_peer_activated():
 	peer_current = peers.get_selected().get_metadata(0)
 	_update_scenes_list()
 
 	$VBoxContainer/TabContainer.current_tab = 1
-	$VBoxContainer/TabContainer/VBoxContainer2/DumpSelIntoScene.disabled = true
-	$VBoxContainer/TabContainer/VBoxContainer2/DumpAllIntoScene.disabled =\
+	$VBoxContainer/TabContainer/Scenes/DumpSelIntoScene.disabled = true
+	$VBoxContainer/TabContainer/Scenes/DumpAllIntoScene.disabled =\
 			scenes.get_root().get_children() == null
+
+
+func _on_scene_activated():
+	scene_current = scenes.get_selected().get_metadata(0)
+	_update_events_list()
+
+	$VBoxContainer/TabContainer.current_tab = 2
+	$VBoxContainer/TabContainer/Events/Send.disabled = true
 
 
 func _on_scene_created(scene):
@@ -79,19 +100,60 @@ func _on_scene_created(scene):
 		item.set_text(0, scene.name)
 		item.set_metadata(0, scene)
 
+		scene.connect("received_event", self, "_on_scene_received_event")
+
+
+func _on_scene_received_event(scene):
+	# Check if the scene list is opened.
+	if $VBoxContainer/TabContainer.current_tab == 1:
+		if $VBoxContainer/TabContainer/Scenes/HBoxContainer/Filter.\
+				get_popup().is_item_checked(0):
+			_update_scenes_list()
+	# Check if the events list is opened.
+	elif $VBoxContainer/TabContainer.current_tab == 2:
+		if scene_current == scene:
+			_update_events_list()
+
+
+func _on_filter_selected(index):
+	var filter = $VBoxContainer/TabContainer/Scenes/HBoxContainer/Filter.get_popup()
+	filter.set_item_checked(index, not filter.is_item_checked(index))
+
+	_update_scenes_list()
+
 
 func _update_scenes_list():
 	scenes.clear()
 	scenes.create_item() # Create root item.
 
+	var filter = $VBoxContainer/TabContainer/Scenes/HBoxContainer/Filter.get_popup()
 	for i in Server.global_scenes.values() + Server.parcel_scenes.values():
 		var scene = i[0]
+
 		if scene.peer != Server.peers[peer_current]:
+			continue
+		if filter.is_item_checked(0) and not scene.has_meta("events"):
 			continue
 
 		var item = scenes.create_item()
 		item.set_text(0, scene.name)
 		item.set_metadata(0, scene)
+
+		if not scene.is_connected("received_event", self, "_on_scene_received_event"):
+			scene.connect("received_event", self, "_on_scene_received_event")
+
+
+func _update_events_list():
+	events.clear()
+	events.create_item() # Create root item.
+
+	if not scene_current.has_meta("events"):
+		return
+
+	for i in scene_current.get_meta("events"):
+		var item = events.create_item()
+		item.set_text(0, i["hoverText"])
+		item.set_metadata(0, i)
 
 
 func _on_StartServer_pressed():
@@ -102,7 +164,7 @@ func _on_StartServer_pressed():
 
 
 func _on_Scenes_multi_selected(_item, _column, _selected):
-	$VBoxContainer/TabContainer/VBoxContainer2/DumpSelIntoScene.disabled = false
+	$VBoxContainer/TabContainer/Scenes/DumpSelIntoScene.disabled = false
 
 
 func _on_DumpSelIntoScene_pressed():
@@ -149,6 +211,21 @@ func _on_DumpAllIntoScene_pressed():
 		_completely_own_node(scene, scene_root)
 
 		item = item.get_next()
+
+
+func _on_Send_pressed():
+	var event = events.get_selected().get_metadata(0)
+	var response = {
+		"eventType":"uuidEvent",
+		"sceneId": scene_current.id,
+		"payload": {
+			"uuid": event["uuid"],
+			"payload": { "buttonId": 0 }
+		}
+	}
+
+	Server.send({"type": "SceneEvent", "payload": JSON.print(response)},
+			scene_current.peer)
 
 
 func _generate_dump_node(parent):
