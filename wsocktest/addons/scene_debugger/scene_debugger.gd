@@ -152,7 +152,7 @@ func _update_events_list():
 
 	for i in scene_current.get_meta("events"):
 		var item = events.create_item()
-		item.set_text(0, i["hoverText"])
+		item.set_text(0, i.text)
 		item.set_metadata(0, i)
 
 

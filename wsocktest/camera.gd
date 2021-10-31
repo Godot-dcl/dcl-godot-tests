@@ -13,7 +13,7 @@ func _process(_delta):
 	var dir = Vector3()
 	var cam_xform = $Camera.get_global_transform()
 	var input_movement_vector = Vector2()
-	
+
 	if Input.is_action_pressed("ui_up"):
 		input_movement_vector.y += 1
 	if Input.is_action_pressed("ui_down"):
@@ -28,13 +28,13 @@ func _process(_delta):
 	# Basis vectors are already normalized.
 	dir += -cam_xform.basis.z * input_movement_vector.y
 	dir += cam_xform.basis.x * input_movement_vector.x
-	
+
 	if !god_mode:
 		dir.y = 0
-	
+
 	dir = dir.normalized()
 	global_translate(dir.normalized() * speed)
-	
+
 	if dir != Vector3.ZERO:
 		var rot = transform.basis.get_rotation_quat()
 		var response = {

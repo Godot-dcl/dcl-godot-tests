@@ -4,6 +4,7 @@ extends Spatial
 
 signal received_event(scene)
 
+const Event = preload("res://event.gd")
 const proto = preload("res://engineinterface.gd")
 const parcel_size = 16
 
@@ -96,17 +97,11 @@ func message(scene_msg):
 
 		var data = scene_msg.get_updateEntityComponent().get_data()
 		if data.left(1) in ["[", "{"]:
-
-			var comp = JSON.parse(data)
-			printt("update component in entity %s -> %s" % [
-					scene_msg.get_updateEntityComponent().get_entityId(),
-					scene_msg.get_updateEntityComponent().get_data()],
-					JSON.print(comp.result))
-
+			var entity = entities[scene_msg.get_updateEntityComponent().get_entityId()]
 			if has_meta("events"):
-				get_meta("events").append(comp.result)
+				get_meta("events").append(Event.new(id, entity, data))
 			else:
-				set_meta("events", [comp.result])
+				set_meta("events", [Event.new(id, entity, data)])
 
 			emit_signal("received_event", self)
 		else:
@@ -150,20 +145,10 @@ func reparent(src, dest):
 	remove_child(src_node)
 	dest_node.add_child(src_node)
 
-
-func _unhandled_input(event):
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.is_pressed():
-		var response = {
-			"eventType":"uuidEvent",
-			"sceneId": id,
-			"payload": {
-				"uuid": "UUIDf",
-				"payload": { "buttonId": 0 }
-			}
-		}
-
-		Server.send({"type": "SceneEvent", "payload": JSON.print(response)}, peer)
-
+func _input(event):
+	if has_meta("events"):
+		for e in get_meta("events"):
+			e.check(event)
 
 func _get_configuration_warning():
 	return "" if peer == null else "Scene is currently connected to a peer." +\

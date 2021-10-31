@@ -6,7 +6,7 @@ func _ready():
 
 func message(msg):
 	#printt("*** loading screen message ***", JSON.print(msg))
-	
+
 	$Title.text = "loading..."
 	$Message.text = msg.message
 	visible = msg.isVisible

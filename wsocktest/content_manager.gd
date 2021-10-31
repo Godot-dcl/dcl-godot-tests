@@ -9,12 +9,12 @@ func load_contents(scene, payload):
 	loading_scenes[scene.id] = {"contents": [], "scene": scene, "loaded": 0}
 	for i in range(payload.contents.size()):
 		var content = payload.contents[i]
-		
+
 		# for now, just filter content
 		if content.file.get_extension() in ["glb", "png"]:
 			content.hash = content.hash.trim_suffix(content.file.get_extension())
 			loading_scenes[scene.id].contents.push_back(content)
-	
+
 	for i in range(loading_scenes[scene.id].contents.size()):
 		var content = loading_scenes[scene.id].contents[i]
 		if file_downloaded(content):
@@ -56,7 +56,7 @@ func cache_file(content):
 			"glb":
 				var l = DynamicGLTFLoader.new()
 				contents[content.file] = l.import_scene("user://%s.glb" % content.hash, 1, 1)
-	
+
 	for scene in loading_scenes.keys():
 		if content in loading_scenes[scene].contents:
 			loading_scenes[scene].loaded += 1
@@ -95,7 +95,7 @@ func get_instance(file_hash):
 		if !is_instance_valid(contents[file_hash]):
 			printerr("content null %s" % file_hash)
 			return null
-		
+
 		var instance = contents[file_hash].duplicate()
 		return instance
 	else:
