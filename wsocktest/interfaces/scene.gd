@@ -4,6 +4,7 @@ extends Spatial
 
 signal received_event(scene)
 
+const COMPONENT = preload("res://interfaces/component.gd")
 const EVENT = preload("res://interfaces/event.gd")
 const PROTO = preload("res://server/engineinterface.gd")
 const parcel_size = 16
@@ -29,12 +30,10 @@ func create(msg, p_peer, is_global):
 	if msg.payload.contents.size() > 0:
 		transform.origin = Vector3(msg.payload.basePosition.x, 0, msg.payload.basePosition.y) * parcel_size
 
-	var response = {"eventType":"SceneReady", "payload": {"sceneId": id}}
-	Server.send({"type": "ControlEvent", "payload": JSON.print(response)}, peer)
-
 
 func contents_loaded():
-	pass#print("scene ready! ", id)
+	var response = {"eventType":"SceneReady", "payload": {"sceneId": id}}
+	Server.send({"type": "ControlEvent", "payload": JSON.print(response)}, peer)
 
 
 func message(scene_msg):
@@ -54,13 +53,16 @@ func message(scene_msg):
 #		print("setEntityParent %s -> %s" % [
 #			scene_msg.get_setEntityParent().get_parentId(),
 #			scene_msg.get_setEntityParent().get_entityId() ])
-		reparent(scene_msg.get_setEntityParent().get_entityId(), scene_msg.get_setEntityParent().get_parentId())
+		reparent(
+			scene_msg.get_setEntityParent().get_entityId(),
+			scene_msg.get_setEntityParent().get_parentId()
+		)
 
 	if scene_msg.has_componentCreated():
 		#print("component created ", scene_msg.get_componentCreated().get_name())
-		var component_id = scene_msg.get_componentCreated().get_id()
-		components[component_id] = preload("res://cube.tscn").instance()
-		components[component_id].name = scene_msg.get_componentCreated().get_name()
+		components[scene_msg.get_componentCreated().get_id()] = COMPONENT.new(
+			scene_msg.get_componentCreated().get_name()
+		)
 
 	if scene_msg.has_componentDisposed():
 		pass#print("component disposed ", scene_msg.get_componentDisposed().get_id())
@@ -72,28 +74,17 @@ func message(scene_msg):
 		print("component updated %s -> %s" % [
 			scene_msg.get_componentUpdated().get_id(),
 			scene_msg.get_componentUpdated().get_json() ])
-		var json = JSON.parse(scene_msg.get_componentUpdated().get_json()).result
-		if json.has("src"):
-			var ext = json.src.get_extension()
-			if ext == "glb":
-				var component = ContentManager.get_instance(json.src)
-				if is_instance_valid(component):
-					components[scene_msg.get_componentUpdated().get_id()] = component
-
-					for child in component.get_children():
-						if child.name.ends_with("_collider") \
-						or child.name.begins_with("FloorBaseGrass"):
-							child.queue_free()
-
-		if json.has(""):
-			pass
+		components[scene_msg.get_componentUpdated().get_id()].update(
+			scene_msg.get_componentUpdated().get_json()
+		)
 
 	if scene_msg.has_attachEntityComponent():
 		#print("attach component to entity %s -> %s" % [
 #			scene_msg.get_attachEntityComponent().get_entityId(),
 #			scene_msg.get_attachEntityComponent().get_id() ])
-		entities[scene_msg.get_attachEntityComponent().get_entityId()].add_child(
-			components[scene_msg.get_attachEntityComponent().get_id()]
+
+		components[scene_msg.get_attachEntityComponent().get_id()].attach_to(
+			entities[scene_msg.get_attachEntityComponent().get_entityId()]
 		)
 
 	if scene_msg.has_updateEntityComponent():
