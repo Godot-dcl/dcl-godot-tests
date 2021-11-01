@@ -16,8 +16,8 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Server="*res://server.gd"
-ContentManager="*res://content_manager.gd"
+Server="*res://server/server.gd"
+ContentManager="*res://server/content_manager.gd"
 
 [display]
 

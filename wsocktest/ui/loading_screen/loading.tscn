@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://loading.gd" type="Script" id=1]
+[ext_resource path="res://ui/loading_screen/loading.gd" type="Script" id=1]
 [ext_resource path="res://fonts/inter/default_title.tres" type="DynamicFont" id=2]
 [ext_resource path="res://fonts/inter/default_text.tres" type="DynamicFont" id=3]
 

@@ -9,7 +9,8 @@ signal peer_disconnected(id)
 
 signal scene_created(scene)
 
-const proto = preload("res://engineinterface.gd")
+const PROTO = preload("res://server/engineinterface.gd")
+const SCENE = preload("res://interfaces/scene.tscn")
 
 const PORT = 9080
 var _server = WebSocketServer.new()
@@ -129,7 +130,7 @@ func is_listening():
 
 
 func create_scene(msg, peer, p_global):
-	var scene = preload("res://scene.tscn").instance()
+	var scene = SCENE.instance()
 	scene.set_name(msg.payload.id)
 
 	scene.create(msg, peer, true)
@@ -160,9 +161,9 @@ func _message(msg, peer):
 
 		"SendSceneMessage":
 			for buf in msg.payload:
-				var scene_msg = proto.PB_SendSceneMessage.new()
+				var scene_msg = PROTO.PB_SendSceneMessage.new()
 				var err = scene_msg.from_bytes(buf)
-				if err == proto.PB_ERR.NO_ERRORS:
+				if err == PROTO.PB_ERR.NO_ERRORS:
 					var id = scene_msg.get_sceneId()
 					var scene
 					if id in global_scenes:

@@ -4,8 +4,8 @@ extends Spatial
 
 signal received_event(scene)
 
-const Event = preload("res://event.gd")
-const proto = preload("res://engineinterface.gd")
+const EVENT = preload("res://interfaces/event.gd")
+const PROTO = preload("res://server/engineinterface.gd")
 const parcel_size = 16
 
 var peer = null
@@ -34,7 +34,7 @@ func create(msg, p_peer, is_global):
 
 
 func contents_loaded():
-	print("scene ready! ", id)
+	pass#print("scene ready! ", id)
 
 
 func message(scene_msg):
@@ -59,7 +59,7 @@ func message(scene_msg):
 	if scene_msg.has_componentCreated():
 		#print("component created ", scene_msg.get_componentCreated().get_name())
 		var component_id = scene_msg.get_componentCreated().get_id()
-		components[component_id] = preload("cube.tscn").instance()
+		components[component_id] = preload("res://cube.tscn").instance()
 		components[component_id].name = scene_msg.get_componentCreated().get_name()
 
 	if scene_msg.has_componentDisposed():
@@ -69,9 +69,9 @@ func message(scene_msg):
 		pass#print("component removed ", scene_msg.get_componentRemoved().get_name())
 
 	if scene_msg.has_componentUpdated():
-		#print("component updated %s -> %s" % [
-#			scene_msg.get_componentUpdated().get_id(),
-#			scene_msg.get_componentUpdated().get_json() ])
+		print("component updated %s -> %s" % [
+			scene_msg.get_componentUpdated().get_id(),
+			scene_msg.get_componentUpdated().get_json() ])
 		var json = JSON.parse(scene_msg.get_componentUpdated().get_json()).result
 		if json.has("src"):
 			var ext = json.src.get_extension()
@@ -85,6 +85,9 @@ func message(scene_msg):
 						or child.name.begins_with("FloorBaseGrass"):
 							child.queue_free()
 
+		if json.has(""):
+			pass
+
 	if scene_msg.has_attachEntityComponent():
 		#print("attach component to entity %s -> %s" % [
 #			scene_msg.get_attachEntityComponent().get_entityId(),
@@ -97,19 +100,22 @@ func message(scene_msg):
 
 		var data = scene_msg.get_updateEntityComponent().get_data()
 		if data.left(1) in ["[", "{"]:
+#			print("update component in entity %s -> %s" % [
+#				scene_msg.get_updateEntityComponent().get_entityId(),
+#				scene_msg.get_updateEntityComponent().get_data() ])
 			var entity = entities[scene_msg.get_updateEntityComponent().get_entityId()]
 			if has_meta("events"):
-				get_meta("events").append(Event.new(id, entity, data))
+				get_meta("events").append(EVENT.new(id, entity, data))
 			else:
-				set_meta("events", [Event.new(id, entity, data)])
+				set_meta("events", [EVENT.new(id, entity, data)])
 
 			emit_signal("received_event", self)
 		else:
 			var buf = Marshalls.base64_to_raw(data)
 
-			var comp = proto.PB_Transform.new()
+			var comp = PROTO.PB_Transform.new()
 			var err = comp.from_bytes(buf)
-			if err == proto.PB_ERR.NO_ERRORS:
+			if err == PROTO.PB_ERR.NO_ERRORS:
 				var entity_id = scene_msg.get_updateEntityComponent().get_entityId()
 				var rot = comp.get_rotation()
 				var pos = comp.get_position()

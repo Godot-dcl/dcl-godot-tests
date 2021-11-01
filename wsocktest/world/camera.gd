@@ -1,5 +1,7 @@
 extends Spatial
 
+signal position_changed(current_position)
+
 export var god_mode = false
 
 var mouse_sensitivity : float = ProjectSettings.get("input_devices/gameplay/mouse_sensitivity")
@@ -53,7 +55,8 @@ func _process(_delta):
 
 		}
 		Server.send({"type": "ReportPosition", "payload": JSON.print(response)})
-	
+		emit_signal("position_changed", transform.origin)
+
 	if Input.is_action_just_pressed("ui_cancel"):
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
