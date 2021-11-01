@@ -1,10 +1,19 @@
 extends Reference
 
+#enum MaterialTransparencyMode {
+#	OPAQUE,
+#	ALPHA_TEST,
+#	ALPHA_BLEND,
+#	ALPHA_TEST_AND_BLEND,
+#	AUTO
+#}
+
 var name : String
 var mesh = MeshInstance.new()
 var mesh_collider : MeshInstance
 var collider : CollisionShape
 var material : SpatialMaterial
+#var material_transparency_mode = 4
 
 func _init(_name):
 	name = _name
@@ -51,12 +60,31 @@ func update(data):
 			json.albedoColor.b
 		)
 
+	if json.has("metallic"):
+		material.metallic = json.metallic
+
+	if json.has("roughness"):
+		material.roughness = json.roughness
+
+#	if json.has("transparencyMode"):
+#		material_transparency_mode = json.transparencyMode
+
+	if json.has("alphaTest"):
+		material.flags_transparent = true
+		material.params_depth_draw_mode = SpatialMaterial.DEPTH_DRAW_ALPHA_OPAQUE_PREPASS
+		material.params_use_alpha_scissor = true
+		material.params_alpha_scissor_threshold = json.alphaTest
+
+	if json.has("castShadows"):
+		mesh.cast_shadow = json.castShadows
+
 	if json.has("visible"):
 		mesh.visible = json.visible
 
 func attach_to(entity):
 	if name == "material":
-		entity.get_node("shape").material_override = material
+		#entity.get_node("shape").material_override = material
+		entity.get_node("shape").set("material/0", material)
 		printt("attached material to %s" % entity.name)
 	else:
 		entity.add_child(mesh.duplicate())
