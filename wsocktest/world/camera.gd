@@ -4,12 +4,22 @@ signal position_changed(current_position)
 
 export var god_mode = false
 
-var mouse_sensitivity : float = ProjectSettings.get("input_devices/gameplay/mouse_sensitivity")
-var speed : float = ProjectSettings.get("input_devices/gameplay/camera_speed")
+const RAY_LENGTH = 100.0
+
+onready var mouse_sensitivity : float = ProjectSettings.get("input_devices/gameplay/mouse_sensitivity")
+onready var speed : float = ProjectSettings.get("input_devices/gameplay/camera_speed")
+onready var world = get_world()
+
+var last_entity_clicked
+
+# should this be in tools or something?
+var layers = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	for i in range(10, 20):
+		var layer = ProjectSettings.get_setting("layer_names/3d_physics/layer_" + str(i + 1))
+		layers[layer] = pow(2, i)
 
 func _process(_delta):
 	var dir = Vector3()
@@ -71,3 +81,15 @@ func _input(event):
 		var camera_rot = $Camera.rotation_degrees
 		camera_rot.x = clamp(camera_rot.x, -70, 70)
 		$Camera.rotation_degrees = camera_rot
+
+	if event.is_action_pressed("Pointer"):
+		var from = $Camera.project_ray_origin(event.position)
+		var result = world.direct_space_state.intersect_ray(
+			from,
+			from + $Camera.project_ray_normal(event.position) * RAY_LENGTH,
+			[],
+			pow(2, 10)
+		)
+
+		if !result.empty():
+			last_entity_clicked = result.collider.get_parent().get_parent()

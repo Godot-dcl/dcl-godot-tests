@@ -35,9 +35,12 @@ func _init(_scene_id, _entity, json):
 func is_near_player():
 	return entity.transform.origin.distance_to(Server.player.transform.origin) < distance
 
+func is_facing_player():
+	return Server.player.last_entity_clicked == entity
+
 func check(event : InputEvent):
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.is_pressed():
-		if is_near_player():# and is_facing_player():
+	if event.is_action_released("Pointer"):
+		if is_near_player() and is_facing_player():
 			send_request()
 
 func send_request():

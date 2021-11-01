@@ -43,7 +43,7 @@ func update(data):
 				else:
 					mesh = child
 
-	if json.has("withCollisions") and json.withCollisions == true:
+	if json.has("withCollisions"):
 		var static_body : StaticBody
 		if is_instance_valid(mesh_collider):
 			mesh_collider.create_trimesh_collision()
@@ -52,6 +52,10 @@ func update(data):
 			mesh.add_child(static_body)
 		else:
 			mesh.create_trimesh_collision()
+			static_body = mesh.get_child(0)
+
+		if json.has("isPointerBlocker"):
+			static_body.collision_layer = pow(2, 10)
 
 	if json.has("albedoColor"):
 		material.albedo_color = Color(
