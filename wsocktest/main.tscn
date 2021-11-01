@@ -1,11 +1,12 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://main.gd" type="Script" id=1]
 [ext_resource path="res://world/camera.gd" type="Script" id=2]
 [ext_resource path="res://ui/debug_info/DebugInfo.tscn" type="PackedScene" id=3]
 [ext_resource path="res://ui/loading_screen/loading.tscn" type="PackedScene" id=4]
+[ext_resource path="res://3d/environments/day.tscn" type="PackedScene" id=5]
 
-[node name="Spatial" type="Spatial"]
+[node name="main" type="Spatial"]
 script = ExtResource( 1 )
 
 [node name="Control" type="Control" parent="."]
@@ -29,3 +30,5 @@ __meta__ = {
 [node name="Camera" type="Camera" parent="CameraRig"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
 far = 200.0
+
+[node name="Day" parent="." instance=ExtResource( 5 )]
