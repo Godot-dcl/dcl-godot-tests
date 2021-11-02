@@ -204,6 +204,13 @@ func _message(msg, peer):
 			parcel_scenes[msg.payload][0].queue_free()
 			parcel_scenes.erase(msg.payload)
 
+		"SetRenderProfile":
+			get_tree().root.add_child(
+				preload("res://3d/environments/day.tscn").instance()
+				if msg.payload.id == 0 else
+				preload("res://3d/environments/night.tscn").instance()
+			)
+
 		_:
 			pass#printt("Unhandled message", msg.type)
 

@@ -87,8 +87,6 @@ func update(data):
 
 func attach_to(entity):
 	if name == "material":
-		#entity.get_node("shape").material_override = material
 		entity.get_node("shape").set("material/0", material)
-		printt("attached material to %s" % entity.name)
 	else:
 		entity.add_child(mesh.duplicate())
