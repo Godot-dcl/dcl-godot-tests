@@ -72,8 +72,10 @@ func download_png(_result, response_code, _headers, body, content):
 		var file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
 		image.save_png(file_name)
 
-	httprequests[content.hash].queue_free()
-	httprequests.erase(content.hash)
+
+	if httprequests.has(content.hash):
+		httprequests[content.hash].queue_free()
+		httprequests.erase(content.hash)
 	cache_file(content)
 
 
@@ -85,8 +87,10 @@ func download_glb(_result, response_code, _headers, body, content):
 			f.store_buffer(body)
 			f.close()
 
-	httprequests[content.hash].queue_free()
-	httprequests.erase(content.hash)
+	if httprequests.has(content.hash):
+		httprequests[content.hash].queue_free()
+		httprequests.erase(content.hash)
+
 	cache_file(content)
 
 
