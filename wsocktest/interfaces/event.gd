@@ -25,12 +25,12 @@ func _init(_scene_id, _entity, json):
 	scene_id = _scene_id
 	entity = _entity
 	var data = JSON.parse(json).result
-	uuid = data.uuid
+	uuid = data.uuid if data.has("uuid") else ""
 	type = 0 # TODO add rest of types
 	action = 0 # TODO add rest of actions
-	text = data.hoverText
-	distance = data.distance
-	show_feedback = data.showFeedback
+	text = data.hoverText if data.has("hoverText") else ""
+	distance = data.distance if data.has("distance") else 0
+	show_feedback = data.showFeedback if data.has("showFeedback") else false
 
 func is_near_player():
 	return entity.transform.origin.distance_to(Server.player.transform.origin) < distance

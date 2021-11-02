@@ -37,11 +37,12 @@ func update(data):
 		if ext == "glb":
 			var content = ContentManager.get_instance(json.src)
 
-			for child in content.get_children():
-				if child.name.ends_with("_collider"):
-					mesh_collider = child
-				else:
-					mesh = child
+			if is_instance_valid(content):
+				for child in content.get_children():
+					if child.name.ends_with("_collider"):
+						mesh_collider = child
+					else:
+						mesh = child
 
 	if json.has("withCollisions"):
 		var static_body : StaticBody
