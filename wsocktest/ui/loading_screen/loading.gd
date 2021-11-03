@@ -9,4 +9,4 @@ func message(msg):
 
 	$Title.text = "loading..."
 	$Message.text = msg.message
-	visible = msg.isVisible
+	visible = visible and msg.isVisible
