@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://main.gd" type="Script" id=1]
 [ext_resource path="res://world/camera.gd" type="Script" id=2]
 [ext_resource path="res://ui/debug_info/DebugInfo.tscn" type="PackedScene" id=3]
 [ext_resource path="res://ui/loading_screen/loading.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/crosshair/crosshairs-solid.svg" type="Texture" id=5]
+[ext_resource path="res://ui/theming/element_bg.tres" type="StyleBox" id=6]
 
 [node name="main" type="Spatial"]
 script = ExtResource( 1 )
@@ -29,6 +30,32 @@ __meta__ = {
 "_edit_use_anchors_": true
 }
 
+[node name="EntityHovered" type="PanelContainer" parent="Control"]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -20.0
+margin_top = -40.0
+margin_right = 20.0
+margin_bottom = -18.0
+grow_horizontal = 2
+custom_styles/panel = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Action" type="Label" parent="Control/EntityHovered"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 36.0
+margin_bottom = 18.0
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Loading" parent="Control" instance=ExtResource( 4 )]
 
 [node name="DebugInfo" parent="Control" instance=ExtResource( 3 )]
@@ -42,3 +69,9 @@ __meta__ = {
 [node name="Camera" type="Camera" parent="CameraRig"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
 far = 200.0
+
+[node name="RayCast" type="RayCast" parent="CameraRig/Camera"]
+enabled = true
+cast_to = Vector3( 0, 0, -100 )
+
+[connection signal="entity_hovered_changed" from="CameraRig" to="." method="_on_CameraRig_entity_hovered_changed"]

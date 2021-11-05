@@ -1,5 +1,6 @@
 extends Reference
 
+
 enum Action {
 	POINTER,
 	PRIMARY,
@@ -21,6 +22,7 @@ var text : String
 var distance : int
 var show_feedback : bool
 
+
 func _init(_scene_id, _entity, json):
 	scene_id = _scene_id
 	entity = _entity
@@ -32,24 +34,35 @@ func _init(_scene_id, _entity, json):
 	distance = data.distance if data.has("distance") else 0
 	show_feedback = data.showFeedback if data.has("showFeedback") else false
 
+
 func is_near_player():
-	return entity.transform.origin.distance_to(Server.player.transform.origin) < distance
+	return entity.global_transform.origin.distance_to(
+			Server.player.global_transform.origin) < distance
+
 
 func is_facing_player():
 	return Server.player.last_entity_clicked == entity
 
-func check(event : InputEvent):
-	if event.is_action_released("Pointer"):
-		if is_near_player() and is_facing_player():
-			send_request()
 
-func send_request():
+func check(event : InputEvent):
+	if not is_near_player() or not is_facing_player():
+		return
+
+	if event.is_action_pressed("Pointer"):
+		send_request(Action.POINTER)
+	elif event.is_action_pressed("Primary"):
+		send_request(Action.PRIMARY)
+	elif event.is_action_pressed("Secondary"):
+		send_request(Action.SECONDARY)
+
+
+func send_request(event_action):
 	var response = {
 		"eventType":"uuidEvent",
 		"sceneId": scene_id,
 		"payload": {
 			"uuid": uuid,
-			"payload": { "buttonId": 0 }
+			"payload": {"buttonId": event_action}
 		}
 	}
 
