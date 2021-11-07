@@ -1,6 +1,8 @@
 extends Spatial
 
+
 signal position_changed(current_position)
+signal entity_hovered_changed(entity)
 
 export var god_mode = false
 
@@ -10,16 +12,22 @@ onready var mouse_sensitivity : float = ProjectSettings.get("input_devices/gamep
 onready var speed : float = ProjectSettings.get("input_devices/gameplay/camera_speed")
 onready var world = get_world()
 
+onready var ray_cast = $Camera/RayCast
+
+var entity_hovered
 var last_entity_clicked
 
 # should this be in tools or something?
 var layers = {}
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready():
 	for i in range(10, 20):
 		var layer = ProjectSettings.get_setting("layer_names/3d_physics/layer_" + str(i + 1))
 		layers[layer] = pow(2, i)
+
+	ray_cast.collision_mask = pow(2, 10)
+
 
 func _process(_delta):
 	var dir = Vector3()
@@ -73,6 +81,7 @@ func _process(_delta):
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
+
 func _input(event):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		$Camera.rotate_x(deg2rad(event.relative.y * mouse_sensitivity * -1))
@@ -82,14 +91,24 @@ func _input(event):
 		camera_rot.x = clamp(camera_rot.x, -70, 70)
 		$Camera.rotation_degrees = camera_rot
 
-	if event.is_action_pressed("Pointer"):
-		var from = $Camera.project_ray_origin(event.position)
-		var result = world.direct_space_state.intersect_ray(
-			from,
-			from + $Camera.project_ray_normal(event.position) * RAY_LENGTH,
-			[],
-			pow(2, 10)
-		)
+	if ray_cast.is_colliding():
+		var entity = ray_cast.get_collider().get_parent().get_parent()
+		if entity != entity_hovered:
+			entity_hovered = entity
 
-		if !result.empty():
-			last_entity_clicked = result.collider.get_parent().get_parent()
+			emit_signal("entity_hovered_changed", entity)
+	elif entity_hovered != null:
+		entity_hovered = null
+
+		emit_signal("entity_hovered_changed", null)
+		return
+
+	if entity_hovered != null:
+		if event.is_action_pressed("Pointer"):
+			last_entity_clicked = entity_hovered
+
+		if entity_hovered.get_parent().has_meta("events"):
+			for i in entity_hovered.get_parent().get_meta("events"):
+				if i.entity == entity_hovered:
+					i.check(event)
+					return

@@ -13,6 +13,7 @@ var peer = null
 var global_scene
 var id
 
+
 var current_index = -1
 var entities = {"0": get_node(".")}
 var components : Dictionary
@@ -142,10 +143,12 @@ func reparent(src, dest):
 	remove_child(src_node)
 	dest_node.add_child(src_node)
 
+
 func _input(event):
 	if has_meta("events"):
 		for e in get_meta("events"):
 			e.check(event)
+
 
 func _get_configuration_warning():
 	return "" if peer == null else "Scene is currently connected to a peer." +\

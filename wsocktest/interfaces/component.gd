@@ -1,5 +1,6 @@
 extends Reference
 
+
 #enum MaterialTransparencyMode {
 #	OPAQUE,
 #	ALPHA_TEST,
@@ -14,6 +15,7 @@ var mesh_collider : MeshInstance
 var collider : CollisionShape
 var material : SpatialMaterial
 #var material_transparency_mode = 4
+
 
 func _init(_name):
 	name = _name
@@ -30,6 +32,7 @@ func _init(_name):
 		"material":
 			material = SpatialMaterial.new()
 
+
 func update(data):
 	var json = JSON.parse(data).result
 	if json.has("src"):
@@ -45,7 +48,7 @@ func update(data):
 						mesh = child
 
 	if json.has("withCollisions"):
-		var static_body : StaticBody
+		var static_body: StaticBody
 		if is_instance_valid(mesh_collider):
 			mesh_collider.create_trimesh_collision()
 			static_body = mesh_collider.get_child(0)
