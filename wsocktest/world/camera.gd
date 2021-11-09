@@ -10,7 +10,7 @@ func _ready():
 	EventManager.raycast = $Camera/RayCast
 
 
-func _process(_delta):
+func _process(delta):
 	var dir = Vector3()
 	var cam_xform = $Camera.get_global_transform()
 	var input_movement_vector = Vector2()
@@ -34,7 +34,7 @@ func _process(_delta):
 		dir.y = 0
 
 	dir = dir.normalized()
-	global_translate(dir.normalized() * speed)
+	global_translate(dir.normalized() * speed * delta)
 
 	if dir != Vector3.ZERO:
 		var rot = transform.basis.get_rotation_quat()

@@ -38,18 +38,63 @@ func _process(_delta):
 
 
 func _input(event):
-	if last_entity_hovered != null:
-		if Input.is_action_just_pressed("Pointer"):
+	if Input.is_action_just_pressed("Pointer"):
+		send_request(Event.Action.POINTER, Event.Type.DOWN)
+		if last_entity_hovered != null:
 			emit_signal("pointer_down", last_entity_hovered)
-		if Input.is_action_just_released("Pointer"):
+	if Input.is_action_just_released("Pointer"):
+		send_request(Event.Action.POINTER, Event.Type.UP)
+		if last_entity_hovered != null:
 			emit_signal("pointer_up", last_entity_hovered)
 
-		if Input.is_action_just_pressed("Primary"):
+	if Input.is_action_just_pressed("Primary"):
+		send_request(Event.Action.PRIMARY, Event.Type.DOWN)
+		if last_entity_hovered != null:
 			emit_signal("primary_down", last_entity_hovered)
-		if Input.is_action_just_released("Primary"):
+	if Input.is_action_just_released("Primary"):
+		send_request(Event.Action.PRIMARY, Event.Type.UP)
+		if last_entity_hovered != null:
 			emit_signal("primary_up", last_entity_hovered)
 
-		if Input.is_action_just_pressed("Secondary"):
+	if Input.is_action_just_pressed("Secondary"):
+		send_request(Event.Action.SECONDARY, Event.Type.DOWN)
+		if last_entity_hovered != null:
 			emit_signal("secondary_down", last_entity_hovered)
-		if Input.is_action_just_released("Secondary"):
+	if Input.is_action_just_released("Secondary"):
+		send_request(Event.Action.SECONDARY, Event.Type.UP)
+		if last_entity_hovered != null:
 			emit_signal("secondary_up", last_entity_hovered)
+
+
+func send_request(action, type):
+	var parcel_scenes = Server.parcel_scenes.keys()
+	var response = {
+		"eventType": "actionButtonEvent",
+		"sceneId": Server.parcel_scenes[parcel_scenes[0]][0].id,
+		"payload": {
+			"payload": {
+				"type": type,
+				"buttonId": action,
+				"origin": raycast.get_parent().get_parent().global_transform.origin,
+				"direction": raycast.to_global(raycast.cast_to).normalized(),
+				"hit": {
+					"origin": parse_vector(Vector3.ZERO),
+					"hitPoint": parse_vector(Vector3.ZERO),
+					"length": 0.0,
+					"normal": parse_vector(Vector3.ZERO),
+					"worldNormal": parse_vector(Vector3.ZERO),
+					"meshName": "",
+					"entityId": "",
+				}
+			}
+		}
+	}
+	Server.send({"type": "SceneEvent", "payload": JSON.print(response)})
+
+
+func parse_vector(_in : Vector3):
+	return {
+		"x": _in.x,
+		"y": _in.y,
+		"z": _in.z,
+	}
