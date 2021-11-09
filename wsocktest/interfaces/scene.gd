@@ -7,6 +7,7 @@ signal received_event(scene)
 const COMPONENT = preload("res://interfaces/component.gd")
 const EVENT = preload("res://interfaces/event.gd")
 const PROTO = preload("res://server/engineinterface.gd")
+const WAYPOINT = preload("res://ui/waypoint/waypoint.tscn")
 const parcel_size = 16
 
 var peer = null
@@ -102,6 +103,13 @@ func message(scene_msg):
 					get_meta("events").append(EVENT.new(id, entity, parsed))
 				else:
 					set_meta("events", [EVENT.new(id, entity, parsed)])
+			if parsed.has("outlineWidth"):
+				var w = WAYPOINT.instance()
+				var font = w.get_node("Label").get("custom_fonts/font") as DynamicFont
+				w.text = parsed.value
+				font.outline_color = Color(parsed.outlineColor.r, parsed.outlineColor.g, parsed.outlineColor.b)
+				font.outline_size = parsed.outlineWidth
+				entity.add_child(w)
 
 			emit_signal("received_event", self)
 		else:
