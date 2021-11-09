@@ -1,4 +1,5 @@
 extends Reference
+class_name Event
 
 
 enum Action {
@@ -7,14 +8,22 @@ enum Action {
 	SECONDARY,
 	ANY
 }
+const ActionsMap = {
+	"POINTER": Action.POINTER,
+	"PRIMARY": Action.PRIMARY,
+	"SECONDARY": Action.SECONDARY,
+	"ANY": Action.ANY,
+}
+
 
 enum Type {
 	DOWN,
 	UP
 }
 
+
 var scene_id
-var entity
+var entity : Node
 var uuid : String
 var type
 var action
@@ -23,16 +32,23 @@ var distance : int
 var show_feedback : bool
 
 
-func _init(_scene_id, _entity, json):
+func _init(_scene_id, _entity, data):
 	scene_id = _scene_id
 	entity = _entity
-	var data = JSON.parse(json).result
 	uuid = data.uuid if data.has("uuid") else ""
-	type = 0 # TODO add rest of types
-	action = 0 # TODO add rest of actions
+	type = data.type if data.has("type") else Type.DOWN
+	action = ActionsMap[data.button] if data.has("button") else Action.ANY
 	text = data.hoverText if data.has("hoverText") else ""
 	distance = data.distance if data.has("distance") else 0
 	show_feedback = data.showFeedback if data.has("showFeedback") else false
+
+	if action != Action.ANY:
+		EventManager.connect("%s_%s" % [
+			data.button.to_lower(),
+			data.type.trim_prefix("pointer").to_lower()
+		], self, "check")
+
+		entity.get_node("shape/shape_col").collision_layer = int(pow(2, action + 9))
 
 
 func is_near_player():
@@ -40,30 +56,15 @@ func is_near_player():
 			Server.player.global_transform.origin) < distance
 
 
-func is_facing_player():
-	return Server.player.last_entity_clicked == entity
-
-
-func check(event : InputEvent):
-	if not is_near_player() or not is_facing_player():
-		return
-
-	if event.is_action_pressed("Pointer"):
-		send_request(Action.POINTER)
-	elif event.is_action_pressed("Primary"):
-		send_request(Action.PRIMARY)
-	elif event.is_action_pressed("Secondary"):
-		send_request(Action.SECONDARY)
-
-
-func send_request(event_action):
-	var response = {
-		"eventType":"uuidEvent",
-		"sceneId": scene_id,
-		"payload": {
-			"uuid": uuid,
-			"payload": {"buttonId": event_action}
+func check(_entity):
+	if _entity == entity:# and is_near_player():
+		var response = {
+			"eventType":"uuidEvent",
+			"sceneId": scene_id,
+			"payload": {
+				"uuid": uuid,
+				"payload": {"buttonId": action}
+			}
 		}
-	}
 
-	Server.send({"type": "SceneEvent", "payload": JSON.print(response)})
+		Server.send({"type": "SceneEvent", "payload": JSON.print(response)})

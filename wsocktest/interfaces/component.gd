@@ -59,7 +59,7 @@ func update(data):
 			static_body = mesh.get_child(0)
 
 		if json.has("isPointerBlocker"):
-			static_body.collision_layer = pow(2, 10)
+			static_body.collision_layer = int(pow(2, 10) + pow(2, 11) + pow(2, 12))
 
 	if json.has("albedoColor"):
 		material.albedo_color = Color(

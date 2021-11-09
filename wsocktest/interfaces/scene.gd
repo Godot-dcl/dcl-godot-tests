@@ -92,14 +92,16 @@ func message(scene_msg):
 
 		var data = scene_msg.get_updateEntityComponent().get_data()
 		if data.left(1) in ["[", "{"]:
-#			print("update component in entity %s -> %s" % [
-#				scene_msg.get_updateEntityComponent().get_entityId(),
-#				scene_msg.get_updateEntityComponent().get_data() ])
+			print("update component in entity %s -> %s" % [
+				scene_msg.get_updateEntityComponent().get_entityId(),
+				scene_msg.get_updateEntityComponent().get_data() ])
 			var entity = entities[scene_msg.get_updateEntityComponent().get_entityId()]
-			if has_meta("events"):
-				get_meta("events").append(EVENT.new(id, entity, data))
-			else:
-				set_meta("events", [EVENT.new(id, entity, data)])
+			var parsed = JSON.parse(data).result
+			if parsed.has("uuid"):
+				if has_meta("events"):
+					get_meta("events").append(EVENT.new(id, entity, parsed))
+				else:
+					set_meta("events", [EVENT.new(id, entity, parsed)])
 
 			emit_signal("received_event", self)
 		else:

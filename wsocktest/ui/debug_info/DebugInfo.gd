@@ -1,4 +1,4 @@
-extends PanelContainer
+extends MarginContainer
 
 
 const B_TO_MB = pow(1024, 2)

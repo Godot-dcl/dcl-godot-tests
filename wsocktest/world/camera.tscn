@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://world/camera.gd" type="Script" id=1]
+
+[node name="CameraRig" type="Spatial"]
+script = ExtResource( 1 )
+__meta__ = {
+"_editor_description_": ""
+}
+mouse_sensitivity = 0.1
+speed = 0.05
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
+far = 200.0
+
+[node name="RayCast" type="RayCast" parent="Camera"]
+enabled = true
+cast_to = Vector3( 0, 0, -100 )
+collision_mask = 3584
