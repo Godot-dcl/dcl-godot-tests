@@ -57,7 +57,7 @@ func is_near_player():
 
 
 func check(_entity):
-	if _entity == entity:# and is_near_player():
+	if _entity == entity and is_near_player():
 		var response = {
 			"eventType":"uuidEvent",
 			"sceneId": scene_id,

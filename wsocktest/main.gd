@@ -8,6 +8,7 @@ const ActionsMap = {
 	Event.Action.ANY: "",
 }
 
+var last_hovered_event
 
 func _ready():
 	Server.loading_screen = $Control/Loading
@@ -16,15 +17,17 @@ func _ready():
 	EventManager.connect("entity_hover_changed", self, "_on_entity_hovered_changed")
 
 
+func _process(delta):
+	$Control/EntityHovered.visible = is_instance_valid(last_hovered_event) and last_hovered_event.is_near_player()
+
+
 func _on_entity_hovered_changed(entity):
-	if entity == null:
-		$Control/EntityHovered.hide()
-		return
-
-	$Control/EntityHovered.show()
-
-	if entity.get_parent().has_meta("events"):
-		for i in entity.get_parent().get_meta("events"):
-			if i.entity == entity:
-				$Control/EntityHovered/Action.text = "%s %s" % [ActionsMap[i.action], i.text]
-				return
+	if is_instance_valid(entity):
+		if entity.get_parent().has_meta("events"):
+			for i in entity.get_parent().get_meta("events"):
+				if i.entity == entity:
+					last_hovered_event = i
+					$Control/EntityHovered/Action.text = "%s %s" % [ActionsMap[i.action], i.text]
+					break
+	else:
+		last_hovered_event = null
