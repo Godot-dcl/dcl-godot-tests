@@ -42,7 +42,15 @@ func _init(_scene_id, _entity, data):
 	distance = data.distance if data.has("distance") else 0
 	show_feedback = data.showFeedback if data.has("showFeedback") else false
 
-	if action != Action.ANY:
+	if action == Action.ANY:
+		var type = data.type.trim_prefix("pointer").to_lower()
+		for a in ActionsMap.keys():
+			if a != "ANY":
+				EventManager.connect("%s_%s" % [
+					a.to_lower(),
+					"down"
+				], self, "check")
+	else:
 		EventManager.connect("%s_%s" % [
 			data.button.to_lower(),
 			data.type.trim_prefix("pointer").to_lower()

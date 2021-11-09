@@ -26,7 +26,7 @@ func _init(_name):
 			mesh.name = name
 
 			material = SpatialMaterial.new()
-			material.flags_unshaded = true
+			#material.flags_unshaded = true
 			mesh.set("material/0", material)
 
 		"material":

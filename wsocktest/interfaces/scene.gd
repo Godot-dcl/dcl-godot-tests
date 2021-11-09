@@ -93,9 +93,9 @@ func message(scene_msg):
 
 		var data = scene_msg.get_updateEntityComponent().get_data()
 		if data.left(1) in ["[", "{"]:
-			print("update component in entity %s -> %s" % [
-				scene_msg.get_updateEntityComponent().get_entityId(),
-				scene_msg.get_updateEntityComponent().get_data() ])
+#			print("update component in entity %s -> %s" % [
+#				scene_msg.get_updateEntityComponent().get_entityId(),
+#				scene_msg.get_updateEntityComponent().get_data() ])
 			var entity = entities[scene_msg.get_updateEntityComponent().get_entityId()]
 			var parsed = JSON.parse(data).result
 			if parsed.has("uuid"):
@@ -105,8 +105,10 @@ func message(scene_msg):
 					set_meta("events", [EVENT.new(id, entity, parsed)])
 			if parsed.has("outlineWidth"):
 				var w = WAYPOINT.instance()
-				var font = w.get_node("Label").get("custom_fonts/font") as DynamicFont
+				var label = w.get_node("Label") as Label
+				var font = label.get("custom_fonts/font") as DynamicFont
 				w.text = parsed.value
+				label.set("custom_colors/font_color", Color(parsed.color.r, parsed.color.g, parsed.color.b))
 				font.outline_color = Color(parsed.outlineColor.r, parsed.outlineColor.g, parsed.outlineColor.b)
 				font.outline_size = parsed.outlineWidth
 				entity.add_child(w)

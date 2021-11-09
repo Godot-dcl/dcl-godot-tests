@@ -16,15 +16,20 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="."]
-margin_left = -200.0
-margin_top = -49.0
-margin_right = 200.0
-margin_bottom = -19.0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -128.0
+margin_top = -54.0
+margin_right = 128.0
+margin_bottom = -18.0
+rect_pivot_offset = Vector2( 30, 36 )
+size_flags_horizontal = 5
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 0.501961 )
-custom_constants/shadow_offset_x = 1
-custom_constants/shadow_offset_y = 1
-text = "Waypoint"
+custom_constants/shadow_offset_x = 0
+custom_constants/shadow_offset_y = 0
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
