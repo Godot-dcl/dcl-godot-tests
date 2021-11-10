@@ -50,12 +50,13 @@ func file_downloaded(content):
 
 
 func cache_file(content):
-	if not content.file in contents:
+	var f = content.file.to_lower()
+	if not f in contents:
 		var ext = content.file.get_extension()
 		match ext:
 			"glb":
 				var l = DynamicGLTFLoader.new()
-				contents[content.file] = l.import_scene("user://%s.glb" % content.hash, 1, 1)
+				contents[f] = l.import_scene("user://%s.glb" % content.hash, 1, 1)
 
 	for scene in loading_scenes.keys():
 		if content in loading_scenes[scene].contents:
@@ -95,13 +96,14 @@ func download_glb(_result, response_code, _headers, body, content):
 
 
 func get_instance(file_hash):
-	if file_hash in contents:
-		if !is_instance_valid(contents[file_hash]):
-			printerr("content null %s" % file_hash)
+	var f = file_hash.to_lower()
+	if f in contents:
+		if !is_instance_valid(contents[f]):
+			printerr("content null %s" % f)
 			return null
 
-		var instance = contents[file_hash].duplicate()
+		var instance = contents[f].duplicate()
 		return instance
 	else:
-		printerr("content not found %s" % file_hash)
+		printerr("content not found %s" % f)
 		return null
