@@ -17,7 +17,7 @@ func _ready():
 	EventManager.connect("entity_hover_changed", self, "_on_entity_hovered_changed")
 
 
-func _process(delta):
+func _process(_delta):
 	$Control/EntityHovered.visible = is_instance_valid(last_hovered_event) and last_hovered_event.is_near_player()
 
 

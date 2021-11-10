@@ -15,8 +15,8 @@ func load_contents(scene, payload):
 			content.hash = content.hash.trim_suffix(content.file.get_extension())
 			loading_scenes[scene.id].contents.push_back(content)
 
-	for content in loading_scenes[scene.id].contents:
-		#var content = loading_scenes[scene.id].contents[i]
+	for i in range(loading_scenes[scene.id].contents.size()):
+		var content = loading_scenes[scene.id].contents[i]
 		if file_downloaded(content):
 			cache_file(content)
 		else:
@@ -50,14 +50,12 @@ func file_downloaded(content):
 
 
 func cache_file(content):
-	var f = content.file.to_lower()
-	if not f in contents:
+	if not content.file in contents:
 		var ext = content.file.get_extension()
 		match ext:
 			"glb":
-				#printt("***** caching GLB ***", "user://%s.glb" % content.hash, JSON.print(content))
 				var l = DynamicGLTFLoader.new()
-				contents[f] = l.import_scene("user://%s.glb" % content.hash, 1, 1)
+				contents[content.file] = l.import_scene("user://%s.glb" % content.hash, 1, 1)
 
 	for scene in loading_scenes.keys():
 		if content in loading_scenes[scene].contents:
@@ -96,15 +94,14 @@ func download_glb(_result, response_code, _headers, body, content):
 	cache_file(content)
 
 
-func get_instance(file_name):
-	var f = file_name.to_lower()
-	if f in contents:
-		if !is_instance_valid(contents[f]):
-			printerr("content null %s" % f)
+func get_instance(file_hash):
+	if file_hash in contents:
+		if !is_instance_valid(contents[file_hash]):
+			printerr("content null %s" % file_hash)
 			return null
 
-		var instance = contents[f].duplicate()
+		var instance = contents[file_hash].duplicate()
 		return instance
 	else:
-		printerr("content not found %s" % f)
+		printerr("content not found %s" % file_hash)
 		return null
