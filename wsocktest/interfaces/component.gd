@@ -55,10 +55,12 @@ func update(data):
 			mesh_collider.remove_child(static_body)
 			mesh.add_child(static_body)
 		else:
-			mesh.create_trimesh_collision()
-			static_body = mesh.get_child(0)
+			for child in mesh.get_children():
+				if child is MeshInstance:
+					child.create_trimesh_collision()
+					static_body = child.get_child(0)
 
-		if json.has("isPointerBlocker"):
+		if json.has("isPointerBlocker") and is_instance_valid(static_body):
 			static_body.collision_layer = int(pow(2, 10) + pow(2, 11) + pow(2, 12))
 
 	if json.has("albedoColor"):

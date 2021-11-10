@@ -56,7 +56,7 @@ func _init(_scene_id, _entity, data):
 			data.type.trim_prefix("pointer").to_lower()
 		], self, "check")
 
-		entity.get_node("shape/shape_col").collision_layer = int(pow(2, action + 9))
+		#entity.get_child(0).collision_layer = int(pow(2, action + 9))
 
 
 func is_near_player():

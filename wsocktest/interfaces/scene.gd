@@ -73,9 +73,9 @@ func message(scene_msg):
 		pass#print("component removed ", scene_msg.get_componentRemoved().get_name())
 
 	if scene_msg.has_componentUpdated():
-#		print("component updated %s -> %s" % [
-#			scene_msg.get_componentUpdated().get_id(),
-#			scene_msg.get_componentUpdated().get_json() ])
+		print("component updated %s -> %s" % [
+			scene_msg.get_componentUpdated().get_id(),
+			scene_msg.get_componentUpdated().get_json() ])
 		components[scene_msg.get_componentUpdated().get_id()].update(
 			scene_msg.get_componentUpdated().get_json()
 		)
