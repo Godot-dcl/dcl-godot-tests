@@ -10,9 +10,9 @@ extends Reference
 #}
 
 var name : String
-var mesh = [] #MeshInstance.new()
-var mesh_collider : MeshInstance
-var collider : CollisionShape
+var meshes = [] #MeshInstance
+var colliders = [] # Shape
+var physics_body : PhysicsBody
 var material : SpatialMaterial
 #var material_transparency_mode = 4
 
@@ -29,7 +29,7 @@ func _init(_name):
 			material = SpatialMaterial.new()
 			#material.flags_unshaded = true
 			m.set("material/0", material)
-			mesh.push_back(m)
+			meshes.push_back(m)
 
 		"material":
 			material = SpatialMaterial.new()
@@ -38,32 +38,39 @@ func _init(_name):
 func update(data):
 	var json = JSON.parse(data).result
 	if json.has("src"):
-		mesh.clear()
+		for m in meshes:
+			m.queue_free()
+
+		meshes.clear()
+
 		var ext = json.src.get_extension()
 		if ext == "glb":
 			var content = ContentManager.get_instance(json.src)
-
 			if is_instance_valid(content):
+
 				for child in content.get_children():
-					if child.name.ends_with("_collider"):
-						mesh_collider = child
-					else:
-						mesh.push_back(child)
+					if child is MeshInstance:
+						if child.name.ends_with("_collider"):
+							colliders.push_back(child.mesh.create_trimesh_shape())
+						else:
+							meshes.push_back(child)
 
 	if json.has("withCollisions"):
-		var static_body: StaticBody
-		if is_instance_valid(mesh_collider):
-			mesh_collider.create_trimesh_collision()
-			static_body = mesh_collider.get_child(0)
-			mesh_collider.remove_child(static_body)
-			mesh[0].add_child(static_body)
+		physics_body = StaticBody.new()
+		if colliders.size() > 0:
+			for collider in colliders:
+				var c = CollisionShape.new()
+				c.shape = collider
+				physics_body.add_child(c)
 		else:
-			var m = mesh[0]
-			m.create_trimesh_collision()
-			static_body = m.get_child(0)
+			for m in meshes:
+				var c = CollisionShape.new()
+				c.shape = m.mesh.create_trimesh_shape()
+				c.transform = m.transform
+				physics_body.add_child(c)
 
 		if json.has("isPointerBlocker"):
-			static_body.collision_layer = int(pow(2, 10) + pow(2, 11) + pow(2, 12))
+			physics_body.collision_layer = int(pow(2, 10) + pow(2, 11) + pow(2, 12))
 
 	if json.has("albedoColor"):
 		material.albedo_color = Color(
@@ -97,5 +104,8 @@ func attach_to(entity):
 	if name == "material":
 		entity.get_node("shape").set("material/0", material)
 	else:
-		for m in mesh:
+		for m in meshes:
 			entity.add_child(m.duplicate())
+
+		if physics_body:
+			entity.add_child(physics_body.duplicate())
