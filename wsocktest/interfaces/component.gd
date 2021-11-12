@@ -11,8 +11,7 @@ extends Reference
 
 var name : String
 var meshes = [] #MeshInstance
-var colliders = [] # Shape
-var physics_body : PhysicsBody
+var colliders = [] #PhysicsBody
 var material : SpatialMaterial
 #var material_transparency_mode = 4
 
@@ -51,26 +50,24 @@ func update(data):
 				for child in content.get_children():
 					if child is MeshInstance:
 						if child.name.ends_with("_collider"):
-							colliders.push_back(child.mesh.create_trimesh_shape())
+							child.create_trimesh_collision()
+							var collider = child.get_child(0)
+							collider.name = child.name
+							colliders.push_back(collider)
 						else:
 							meshes.push_back(child)
 
 	if json.has("withCollisions"):
-		physics_body = StaticBody.new()
-		if colliders.size() > 0:
-			for collider in colliders:
-				var c = CollisionShape.new()
-				c.shape = collider
-				physics_body.add_child(c)
-		else:
+		if colliders.empty():
 			for m in meshes:
-				var c = CollisionShape.new()
-				c.shape = m.mesh.create_trimesh_shape()
-				c.transform = m.transform
-				physics_body.add_child(c)
+				m.create_trimesh_collision()
+				var c = m.get_child(0)
+				c.name = m.name
+				colliders.push_back(c)
 
 		if json.has("isPointerBlocker"):
-			physics_body.collision_layer = int(pow(2, 10) + pow(2, 11) + pow(2, 12))
+			for collider in colliders:
+				collider.collision_layer = int(pow(2, 10) + pow(2, 11) + pow(2, 12))
 
 	if json.has("albedoColor"):
 		material.albedo_color = Color(
@@ -106,6 +103,3 @@ func attach_to(entity):
 	else:
 		for m in meshes:
 			entity.add_child(m.duplicate())
-
-		if physics_body:
-			entity.add_child(physics_body.duplicate())

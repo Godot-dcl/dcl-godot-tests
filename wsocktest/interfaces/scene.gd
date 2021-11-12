@@ -156,10 +156,10 @@ func reparent(src, dest):
 	dest_node.add_child(src_node)
 
 
-func _input(event):
-	if has_meta("events"):
-		for e in get_meta("events"):
-			e.check(event)
+#func _input(event):
+#	if has_meta("events"):
+#		for e in get_meta("events"):
+#			e.check(event)
 
 
 func _get_configuration_warning():

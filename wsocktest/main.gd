@@ -21,7 +21,7 @@ func _process(_delta):
 	$Control/EntityHovered.visible = is_instance_valid(last_hovered_event) and last_hovered_event.is_near_player()
 
 
-func _on_entity_hovered_changed(entity):
+func _on_entity_hovered_changed(entity, _collider):
 	if is_instance_valid(entity):
 		if entity.get_parent().has_meta("events"):
 			for i in entity.get_parent().get_meta("events"):

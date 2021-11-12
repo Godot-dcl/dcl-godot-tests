@@ -13,6 +13,7 @@ signal secondary_up(entity)
 signal entity_hover_changed(entity)
 
 var last_entity_hovered : Node
+var last_entity_collider_hovered : PhysicsBody
 var raycast : RayCast
 
 # Called when the node enters the scene tree for the first time.
@@ -27,13 +28,16 @@ func _process(_delta):
 			var entity = collider.get_parent().get_parent()
 			if entity != last_entity_hovered:
 				last_entity_hovered = entity
+			if collider != last_entity_collider_hovered:
+				last_entity_collider_hovered = collider
 
-				emit_signal("entity_hover_changed", entity)
+				emit_signal("entity_hover_changed", entity, collider)
 		else:
 			if last_entity_hovered != null:
 				last_entity_hovered = null
+				last_entity_collider_hovered = null
 
-				emit_signal("entity_hover_changed", null)
+				emit_signal("entity_hover_changed", null, null)
 				return
 
 
@@ -41,29 +45,29 @@ func _input(event):
 	if Input.is_action_just_pressed("Pointer"):
 		send_request(Event.Action.POINTER, Event.Type.DOWN)
 		if last_entity_hovered != null:
-			emit_signal("pointer_down", last_entity_hovered)
+			emit_signal("pointer_down", last_entity_hovered, last_entity_collider_hovered)
 	if Input.is_action_just_released("Pointer"):
 		send_request(Event.Action.POINTER, Event.Type.UP)
 		if last_entity_hovered != null:
-			emit_signal("pointer_up", last_entity_hovered)
+			emit_signal("pointer_up", last_entity_hovered, last_entity_collider_hovered)
 
 	if Input.is_action_just_pressed("Primary"):
 		send_request(Event.Action.PRIMARY, Event.Type.DOWN)
 		if last_entity_hovered != null:
-			emit_signal("primary_down", last_entity_hovered)
+			emit_signal("primary_down", last_entity_hovered, last_entity_collider_hovered)
 	if Input.is_action_just_released("Primary"):
 		send_request(Event.Action.PRIMARY, Event.Type.UP)
 		if last_entity_hovered != null:
-			emit_signal("primary_up", last_entity_hovered)
+			emit_signal("primary_up", last_entity_hovered, last_entity_collider_hovered)
 
 	if Input.is_action_just_pressed("Secondary"):
 		send_request(Event.Action.SECONDARY, Event.Type.DOWN)
 		if last_entity_hovered != null:
-			emit_signal("secondary_down", last_entity_hovered)
+			emit_signal("secondary_down", last_entity_hovered, last_entity_collider_hovered)
 	if Input.is_action_just_released("Secondary"):
 		send_request(Event.Action.SECONDARY, Event.Type.UP)
 		if last_entity_hovered != null:
-			emit_signal("secondary_up", last_entity_hovered)
+			emit_signal("secondary_up", last_entity_hovered, last_entity_collider_hovered)
 
 
 func send_request(action, type):
