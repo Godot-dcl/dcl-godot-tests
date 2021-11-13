@@ -104,6 +104,12 @@ margin_bottom = 576.0
 disabled = true
 text = "Dump ALL Nodes Into Active Scene"
 
+[node name="ForceOrigin" type="CheckBox" parent="VBoxContainer/TabContainer/Scenes"]
+margin_right = 24.0
+margin_bottom = 24.0
+pressed = true
+text = "Make Scenes Be at Origin"
+
 [node name="Events" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
 visible = false
 anchor_right = 1.0

@@ -152,7 +152,7 @@ func _update_events_list():
 
 	for i in scene_current.get_meta("events"):
 		var item = events.create_item()
-		item.set_text(0, i.text)
+		item.set_text(0, i.text if i.text != "" else "[Nameless Event]")
 		item.set_metadata(0, i)
 
 
@@ -189,6 +189,9 @@ func _on_DumpSelIntoScene_pressed():
 
 		item = scenes.get_next_selected(item)
 
+	if $VBoxContainer/TabContainer/Scenes/ForceOrigin.pressed:
+		_calculate_dump_origin(dump_node)
+
 
 func _on_DumpAllIntoScene_pressed():
 	var scene_root = _editor_interface.get_edited_scene_root()
@@ -212,20 +215,12 @@ func _on_DumpAllIntoScene_pressed():
 
 		item = item.get_next()
 
+	if $VBoxContainer/TabContainer/Scenes/ForceOrigin.pressed:
+		_calculate_dump_origin(dump_node)
+
 
 func _on_Send_pressed():
-	var event = events.get_selected().get_metadata(0)
-	var response = {
-		"eventType":"uuidEvent",
-		"sceneId": scene_current.id,
-		"payload": {
-			"uuid": event["uuid"],
-			"payload": { "buttonId": 0 }
-		}
-	}
-
-	Server.send({"type": "SceneEvent", "payload": JSON.print(response)},
-			scene_current.peer)
+	events.get_selected().get_metadata(0).check(0)
 
 
 func _generate_dump_node(parent):
@@ -246,3 +241,47 @@ func _completely_own_node(node, new_owner):
 	node.owner = new_owner
 	for i in node.get_children():
 		_completely_own_node(i, new_owner)
+
+
+func _calculate_dump_origin(dump_node):
+	var pos_min = null
+	var pos_max = null
+
+	# Get the furthest opposite values.
+	for scene in dump_node.get_children():
+		if pos_min == null:
+			pos_min = scene.translation
+			pos_max = scene.translation
+
+			continue
+
+		pos_min.x = min(scene.translation.x, pos_min.x)
+		pos_min.y = min(scene.translation.y, pos_min.y)
+		pos_min.z = min(scene.translation.z, pos_min.z)
+
+		pos_max.x = max(scene.translation.x, pos_max.x)
+		pos_max.y = max(scene.translation.y, pos_max.y)
+		pos_max.z = max(scene.translation.z, pos_max.z)
+
+	# Calculate the center point of each Vector3 element (x, y, z).
+	for i in 3:
+		if pos_min[i] >= 0:
+			dump_node.translation[i] -= pos_min[i]
+
+			var size = pos_max[i] - pos_min[i]
+			if size > 0:
+				dump_node.translation[i] -= size / 2
+
+		elif pos_max[i] < 0:
+			dump_node.translation[i] += abs(pos_max[i])
+
+			var size = abs(pos_min[i] + abs(pos_max[i]))
+			if size > 0:
+				dump_node.translation[i] += size / 2
+
+		else:
+			dump_node.translation[i] += pos_min[i]
+
+			var size = pos_max[i] + abs(pos_min[i])
+			if size > 0:
+				dump_node.translation[i] -= size / 2
