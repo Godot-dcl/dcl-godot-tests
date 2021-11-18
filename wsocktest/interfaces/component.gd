@@ -59,7 +59,7 @@ func update(data):
 							meshes.push_back(child)
 
 					if child is Spatial:
-						if child.get_child(0) is Skeleton:
+						if child.get_child_count() > 0 and child.get_child(0) is Skeleton:
 							meshes.push_back(child)
 
 	if json.has("withCollisions"):
@@ -105,7 +105,8 @@ func update(data):
 
 func attach_to(entity):
 	if name == "material":
-		entity.get_node("shape").set("material/0", material)
+		if entity.has_node("shape"):
+			entity.get_node("shape").set("material/0", material)
 	else:
 		for m in meshes:
 			entity.add_child(m.duplicate())
