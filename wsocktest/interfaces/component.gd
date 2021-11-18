@@ -43,7 +43,7 @@ func update(data):
 		meshes.clear()
 
 		var ext = json.src.get_extension()
-		if ext == "glb":
+		if ext in ["glb", "gltf"]:
 			var content = ContentManager.get_instance(json.src)
 			if is_instance_valid(content):
 

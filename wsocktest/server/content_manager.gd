@@ -11,7 +11,7 @@ func load_contents(scene, payload):
 		var content = payload.contents[i]
 
 		# for now, just filter content
-		if content.file.get_extension() in ["glb", "png"]:
+		if content.file.get_extension() in ["gltf", "glb", "png"]:
 			content.hash = content.hash.trim_suffix(content.file.get_extension())
 			loading_scenes[scene.id].contents.push_back(content)
 
@@ -38,8 +38,8 @@ func file_downloaded(content):
 	var ext = content.file.get_extension()
 	var file_name : String
 	match ext:
-		"glb":
-			file_name = "user://%s.glb" % content.hash
+		"glb", "gltf":
+			file_name = "user://%s.%s" % [content.hash, ext]
 		"png":
 			file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
 		_:
@@ -54,9 +54,9 @@ func cache_file(content):
 	if not f in contents:
 		var ext = content.file.get_extension()
 		match ext:
-			"glb":
+			"glb", "gltf":
 				var l = DynamicGLTFLoader.new()
-				contents[f] = l.import_scene("user://%s.glb" % content.hash, 1, 1)
+				contents[f] = l.import_scene("user://%s.%s" % [content.hash, ext], 1, 1)
 
 	for scene in loading_scenes.keys():
 		if content in loading_scenes[scene].contents:
@@ -80,10 +80,14 @@ func download_png(_result, response_code, _headers, body, content):
 	cache_file(content)
 
 
+func download_gltf(_result, response_code, _headers, body, content):
+	download_glb(_result, response_code, _headers, body, content)
+
+
 func download_glb(_result, response_code, _headers, body, content):
 	if response_code >= 200 and response_code < 300:
 		var f = File.new()
-		var file_name = "user://%s.glb" % content.hash
+		var file_name = "user://%s.%s" % [content.hash, content.file.get_extension()]
 		if f.open(file_name, File.WRITE) == OK:
 			f.store_buffer(body)
 			f.close()
