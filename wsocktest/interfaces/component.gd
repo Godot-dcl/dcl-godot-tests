@@ -10,6 +10,7 @@ extends Reference
 #}
 
 var name : String
+var animation : AnimationPlayer
 var meshes = [] #MeshInstance
 var colliders = [] #PhysicsBody
 var material : SpatialMaterial
@@ -57,13 +58,18 @@ func update(data):
 						else:
 							meshes.push_back(child)
 
+					if child is Spatial:
+						if child.get_child(0) is Skeleton:
+							meshes.push_back(child)
+
 	if json.has("withCollisions"):
 		if colliders.empty():
 			for m in meshes:
-				m.create_trimesh_collision()
-				var c = m.get_child(0)
-				c.name = m.name
-				colliders.push_back(c)
+				if m is MeshInstance:
+					m.create_trimesh_collision()
+					var c = m.get_child(0)
+					c.name = m.name
+					colliders.push_back(c)
 
 		if json.has("isPointerBlocker"):
 			for collider in colliders:
