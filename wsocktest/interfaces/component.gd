@@ -58,9 +58,12 @@ func update(data):
 						else:
 							meshes.push_back(child)
 
-					if child is Spatial:
-						if child.get_child_count() > 0 and child.get_child(0) is Skeleton:
+					if child is Spatial and child.get_child_count() > 0 :
+						if child.get_child(0) is Skeleton:
 							meshes.push_back(child)
+
+					if child is AnimationPlayer:
+						animation = child
 
 	if json.has("withCollisions"):
 		if colliders.empty():
@@ -110,3 +113,9 @@ func attach_to(entity):
 	else:
 		for m in meshes:
 			entity.add_child(m.duplicate())
+
+	if is_instance_valid(animation):
+		var a = animation.duplicate()
+		entity.add_child(a)
+		a.root_node = entity.get_path()
+		a.clear_caches()

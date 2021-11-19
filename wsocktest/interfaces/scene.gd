@@ -93,9 +93,9 @@ func message(scene_msg):
 
 		var data = scene_msg.get_updateEntityComponent().get_data()
 		if data.left(1) in ["[", "{"]:
-#			print("update component in entity %s -> %s" % [
-#				scene_msg.get_updateEntityComponent().get_entityId(),
-#				scene_msg.get_updateEntityComponent().get_data() ])
+			print("update component in entity %s -> %s" % [
+				scene_msg.get_updateEntityComponent().get_entityId(),
+				scene_msg.get_updateEntityComponent().get_data() ])
 			var entity = entities[scene_msg.get_updateEntityComponent().get_entityId()]
 			var parsed = JSON.parse(data).result
 			if parsed.has("uuid"):
@@ -103,6 +103,7 @@ func message(scene_msg):
 					get_meta("events").append(EVENT.new(id, entity, parsed))
 				else:
 					set_meta("events", [EVENT.new(id, entity, parsed)])
+
 			if parsed.has("outlineWidth"):
 				var w = WAYPOINT.instance()
 				var label = w.get_node("Label") as Label
@@ -112,6 +113,16 @@ func message(scene_msg):
 				font.outline_color = Color(parsed.outlineColor.r, parsed.outlineColor.g, parsed.outlineColor.b)
 				font.outline_size = parsed.outlineWidth
 				entity.add_child(w)
+
+			if parsed.has("states") and entity.has_node("AnimationPlayer"):
+				var anim_node = entity.get_node("AnimationPlayer") as AnimationPlayer
+				for anim in parsed.states:
+					if anim.playing and anim_node.has_animation(anim.clip):
+						print(anim)
+						anim_node.get_animation(anim.clip).loop = anim.looping
+						anim_node.playback_speed = anim.speed
+						anim_node.play(anim.clip)
+						break
 
 			emit_signal("received_event", self)
 		else:

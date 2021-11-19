@@ -41,7 +41,7 @@ func _process(_delta):
 				return
 
 
-func _input(event):
+func _input(_event):
 	if Input.is_action_just_pressed("Pointer"):
 		send_request(Event.Action.POINTER, Event.Type.DOWN)
 		if last_entity_hovered != null:
