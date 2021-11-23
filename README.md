@@ -26,6 +26,10 @@ $ git submodule add https://github.com/you-win/godot-dynamic-gltf-loader.git
 $ scons tools=yes -j8 -u
 ```
 
+Why do we need this? Godot can't load GLTF models at runtime. For that, we need to expose the module that loads those resources to be used at runtime. Coming up in version 4!
+
+[https://github.com/godotengine/godot-proposals/issues/3273#issuecomment-917664431](https://github.com/godotengine/godot-proposals/issues/3273#issuecomment-917664431)
+
 ## Getting started
 
 ### Install the CLI <a href="install-the-cli" id="install-the-cli"></a>
@@ -73,9 +77,9 @@ A browser will open on an URL like this, to preview the scene
 
 [http://localhost:8000/?SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub](http://localhost:8000/?SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub)
 
-NOTE: Pay special attention to the position query string in the URL. That's where the scene is!
+NOTE: Pay special attention to the `position` query string in the URL. That's where the scene is!
 
-### Parameters of the preview command
+## Parameters of the preview command
 
 You can add the following flags to the `dcl start` command to change its behavior
 
