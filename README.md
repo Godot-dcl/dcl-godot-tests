@@ -4,7 +4,7 @@
 
 *   Node (version >= 12, optimal 14)
 
-    In case of using Linux or MacOS, use NVM (Node Version Manager) to control your node version.&#x20;
+    In case of using Linux or MacOS, use NVM (Node Version Manager) to control your node version.
 
 ```
 $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
@@ -13,7 +13,20 @@ $ nvm install 14
 $ nvm use 14
 ```
 
-## Getting started&#x20;
+*   Godot Engine with Dynamic GLTF Loader module
+
+    Run the following commands to get the engine and the module, and compile the editor
+
+```
+$ git clone https://github.com/godotengine/godot.git
+$ cd godot
+$ git checkout 3.2
+$ cd modules
+$ git submodule add https://github.com/you-win/godot-dynamic-gltf-loader.git
+$ scons tools=yes -j8 -u
+```
+
+## Getting started
 
 ### Install the CLI <a href="install-the-cli" id="install-the-cli"></a>
 
@@ -44,11 +57,11 @@ $ npm install -g decentraland@latest
 2. Enter it and run the following commands in your command line tool of choice:
 
 ```
-$ npm i decentralnad-ecs@latest
+$ npm i decentraland-ecs@latest
 $ dcl init
 ```
 
-## Preview a scene&#x20;
+## Preview a scene
 
 To preview a scene run the following command on the scene’s main folder
 
@@ -56,9 +69,11 @@ To preview a scene run the following command on the scene’s main folder
 $ dcl start
 ```
 
-A browser will open on this URL to preview the scene
+A browser will open on an URL like this, to preview the scene
 
 [http://localhost:8000/?SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub](http://localhost:8000/?SCENE\_DEBUG\_PANEL\&position=0%2C0\&realm=localhost-stub)
+
+NOTE: Pay special attention to the position query string in the URL. That's where the scene is!
 
 ### Parameters of the preview command
 
