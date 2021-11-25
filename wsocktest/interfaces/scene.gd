@@ -39,7 +39,7 @@ func contents_loaded():
 
 
 func message(scene_msg : PROTO.PB_SendSceneMessage):
-	print(scene_msg.to_string())
+	#print(scene_msg.to_string())
 
 	if scene_msg.has_createEntity():
 		#print("create entity ", scene_msg.get_createEntity().get_id())
@@ -98,9 +98,9 @@ func message(scene_msg : PROTO.PB_SendSceneMessage):
 		# check this classid in engineinterface.proto (line 24)
 		match classid:
 			8: # PB_UUIDCallback
-				print("update component in entity %s -> %s" % [
-					scene_msg.get_updateEntityComponent().get_entityId(),
-					scene_msg.get_updateEntityComponent().get_data() ])
+#				print("update component in entity %s -> %s" % [
+#					scene_msg.get_updateEntityComponent().get_entityId(),
+#					scene_msg.get_updateEntityComponent().get_data() ])
 				var entity = entities[scene_msg.get_updateEntityComponent().get_entityId()]
 				var parsed = JSON.parse(data).result
 				if parsed.has("uuid"):
@@ -141,9 +141,9 @@ func message(scene_msg : PROTO.PB_SendSceneMessage):
 					var pos = comp.get_position()
 					var sca = comp.get_scale()
 
-					print("update component in entity %s transform -> %s" % [
-						scene_msg.get_updateEntityComponent().get_entityId(),
-						comp.to_string() ])
+#					print("update component in entity %s transform -> %s" % [
+#						scene_msg.get_updateEntityComponent().get_entityId(),
+#						comp.to_string() ])
 
 					var q = Quat(
 						rot.get_x(),

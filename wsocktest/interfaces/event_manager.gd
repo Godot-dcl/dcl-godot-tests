@@ -74,7 +74,7 @@ func send_request(action, type):
 	var parcel_scenes = Server.parcel_scenes.keys()
 	var response = {
 		"eventType": "actionButtonEvent",
-		"sceneId": Server.parcel_scenes[parcel_scenes[0]][0].id,
+		"sceneId": Server.player.current_scene_id(),
 		"payload": {
 			"payload": {
 				"type": type,

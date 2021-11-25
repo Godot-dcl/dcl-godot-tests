@@ -1,9 +1,18 @@
 extends Spatial
 
+const parcel_size = preload("res://interfaces/scene.gd").parcel_size
+
 export var god_mode = false
 export var mouse_sensitivity : float
 export var speed : float
 
+
+func current_scene_id():
+	var half_parcel_size = parcel_size / 2
+	for parcel in Server.parcel_scenes.values():
+		var parcel_rect = Rect2(parcel[0].transform.origin.x, parcel[0].transform.origin.z, parcel_size, parcel_size)
+		if parcel_rect.has_point(Vector2(transform.origin.x, transform.origin.z)):
+			return parcel[0].id
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
