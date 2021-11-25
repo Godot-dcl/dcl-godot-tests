@@ -20,9 +20,11 @@ $ nvm use 14
 ```
 $ git clone https://github.com/godotengine/godot.git
 $ cd godot
-$ git checkout 3.2
+$ git checkout 3.3
 $ cd modules
-$ git submodule add https://github.com/you-win/godot-dynamic-gltf-loader.git
+$ git clone https://github.com/you-win/godot-dynamic-gltf-loader.git
+$ mv godot-dynamic-gltf-loader/dynamic-gltf-loader .
+$ rm -rf godot-dynamic-gltf-loader
 $ scons tools=yes -j8 -u
 ```
 
