@@ -6,6 +6,10 @@ var contents : Dictionary
 var loading_scenes : Dictionary
 
 func load_contents(scene, payload):
+	if payload.contents.size() < 1:
+		scene.contents_loaded()
+		return
+
 	loading_scenes[scene.id] = {"contents": [], "scene": scene, "loaded": 0}
 	for i in range(payload.contents.size()):
 		var content = payload.contents[i]

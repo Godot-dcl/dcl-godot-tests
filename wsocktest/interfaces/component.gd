@@ -10,6 +10,7 @@ extends Reference
 #}
 
 var name : String
+var classid : int
 var animation : AnimationPlayer
 var meshes = [] #MeshInstance
 var colliders = [] #PhysicsBody
@@ -17,14 +18,45 @@ var material : SpatialMaterial
 #var material_transparency_mode = 4
 
 
-func _init(_name):
+func _init(_name, _classid):
+	classid = _classid
 	name = _name
 	match name:
 		"shape":
 			var m = MeshInstance.new()
-			m.mesh = CubeMesh.new()
-			m.mesh.size = Vector3.ONE
 			m.name = name
+
+			# check this classid in engineinterface.proto (line 24)
+			match _classid:
+				16: # PB_BoxShape
+					var box = CubeMesh.new()
+					box.size = Vector3.ONE
+					m.mesh = box
+
+				17: # PB_SphereShape
+					var sphere = SphereMesh.new()
+					sphere.radius = 1.0
+					sphere.height = 2.0
+					m.mesh = sphere
+
+				18: # PB_PlaneShape
+					var plane = PlaneMesh.new()
+					plane.size = Vector2.ONE
+					m.mesh = plane
+
+				19: # PB_ConeShape
+					var cone = CylinderMesh.new()
+					cone.height = 1.0
+					cone.top_radius = 0.0
+					cone.bottom_radius = 1.0
+					m.mesh = cone
+
+				20: # PB_CylinderShape
+					var cylinder = CylinderMesh.new()
+					cylinder.height = 1.0
+					cylinder.top_radius = 1.0
+					cylinder.bottom_radius = 1.0
+					m.mesh = cylinder
 
 			material = SpatialMaterial.new()
 			#material.flags_unshaded = true

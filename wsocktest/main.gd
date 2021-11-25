@@ -28,6 +28,6 @@ func _on_entity_hovered_changed(entity, _collider):
 				if i.entity == entity:
 					last_hovered_event = i
 					$Control/EntityHovered/Action.text = "%s %s" % [ActionsMap[i.action], i.text]
-					break
-	else:
-		last_hovered_event = null
+					return
+
+	last_hovered_event = null

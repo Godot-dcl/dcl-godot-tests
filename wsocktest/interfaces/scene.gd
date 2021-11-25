@@ -38,8 +38,8 @@ func contents_loaded():
 	Server.send({"type": "ControlEvent", "payload": JSON.print(response)}, peer)
 
 
-func message(scene_msg):
-	#print(scene_msg.to_string())
+func message(scene_msg : PROTO.PB_SendSceneMessage):
+	print(scene_msg.to_string())
 
 	if scene_msg.has_createEntity():
 		#print("create entity ", scene_msg.get_createEntity().get_id())
@@ -63,7 +63,8 @@ func message(scene_msg):
 	if scene_msg.has_componentCreated():
 		#print("component created ", scene_msg.get_componentCreated().get_name())
 		components[scene_msg.get_componentCreated().get_id()] = COMPONENT.new(
-			scene_msg.get_componentCreated().get_name()
+			scene_msg.get_componentCreated().get_name(),
+			scene_msg.get_componentCreated().get_classid()
 		)
 
 	if scene_msg.has_componentDisposed():
@@ -91,61 +92,69 @@ func message(scene_msg):
 
 	if scene_msg.has_updateEntityComponent():
 
+		var classid = scene_msg.get_updateEntityComponent().get_classId()
 		var data = scene_msg.get_updateEntityComponent().get_data()
-		if data.left(1) in ["[", "{"]:
-			print("update component in entity %s -> %s" % [
-				scene_msg.get_updateEntityComponent().get_entityId(),
-				scene_msg.get_updateEntityComponent().get_data() ])
-			var entity = entities[scene_msg.get_updateEntityComponent().get_entityId()]
-			var parsed = JSON.parse(data).result
-			if parsed.has("uuid"):
-				if has_meta("events"):
-					get_meta("events").append(EVENT.new(id, entity, parsed))
+
+		# check this classid in engineinterface.proto (line 24)
+		match classid:
+			8: # PB_UUIDCallback
+				print("update component in entity %s -> %s" % [
+					scene_msg.get_updateEntityComponent().get_entityId(),
+					scene_msg.get_updateEntityComponent().get_data() ])
+				var entity = entities[scene_msg.get_updateEntityComponent().get_entityId()]
+				var parsed = JSON.parse(data).result
+				if parsed.has("uuid"):
+					if has_meta("events"):
+						get_meta("events").append(EVENT.new(id, entity, parsed))
+					else:
+						set_meta("events", [EVENT.new(id, entity, parsed)])
+
+				if parsed.has("outlineWidth"):
+					var w = WAYPOINT.instance()
+					var label = w.get_node("Label") as Label
+					var font = label.get("custom_fonts/font") as DynamicFont
+					w.text = parsed.value
+					label.set("custom_colors/font_color", Color(parsed.color.r, parsed.color.g, parsed.color.b))
+					font.outline_color = Color(parsed.outlineColor.r, parsed.outlineColor.g, parsed.outlineColor.b)
+					font.outline_size = parsed.outlineWidth
+					entity.add_child(w)
+
+				if parsed.has("states") and entity.has_node("AnimationPlayer"):
+					var anim_node = entity.get_node("AnimationPlayer") as AnimationPlayer
+					for anim in parsed.states:
+						if anim.playing and anim_node.has_animation(anim.clip):
+							print(anim)
+							anim_node.get_animation(anim.clip).loop = anim.looping
+							anim_node.playback_speed = anim.speed
+							anim_node.play(anim.clip)
+							break
+
+				emit_signal("received_event", self)
+			1: # PB_Transform
+				var buf = Marshalls.base64_to_raw(data)
+
+				var comp = PROTO.PB_Transform.new()
+				var err = comp.from_bytes(buf)
+				if err == PROTO.PB_ERR.NO_ERRORS:
+					var entity_id = scene_msg.get_updateEntityComponent().get_entityId()
+					var rot = comp.get_rotation()
+					var pos = comp.get_position()
+					var sca = comp.get_scale()
+
+					print("update component in entity %s transform -> %s" % [
+						scene_msg.get_updateEntityComponent().get_entityId(),
+						comp.to_string() ])
+
+					var q = Quat(
+						rot.get_x(),
+						rot.get_y(),
+						rot.get_z(),
+						rot.get_w()
+					)
+					entities[entity_id].transform = Transform(q).scaled(Vector3(sca.get_x(), sca.get_y(), sca.get_z()))
+					entities[entity_id].transform.origin = Vector3(pos.get_x(), pos.get_y(), pos.get_z())
 				else:
-					set_meta("events", [EVENT.new(id, entity, parsed)])
-
-			if parsed.has("outlineWidth"):
-				var w = WAYPOINT.instance()
-				var label = w.get_node("Label") as Label
-				var font = label.get("custom_fonts/font") as DynamicFont
-				w.text = parsed.value
-				label.set("custom_colors/font_color", Color(parsed.color.r, parsed.color.g, parsed.color.b))
-				font.outline_color = Color(parsed.outlineColor.r, parsed.outlineColor.g, parsed.outlineColor.b)
-				font.outline_size = parsed.outlineWidth
-				entity.add_child(w)
-
-			if parsed.has("states") and entity.has_node("AnimationPlayer"):
-				var anim_node = entity.get_node("AnimationPlayer") as AnimationPlayer
-				for anim in parsed.states:
-					if anim.playing and anim_node.has_animation(anim.clip):
-						print(anim)
-						anim_node.get_animation(anim.clip).loop = anim.looping
-						anim_node.playback_speed = anim.speed
-						anim_node.play(anim.clip)
-						break
-
-			emit_signal("received_event", self)
-		else:
-			var buf = Marshalls.base64_to_raw(data)
-
-			var comp = PROTO.PB_Transform.new()
-			var err = comp.from_bytes(buf)
-			if err == PROTO.PB_ERR.NO_ERRORS:
-				var entity_id = scene_msg.get_updateEntityComponent().get_entityId()
-				var rot = comp.get_rotation()
-				var pos = comp.get_position()
-				var sca = comp.get_scale()
-
-				var q = Quat(
-					rot.get_x(),
-					rot.get_y(),
-					rot.get_z(),
-					rot.get_w()
-				)
-				entities[entity_id].transform = Transform(q).scaled(Vector3(sca.get_x(), sca.get_y(), sca.get_z()))
-				entities[entity_id].transform.origin = Vector3(pos.get_x(), pos.get_y(), pos.get_z())
-			else:
-				push_warning("****** error decoding PB_Transform payload %s" % err)
+					push_warning("****** error decoding PB_Transform payload %s" % err)
 
 	if scene_msg.has_sceneStarted():
 		pass#print("scene started ", id)
