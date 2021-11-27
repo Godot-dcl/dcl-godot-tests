@@ -36,7 +36,7 @@ window/vsync/use_vsync=false
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/protobuf/plugin.cfg", "res://addons/scene_debugger/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/gut/plugin.cfg", "res://addons/protobuf/plugin.cfg", "res://addons/scene_debugger/plugin.cfg" )
 
 [input]
 
