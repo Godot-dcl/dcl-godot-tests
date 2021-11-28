@@ -10,7 +10,7 @@ signal peer_disconnected(id)
 signal scene_created(scene)
 
 const PROTO = preload("res://server/engineinterface.gd")
-const SCENE = preload("res://interfaces/scene.tscn")
+const SCENE = preload("res://scene/scene.tscn")
 
 const PORT = 9080
 var _server = WebSocketServer.new()
@@ -21,8 +21,6 @@ var parcel_scenes = {}
 var peers = {}
 
 var httprequests = []
-
-var profile_loaded = false
 
 var loading_screen : Control
 
@@ -192,9 +190,13 @@ func _message(msg, peer):
 			})
 
 		"LoadProfile":
-			if !profile_loaded:
-				profile_loaded = true
-				send({"type": "ControlEvent", "payload": JSON.print({"eventType":"ActivateRenderingACK"})})
+#			send({"type": "CloseUserAvatar", "payload": JSON.print({
+#				"isSignUpFlow": true
+#			})})
+			pass
+
+		"ActivateRendering", "ForceActivateRendering":
+			send({"type": "ControlEvent", "payload": JSON.print({"eventType":"ActivateRenderingACK"})})
 
 		"Teleport":
 			if is_instance_valid(player):

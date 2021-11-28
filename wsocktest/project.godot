@@ -10,11 +10,59 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Reference",
+"class": "DCL_BoxShape",
+"language": "GDScript",
+"path": "res://interfaces/components/shapes/box.gd"
+}, {
+"base": "Reference",
+"class": "DCL_Component",
+"language": "GDScript",
+"path": "res://interfaces/component.gd"
+}, {
+"base": "Reference",
+"class": "DCL_ConeShape",
+"language": "GDScript",
+"path": "res://interfaces/components/shapes/cone.gd"
+}, {
+"base": "Reference",
+"class": "DCL_CylinderShape",
+"language": "GDScript",
+"path": "res://interfaces/components/shapes/cylinder.gd"
+}, {
+"base": "Reference",
+"class": "DCL_GLTFShape",
+"language": "GDScript",
+"path": "res://interfaces/components/gltf.gd"
+}, {
+"base": "Reference",
+"class": "DCL_Material",
+"language": "GDScript",
+"path": "res://interfaces/components/material.gd"
+}, {
+"base": "Reference",
+"class": "DCL_PlaneShape",
+"language": "GDScript",
+"path": "res://interfaces/components/shapes/plane.gd"
+}, {
+"base": "Reference",
+"class": "DCL_SphereShape",
+"language": "GDScript",
+"path": "res://interfaces/components/shapes/sphere.gd"
+}, {
+"base": "Reference",
 "class": "Event",
 "language": "GDScript",
 "path": "res://interfaces/event.gd"
 } ]
 _global_script_class_icons={
+"DCL_BoxShape": "",
+"DCL_Component": "",
+"DCL_ConeShape": "",
+"DCL_CylinderShape": "",
+"DCL_GLTFShape": "",
+"DCL_Material": "",
+"DCL_PlaneShape": "",
+"DCL_SphereShape": "",
 "Event": ""
 }
 
@@ -28,7 +76,7 @@ config/icon="res://icon.png"
 
 Server="*res://server/server.gd"
 ContentManager="*res://server/content_manager.gd"
-EventManager="*res://interfaces/event_manager.gd"
+EventManager="*res://scene/event_manager.gd"
 
 [display]
 

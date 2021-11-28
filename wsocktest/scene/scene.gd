@@ -62,10 +62,21 @@ func message(scene_msg : PROTO.PB_SendSceneMessage):
 
 	if scene_msg.has_componentCreated():
 		#print("component created ", scene_msg.get_componentCreated().get_name())
-		components[scene_msg.get_componentCreated().get_id()] = COMPONENT.new(
-			scene_msg.get_componentCreated().get_name(),
-			scene_msg.get_componentCreated().get_classid()
-		)
+		var classid = scene_msg.get_componentCreated().get_classid()
+		var c_id = scene_msg.get_componentCreated().get_id()
+		var c_name = scene_msg.get_componentCreated().get_name()
+		match classid:
+			DCL_BoxShape._classid:
+				components[c_id] = DCL_BoxShape.new(c_name)
+			DCL_SphereShape._classid:
+				components[c_id] = DCL_SphereShape.new(c_name)
+			DCL_Material._classid:
+				components[c_id] = DCL_Material.new(c_name)
+			DCL_GLTFShape._classid:
+				components[c_id] = DCL_GLTFShape.new(c_name)
+			_:
+				print("Unimplemented component")
+				components[c_id] = DCL_Component.new(c_name)
 
 	if scene_msg.has_componentDisposed():
 		pass#print("component disposed ", scene_msg.get_componentDisposed().get_id())
@@ -94,14 +105,16 @@ func message(scene_msg : PROTO.PB_SendSceneMessage):
 
 		var classid = scene_msg.get_updateEntityComponent().get_classId()
 		var data = scene_msg.get_updateEntityComponent().get_data()
+		var entity_id = scene_msg.get_updateEntityComponent().get_entityId()
+
+#		print("update component in entity %s -> %s" % [
+#			entity_id,
+#			data ])
 
 		# check this classid in engineinterface.proto (line 24)
 		match classid:
 			8: # PB_UUIDCallback
-#				print("update component in entity %s -> %s" % [
-#					scene_msg.get_updateEntityComponent().get_entityId(),
-#					scene_msg.get_updateEntityComponent().get_data() ])
-				var entity = entities[scene_msg.get_updateEntityComponent().get_entityId()]
+				var entity = entities[entity_id]
 				var parsed = JSON.parse(data).result
 				if parsed.has("uuid"):
 					if has_meta("events"):
@@ -136,7 +149,6 @@ func message(scene_msg : PROTO.PB_SendSceneMessage):
 				var comp = PROTO.PB_Transform.new()
 				var err = comp.from_bytes(buf)
 				if err == PROTO.PB_ERR.NO_ERRORS:
-					var entity_id = scene_msg.get_updateEntityComponent().get_entityId()
 					var rot = comp.get_rotation()
 					var pos = comp.get_position()
 					var sca = comp.get_scale()
@@ -155,6 +167,8 @@ func message(scene_msg : PROTO.PB_SendSceneMessage):
 					entities[entity_id].transform.origin = Vector3(pos.get_x(), pos.get_y(), pos.get_z())
 				else:
 					push_warning("****** error decoding PB_Transform payload %s" % err)
+			_:
+				pass#printt("updateEntityComponent ****", classid)
 
 	if scene_msg.has_sceneStarted():
 		pass#print("scene started ", id)

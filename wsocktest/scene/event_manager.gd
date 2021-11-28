@@ -71,7 +71,6 @@ func _input(_event):
 
 
 func send_request(action, type):
-	var parcel_scenes = Server.parcel_scenes.keys()
 	var response = {
 		"eventType": "actionButtonEvent",
 		"sceneId": Server.player.current_scene_id(),
