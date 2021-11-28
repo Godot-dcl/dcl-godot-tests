@@ -17,7 +17,7 @@ var id
 
 var current_index = -1
 var entities = {"0": get_node(".")}
-var components : Dictionary
+var components: Dictionary
 
 
 func create(msg, p_peer, is_global):
@@ -38,7 +38,7 @@ func contents_loaded():
 	Server.send({"type": "ControlEvent", "payload": JSON.print(response)}, peer)
 
 
-func message(scene_msg : PROTO.PB_SendSceneMessage):
+func message(scene_msg: PROTO.PB_SendSceneMessage):
 	#print(scene_msg.to_string())
 
 	if scene_msg.has_createEntity():
@@ -186,7 +186,7 @@ func message(scene_msg : PROTO.PB_SendSceneMessage):
 func reparent(src, dest):
 	var src_node = entities[src]
 	var dest_node = entities[dest]
-	remove_child(src_node)
+	src_node.get_parent().remove_child(src_node)
 	dest_node.add_child(src_node)
 
 
