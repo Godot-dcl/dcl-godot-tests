@@ -1,7 +1,7 @@
 extends "res://addons/gut/test.gd"
 
 
-const Scene = preload("res://interfaces/scene.tscn")
+const Scene = preload("res://scene/scene.tscn")
 
 
 func test_entity_creation():
