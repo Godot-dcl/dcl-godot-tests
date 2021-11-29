@@ -15,7 +15,7 @@ func load_contents(scene, payload):
 		var content = payload.contents[i]
 
 		# for now, just filter content
-		if content.file.get_extension() in ["gltf", "glb", "png"]:
+		if content.file.get_extension() in ["gltf", "glb", "bin", "png"]:
 			content.hash = content.hash.trim_suffix(content.file.get_extension())
 			loading_scenes[scene.id].contents.push_back(content)
 
@@ -26,7 +26,8 @@ func load_contents(scene, payload):
 		else:
 			var http = HTTPRequest.new()
 			http.use_threads = true
-			http.connect("request_completed", self, "download_" + content.file.get_extension(), [content])
+			var func_name = "download_" + content.file.get_extension()
+			http.connect("request_completed", self, func_name, [content])
 			add_child(http)
 
 			var file : String = payload.baseUrl + content.hash
@@ -100,6 +101,20 @@ func download_glb(_result, response_code, _headers, body, content):
 		httprequests[content.hash].queue_free()
 		httprequests.erase(content.hash)
 
+	cache_file(content)
+
+
+func download_bin(_result, response_code, _headers, body, content):
+	if response_code >= 200 and response_code < 300:
+		var f = File.new()
+		var file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
+		if f.open(file_name, File.WRITE) == OK:
+			f.store_buffer(body)
+			f.close()
+
+	if httprequests.has(content.hash):
+		httprequests[content.hash].queue_free()
+		httprequests.erase(content.hash)
 	cache_file(content)
 
 

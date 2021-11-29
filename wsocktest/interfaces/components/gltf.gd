@@ -47,8 +47,9 @@ func update(data):
 				if m is MeshInstance:
 					m.create_trimesh_collision()
 					var c = m.get_child(0)
-					c.name = m.name
-					colliders.push_back(c)
+					if is_instance_valid(c):
+						c.name = m.name
+						colliders.push_back(c)
 
 		if json.has("isPointerBlocker"):
 			for collider in colliders:

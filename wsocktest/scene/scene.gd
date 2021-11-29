@@ -75,7 +75,7 @@ func message(scene_msg: PROTO.PB_SendSceneMessage):
 			DCL_GLTFShape._classid:
 				components[c_id] = DCL_GLTFShape.new(c_name)
 			_:
-				print("Unimplemented component")
+				printt("**** Unimplemented component", classid)
 				components[c_id] = DCL_Component.new(c_name)
 
 	if scene_msg.has_componentDisposed():
@@ -168,7 +168,7 @@ func message(scene_msg: PROTO.PB_SendSceneMessage):
 				else:
 					push_warning("****** error decoding PB_Transform payload %s" % err)
 			_:
-				pass#printt("updateEntityComponent ****", classid)
+				printt("updateEntityComponent ****", classid)
 
 	if scene_msg.has_sceneStarted():
 		pass#print("scene started ", id)
