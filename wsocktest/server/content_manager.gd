@@ -45,7 +45,7 @@ func file_downloaded(content):
 	match ext:
 		"glb", "gltf":
 			file_name = "user://%s.%s" % [content.hash, ext]
-		"png":
+		"png", "bin":
 			file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
 		_:
 			push_warning("*** undefined extension")
