@@ -59,3 +59,6 @@ func update(data):
 func attach_to(entity):
 	for m in meshes:
 		entity.add_child(m.duplicate())
+
+	if is_instance_valid(animation):
+		entity.add_child(animation.duplicate())

@@ -12,3 +12,6 @@ func update(data):
 
 func attach_to(entity):
 	pass
+
+static func update_component_in_entity(data, entity, scene):
+	pass

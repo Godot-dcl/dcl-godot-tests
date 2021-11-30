@@ -68,14 +68,18 @@ func message(scene_msg: PROTO.PB_SendSceneMessage):
 		match classid:
 			DCL_BoxShape._classid:
 				components[c_id] = DCL_BoxShape.new(c_name)
+
 			DCL_SphereShape._classid:
 				components[c_id] = DCL_SphereShape.new(c_name)
+
 			DCL_Material._classid:
 				components[c_id] = DCL_Material.new(c_name)
+
 			DCL_GLTFShape._classid:
 				components[c_id] = DCL_GLTFShape.new(c_name)
+
 			_:
-				printt("**** Unimplemented component", classid)
+				printt("**** Unimplemented component creation", classid)
 				components[c_id] = DCL_Component.new(c_name)
 
 	if scene_msg.has_componentDisposed():
@@ -113,62 +117,21 @@ func message(scene_msg: PROTO.PB_SendSceneMessage):
 
 		# check this classid in engineinterface.proto (line 24)
 		match classid:
-			8: # PB_UUIDCallback
-				var entity = entities[entity_id]
-				var parsed = JSON.parse(data).result
-				if parsed.has("uuid"):
-					if has_meta("events"):
-						get_meta("events").append(EVENT.new(id, entity, parsed))
-					else:
-						set_meta("events", [EVENT.new(id, entity, parsed)])
-
-				if parsed.has("outlineWidth"):
-					var w = WAYPOINT.instance()
-					var label = w.get_node("Label") as Label
-					var font = label.get("custom_fonts/font") as DynamicFont
-					w.text = parsed.value
-					label.set("custom_colors/font_color", Color(parsed.color.r, parsed.color.g, parsed.color.b))
-					font.outline_color = Color(parsed.outlineColor.r, parsed.outlineColor.g, parsed.outlineColor.b)
-					font.outline_size = parsed.outlineWidth
-					entity.add_child(w)
-
-				if parsed.has("states") and entity.has_node("AnimationPlayer"):
-					var anim_node = entity.get_node("AnimationPlayer") as AnimationPlayer
-					for anim in parsed.states:
-						if anim.playing and anim_node.has_animation(anim.clip):
-							print(anim)
-							anim_node.get_animation(anim.clip).loop = anim.looping
-							anim_node.playback_speed = anim.speed
-							anim_node.play(anim.clip)
-							break
-
+			DCL_UUIDCallback._classid:
+				DCL_UUIDCallback.update_component_in_entity(data, entities[entity_id], self)
 				emit_signal("received_event", self)
-			1: # PB_Transform
-				var buf = Marshalls.base64_to_raw(data)
 
-				var comp = PROTO.PB_Transform.new()
-				var err = comp.from_bytes(buf)
-				if err == PROTO.PB_ERR.NO_ERRORS:
-					var rot = comp.get_rotation()
-					var pos = comp.get_position()
-					var sca = comp.get_scale()
+			DCL_Transform._classid:
+				DCL_Transform.update_component_in_entity(data, entities[entity_id], self)
 
-#					print("update component in entity %s transform -> %s" % [
-#						scene_msg.get_updateEntityComponent().get_entityId(),
-#						comp.to_string() ])
+			DCL_TextShape._classid:
+				DCL_TextShape.update_component_in_entity(data, entities[entity_id], self)
 
-					var q = Quat(
-						rot.get_x(),
-						rot.get_y(),
-						rot.get_z(),
-						rot.get_w()
-					)
-					entities[entity_id].transform = Transform(q).scaled(Vector3(sca.get_x(), sca.get_y(), sca.get_z()))
-					entities[entity_id].transform.origin = Vector3(pos.get_x(), pos.get_y(), pos.get_z())
-				else:
-					push_warning("****** error decoding PB_Transform payload %s" % err)
+			DCL_AnimationState._classid:
+				DCL_AnimationState.update_component_in_entity(data, entities[entity_id], self)
+
 			_:
-				printt("updateEntityComponent ****", classid)
+				printt("**** Unimplemented component update", classid)
 
 	if scene_msg.has_sceneStarted():
 		pass#print("scene started ", id)

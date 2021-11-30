@@ -10,6 +10,11 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Reference",
+"class": "DCL_AnimationState",
+"language": "GDScript",
+"path": "res://interfaces/components/animation_state.gd"
+}, {
+"base": "Reference",
 "class": "DCL_BoxShape",
 "language": "GDScript",
 "path": "res://interfaces/components/shapes/box.gd"
@@ -50,11 +55,27 @@ _global_script_classes=[ {
 "path": "res://interfaces/components/shapes/sphere.gd"
 }, {
 "base": "Reference",
+"class": "DCL_TextShape",
+"language": "GDScript",
+"path": "res://interfaces/components/text_shape.gd"
+}, {
+"base": "Reference",
+"class": "DCL_Transform",
+"language": "GDScript",
+"path": "res://interfaces/components/transform.gd"
+}, {
+"base": "Reference",
+"class": "DCL_UUIDCallback",
+"language": "GDScript",
+"path": "res://interfaces/components/uuid_callback.gd"
+}, {
+"base": "Reference",
 "class": "Event",
 "language": "GDScript",
 "path": "res://interfaces/event.gd"
 } ]
 _global_script_class_icons={
+"DCL_AnimationState": "",
 "DCL_BoxShape": "",
 "DCL_Component": "",
 "DCL_ConeShape": "",
@@ -63,6 +84,9 @@ _global_script_class_icons={
 "DCL_Material": "",
 "DCL_PlaneShape": "",
 "DCL_SphereShape": "",
+"DCL_TextShape": "",
+"DCL_Transform": "",
+"DCL_UUIDCallback": "",
 "Event": ""
 }
 
