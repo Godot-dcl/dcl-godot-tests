@@ -15,6 +15,16 @@ _global_script_classes=[ {
 "path": "res://interfaces/components/animation_state.gd"
 }, {
 "base": "Reference",
+"class": "DCL_AudioClip",
+"language": "GDScript",
+"path": "res://interfaces/components/audio_clip.gd"
+}, {
+"base": "Reference",
+"class": "DCL_AudioSource",
+"language": "GDScript",
+"path": "res://interfaces/components/audio_source.gd"
+}, {
+"base": "Reference",
 "class": "DCL_BoxShape",
 "language": "GDScript",
 "path": "res://interfaces/components/shapes/box.gd"
@@ -76,6 +86,8 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "DCL_AnimationState": "",
+"DCL_AudioClip": "",
+"DCL_AudioSource": "",
 "DCL_BoxShape": "",
 "DCL_Component": "",
 "DCL_ConeShape": "",

@@ -78,6 +78,12 @@ func message(scene_msg: PROTO.PB_SendSceneMessage):
 			DCL_GLTFShape._classid:
 				components[c_id] = DCL_GLTFShape.new(c_name)
 
+			DCL_AudioSource._classid:
+				components[c_id] = DCL_AudioSource.new(c_name)
+				
+			DCL_AudioClip._classid:
+				components[c_id] = DCL_AudioClip.new(c_name)
+
 			_:
 				printt("**** Unimplemented component creation", classid)
 				components[c_id] = DCL_Component.new(c_name)
@@ -130,6 +136,11 @@ func message(scene_msg: PROTO.PB_SendSceneMessage):
 			DCL_AnimationState._classid:
 				DCL_AnimationState.update_component_in_entity(data, entities[entity_id], self)
 
+			DCL_AudioSource._classid:
+				DCL_AudioSource.update_component_in_entity(data, entities[entity_id], self)
+
+			DCL_AudioClip._classid:
+				DCL_AudioClip.update_component_in_entity(data, entities[entity_id], self)
 			_:
 				printt("**** Unimplemented component update", classid)
 
