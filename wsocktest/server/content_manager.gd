@@ -15,7 +15,7 @@ func load_contents(scene, payload):
 		var content = payload.contents[i]
 
 		# for now, just filter content
-		if content.file.get_extension() in ["gltf", "glb", "bin", "png"]:
+		if content.file.get_extension() in ["gltf", "glb", "bin", "png", "mp3"]:
 			content.hash = content.hash.trim_suffix(content.file.get_extension())
 			loading_scenes[scene.id].contents.push_back(content)
 
@@ -43,7 +43,7 @@ func file_downloaded(content):
 	var ext = content.file.get_extension()
 	var file_name : String
 	match ext:
-		"glb", "gltf":
+		"glb", "gltf", "mp3":
 			file_name = "user://%s.%s" % [content.hash, ext]
 		"png", "bin":
 			file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
@@ -62,6 +62,14 @@ func cache_file(content):
 			"glb", "gltf":
 				var l = DynamicGLTFLoader.new()
 				contents[f] = l.import_scene("user://%s.%s" % [content.hash, ext], 1, 1)
+			"mp3":
+				var s := AudioStreamMP3.new()
+				var file = File.new()
+				file.open("user://%s.%s" % [content.hash, ext],File.READ)
+				s.data = file.get_buffer(file.get_len())
+				file.close()
+				contents[f] = s
+				
 
 	for scene in loading_scenes.keys():
 		if content in loading_scenes[scene].contents:
@@ -117,6 +125,18 @@ func download_bin(_result, response_code, _headers, body, content):
 		httprequests.erase(content.hash)
 	cache_file(content)
 
+func download_mp3(_result, response_code, _headers, body, content):
+	if response_code >= 200 and response_code < 300:
+		var f = File.new()
+		var file_name = "user://%s.%s" % [content.hash, content.file.get_extension()]
+		if f.open(file_name, File.WRITE) == OK:
+			f.store_buffer(body)
+			f.close()
+
+	if httprequests.has(content.hash):
+		httprequests[content.hash].queue_free()
+		httprequests.erase(content.hash)
+	cache_file(content)
 
 func get_instance(file_hash):
 	var f = file_hash.to_lower()
