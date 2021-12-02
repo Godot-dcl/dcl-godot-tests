@@ -83,6 +83,11 @@ _global_script_classes=[ {
 "class": "Event",
 "language": "GDScript",
 "path": "res://interfaces/event.gd"
+}, {
+"base": "Reference",
+"class": "TestUtils",
+"language": "GDScript",
+"path": "res://tests/utils.gd"
 } ]
 _global_script_class_icons={
 "DCL_AnimationState": "",
@@ -99,7 +104,8 @@ _global_script_class_icons={
 "DCL_TextShape": "",
 "DCL_Transform": "",
 "DCL_UUIDCallback": "",
-"Event": ""
+"Event": "",
+"TestUtils": ""
 }
 
 [application]
