@@ -1,0 +1,51 @@
+name: Build
+on: 
+  push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: kuruk/dcl-godot:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Export
+        run: |
+          cd wsocktest
+          mv export_presets_ci.cfg export_presets.cfg
+          /godot-bin/godot_server.x11.opt.tools.64 --export-pack Linux/X11 DCLGodot.pck
+      - name: Prepare publish
+        run: |
+          mkdir -p output
+          cd output
+          mkdir -p linux
+          cp /godot-bin/linux_x11_64_debug linux/DCLGodot
+          cp ../wsocktest/DCLGodot.pck linux
+          zip -r linux.zip linux
+
+          mkdir -p windows
+          cp /godot-bin/windows_64_debug.exe windows/DCLGodot.exe
+          cp ../wsocktest/DCLGodot.pck windows
+          zip -r windows.zip windows
+
+          mkdir -p mac
+          cp -r /godot-bin/osx_template.app mac/DCLGodot.app
+          cp ../wsocktest/DCLGodot.pck mac
+          zip -r mac.zip mac
+      - name: Publish
+        uses: actions/upload-artifact@v2
+        with:
+          name: dcl-godot-windows
+          path: |
+            output/windows.zip
+      - name: Publish
+        uses: actions/upload-artifact@v2
+        with:
+          name: dcl-godot-linux
+          path: |
+            output/linux.zip
+      - name: Publish
+        uses: actions/upload-artifact@v2
+        with:
+          name: dcl-godot-mac
+          path: |
+            output/mac.zip
