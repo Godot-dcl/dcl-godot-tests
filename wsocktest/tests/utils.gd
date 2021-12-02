@@ -25,7 +25,7 @@ func remove_entity(scene: Node, id: String):
 
 
 func update_entity_component(
-		scene: Node, entity_id: String, class_id: int, data: Server.PROTO):
+		scene: Node, entity_id: String, class_id: int, data):
 	var msg = Server.PROTO.PB_SendSceneMessage.new()
 	msg.new_updateEntityComponent()
 	msg.get_updateEntityComponent().set_entityId(entity_id)
