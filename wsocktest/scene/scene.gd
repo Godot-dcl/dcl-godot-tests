@@ -71,6 +71,9 @@ func message(scene_msg: PROTO.PB_SendSceneMessage):
 
 			DCL_SphereShape._classid:
 				components[c_id] = DCL_SphereShape.new(c_name)
+				
+			DCL_PlaneShape._classid:
+				components[c_id] = DCL_PlaneShape.new(c_name)
 
 			DCL_Material._classid:
 				components[c_id] = DCL_Material.new(c_name)
