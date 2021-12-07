@@ -18,7 +18,22 @@ func update(data):
 			json.albedoColor.g,
 			json.albedoColor.b
 		)
-
+	if json.has("albedoTexture"):
+		var tex = Server.parcel_scenes[Server.parcel_scenes.keys()[0]][0].components[json.albedoTexture].texture # TODO: Replace with proper equivalent of scene.GetSharedComponent(componentId)
+		material.albedo_texture = tex
+	
+	if json.has("emissiveTexture"):
+		material.emission_enabled = true
+		var tex = Server.parcel_scenes[Server.parcel_scenes.keys()[0]][0].components[json.emissiveTexture].texture # TODO: Replace with proper equivalent of scene.GetSharedComponent(componentId)
+		material.emission_texture = tex
+	
+	if json.has("emissiveIntensity"):
+		material.emission_enabled = true
+		material.emission_energy = json.get("emissiveIntensity", material.emission_energy)
+		if json.has("emissiveColor"):
+			var color_dict = json.emissiveColor
+			var color = Color(color_dict.r, color_dict.g, color_dict.b)
+	
 	if json.has("metallic"):
 		material.metallic = json.metallic
 
