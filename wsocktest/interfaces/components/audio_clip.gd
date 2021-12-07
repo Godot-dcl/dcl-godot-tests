@@ -24,7 +24,3 @@ func update(data):
 func attach_to(entity):
 	if entity.has_node("AudioSource"):
 		entity.get_node("AudioSource").stream = audio_clip
-
-#Unused in test scene
-static func update_component_in_entity(data, entity, scene):
-	printt("Updating audio clip: ", entity, data)

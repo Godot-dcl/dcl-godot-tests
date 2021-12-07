@@ -7,11 +7,11 @@ var name : String
 func _init(_name):
 	name = _name
 
-func update(data):
+func update(_data):
 	pass
 
-func attach_to(entity):
+func attach_to(_entity):
 	pass
 
-static func update_component_in_entity(data, entity, scene):
+static func update_component_in_entity(_data, _entity, _scene):
 	pass

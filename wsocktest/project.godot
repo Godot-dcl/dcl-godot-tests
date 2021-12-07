@@ -120,6 +120,10 @@ Server="*res://server/server.gd"
 ContentManager="*res://server/content_manager.gd"
 EventManager="*res://scene/event_manager.gd"
 
+[debug]
+
+gdscript/warnings/return_value_discarded=false
+
 [display]
 
 window/vsync/use_vsync=false

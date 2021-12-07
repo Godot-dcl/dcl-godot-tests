@@ -5,7 +5,7 @@ const _classid = 1
 const PROTO = preload("res://server/engineinterface.gd")
 
 
-static func update_component_in_entity(data, entity, scene):
+static func update_component_in_entity(data, entity, _scene):
 	var buf = Marshalls.base64_to_raw(data)
 
 	var comp = PROTO.PB_Transform.new()
