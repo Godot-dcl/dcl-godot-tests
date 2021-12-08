@@ -1,23 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://addons/scene_debugger/scene_debugger.gd" type="Script" id=1]
 
 [sub_resource type="StyleBoxEmpty" id=1]
-
-[sub_resource type="Image" id=4]
-data = {
-"data": PoolByteArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ),
-"format": "LumAlpha8",
-"height": 16,
-"mipmaps": false,
-"width": 16
-}
-
-[sub_resource type="ImageTexture" id=3]
-flags = 4
-flags = 4
-image = SubResource( 4 )
-size = Vector2( 16, 16 )
 
 [node name="SceneDebugger" type="Control"]
 anchor_right = 1.0
@@ -49,7 +34,6 @@ custom_styles/panel = SubResource( 1 )
 tabs_visible = false
 
 [node name="Peers" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 
@@ -78,7 +62,6 @@ margin_bottom = 22.0
 [node name="Back" type="Button" parent="VBoxContainer/TabContainer/Scenes/HBoxContainer"]
 margin_right = 28.0
 margin_bottom = 22.0
-icon = SubResource( 3 )
 flat = true
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/Scenes/HBoxContainer"]
@@ -94,7 +77,6 @@ align = 1
 margin_left = 996.0
 margin_right = 1024.0
 margin_bottom = 22.0
-icon = SubResource( 3 )
 items = [ "Has Events", null, 1, false, false, 0, 0, null, "", false ]
 
 [node name="Tree" type="Tree" parent="VBoxContainer/TabContainer/Scenes"]
@@ -130,6 +112,7 @@ pressed = true
 text = "Make Scenes Be at Origin"
 
 [node name="Events" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 
@@ -140,7 +123,6 @@ margin_bottom = 22.0
 [node name="Back" type="Button" parent="VBoxContainer/TabContainer/Events/HBoxContainer"]
 margin_right = 28.0
 margin_bottom = 22.0
-icon = SubResource( 3 )
 flat = true
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/Events/HBoxContainer"]
@@ -159,22 +141,21 @@ margin_bottom = 524.0
 size_flags_vertical = 3
 hide_root = true
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer/TabContainer/Events"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/TabContainer/Events"]
 margin_top = 528.0
 margin_right = 1024.0
 margin_bottom = 552.0
-columns = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Events/GridContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Events/HBoxContainer2"]
 margin_top = 5.0
 margin_right = 510.0
 margin_bottom = 19.0
 size_flags_horizontal = 3
-text = "Mesh Name"
+text = "Mesh Name:"
 align = 2
 valign = 1
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/TabContainer/Events/GridContainer"]
+[node name="MeshName" type="LineEdit" parent="VBoxContainer/TabContainer/Events/HBoxContainer2"]
 margin_left = 514.0
 margin_right = 1024.0
 margin_bottom = 24.0
