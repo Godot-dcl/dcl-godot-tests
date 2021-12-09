@@ -6,7 +6,7 @@ const _classid = 65
 var material : SpatialMaterial
 
 
-func _init(_name).(_name):
+func _init(_name, _scene, _id).(_name, _scene, _id):
 	material = SpatialMaterial.new()
 
 
@@ -19,12 +19,12 @@ func update(data):
 			json.albedoColor.b
 		)
 	if json.has("albedoTexture"):
-		var tex = Server.parcel_scenes[Server.parcel_scenes.keys()[0]][0].components[json.albedoTexture].texture # TODO: Replace with proper equivalent of scene.GetSharedComponent(componentId)
+		var tex = scene.components[json.albedoTexture].texture # TODO: Replace with proper equivalent of scene.GetSharedComponent(componentId)
 		material.albedo_texture = tex
 	
 	if json.has("emissiveTexture"):
 		material.emission_enabled = true
-		var tex = Server.parcel_scenes[Server.parcel_scenes.keys()[0]][0].components[json.emissiveTexture].texture # TODO: Replace with proper equivalent of scene.GetSharedComponent(componentId)
+		var tex = scene.components[json.emissiveTexture].texture # TODO: Replace with proper equivalent of scene.GetSharedComponent(componentId)
 		material.emission_texture = tex
 	
 	if json.has("emissiveIntensity"):

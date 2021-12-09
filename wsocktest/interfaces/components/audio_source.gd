@@ -7,7 +7,7 @@ var audio_player : = AudioStreamPlayer.new()
 var audio_clip : AudioStreamMP3
 
 # Unused in test scene
-func _init(_name).(_name):
+func _init(_name, _scene, _id).(_name, _scene, _id):
 	audio_player.name = name
 	print("Component name is", name)
 

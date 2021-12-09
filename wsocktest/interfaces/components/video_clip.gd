@@ -9,7 +9,7 @@ var video_clip : VideoStream
 
 var error = true
 
-func _init(_name).(_name):
+func _init(_name, _scene, _id).(_name, _scene, _id):
 	pass
 
 func update(data):
