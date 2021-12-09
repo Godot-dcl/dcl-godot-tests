@@ -220,7 +220,8 @@ func _on_DumpAllIntoScene_pressed():
 
 
 func _on_Send_pressed():
-	events.get_selected().get_metadata(0).check(0, $VBoxContainer/TabContainer/Events/GridContainer/LineEdit.text)
+	events.get_selected().get_metadata(0).check(
+			0, $VBoxContainer/TabContainer/Events/HBoxContainer2/MeshName.text)
 
 
 func _generate_dump_node(parent):
