@@ -4,7 +4,7 @@ var mesh_instance = MeshInstance.new()
 var material : SpatialMaterial
 
 
-func _init(_name).(_name):
+func _init(_name, _scene, _id).(_name, _scene, _id):
 	material = SpatialMaterial.new()
 	mesh_instance.name = name
 	mesh_instance.set("material/0", material)

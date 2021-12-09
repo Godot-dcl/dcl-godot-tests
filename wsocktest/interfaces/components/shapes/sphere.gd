@@ -4,7 +4,7 @@ class_name DCL_SphereShape
 const _classid = 17
 
 
-func _init(_name).(_name):
+func _init(_name, _scene, _id).(_name, _scene, _id):
 	var sphere = SphereMesh.new()
 	sphere.radius = 1.0
 	sphere.height = 2.0

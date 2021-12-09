@@ -2,10 +2,13 @@ extends Reference
 class_name DCL_Component
 
 var name : String
+var scene : Node
+var id : String
 
-
-func _init(_name):
+func _init(_name, _scene, _id):
 	name = _name
+	scene = _scene
+	id = _id
 
 func update(_data):
 	pass
