@@ -29,12 +29,12 @@ func update(data):
 			push_error("DCL_VideoClip: Unsupported extention: %s" % ext)
 			return
 
-		if not is_https:
-			status = STATUS_ERRORED
-			push_error("DCL_VideoClip: http is unsupported. Please use https" % ext)
-			return
-
 		if is_external:
+			if not is_https:
+				status = STATUS_ERRORED
+				push_error("DCL_VideoClip: http is unsupported. Please use https")
+				return
+
 			status = STATUS_PREPARING
 			var download = _get_external_video(url)
 			if download is GDScriptFunctionState:
