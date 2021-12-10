@@ -13,7 +13,7 @@
  "ignore_pause": true,
  "include_subdirs": true,
  "inner_class": null,
- "junit_xml_file": "",
+ "junit_xml_file": "godot-testresults.xml",
  "junit_xml_timestamp": false,
  "log_level": 2,
  "opacity": 100,

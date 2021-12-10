@@ -66,22 +66,23 @@ func is_near_player():
 			Server.player.global_transform.origin) < distance
 
 
-func check(_entity, _collider):
-	if _entity == entity and is_near_player():
-		var response = {
-			"eventType":"uuidEvent",
-			"sceneId": scene_id,
-			"payload": {
-				"uuid": uuid,
+func check(_entity, _collider = ""):
+	if  ( _entity is int and _entity == 0 ) or \
+		( _entity == entity and is_near_player() ):
+			var response = {
+				"eventType":"uuidEvent",
+				"sceneId": scene_id,
 				"payload": {
-					"buttonId": action,
-					"hit": {
-						"meshName": _collider.name,
-						"entityId": entity.name,
+					"uuid": uuid,
+					"payload": {
+						"buttonId": action,
+						"hit": {
+							"meshName": _collider if _entity is int else _collider.name,
+							"entityId": entity.name,
+						}
 					}
 				}
 			}
-		}
 
-		var message = {"type": "SceneEvent", "payload": JSON.print(response)}
-		Server.send(message)
+			var message = {"type": "SceneEvent", "payload": JSON.print(response)}
+			Server.send(message)

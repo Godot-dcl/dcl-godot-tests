@@ -3,6 +3,7 @@
 [ext_resource path="res://scene/camera.gd" type="Script" id=1]
 
 [node name="CameraRig" type="Spatial"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
 script = ExtResource( 1 )
 __meta__ = {
 "_editor_description_": ""

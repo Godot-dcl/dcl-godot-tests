@@ -80,7 +80,7 @@ func message(scene_msg: PROTO.PB_SendSceneMessage):
 
 			DCL_AudioSource._classid:
 				components[c_id] = DCL_AudioSource.new(c_name)
-				
+
 			DCL_AudioClip._classid:
 				components[c_id] = DCL_AudioClip.new(c_name)
 

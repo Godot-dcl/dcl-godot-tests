@@ -1,9 +1,12 @@
 class_name TestUtils
 
 
+const FLOAT_ERROR_MARGIN = 0.000001
+
+
 # Entity manipulation
 
-func create_entity(scene: Node, id: String):
+func create_entity(scene: Node, id: String) -> Node:
 	var msg = Server.PROTO.PB_SendSceneMessage.new()
 	msg.new_createEntity().set_id(id)
 	scene.message(msg)

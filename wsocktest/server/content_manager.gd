@@ -69,7 +69,7 @@ func cache_file(content):
 				s.data = file.get_buffer(file.get_len())
 				file.close()
 				contents[f] = s
-				
+
 
 	for scene in loading_scenes.keys():
 		if content in loading_scenes[scene].contents:
