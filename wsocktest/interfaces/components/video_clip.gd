@@ -46,22 +46,38 @@ func update(data):
 		status = STATUS_READY
 
 func _get_external_video(url: String):
-	var content = {"file": url, "hash" : str(url.hash())}
+	# Get ETag and Last-Modified headers
+	var http = HTTPRequest.new()
+	http.use_threads = false 
+	scene.add_child(http)
+	var check_res = http.request(url, [], true,HTTPClient.METHOD_HEAD)
+	var check_response = yield(http,"request_completed")
+	if check_res != OK:
+		printerr("****** error creating the request: ", check_res)
+		return
+	
+	var e_tag = ""
+	var last_modified = ""
+	for header in check_response[2]:
+		if header.begins_with("ETag:"):
+			e_tag = header
+		if header.begins_with("Last-Modified:"):
+			last_modified = header
+	
+	var content = {"file": url, "hash" : (url + e_tag + last_modified).sha1_text() }
 	if ContentManager.file_downloaded(content):
 		ContentManager.cache_file(content)
 		return
 	
-	var http = HTTPRequest.new()
-	http.use_threads = false
-	scene.add_child(http)
-	var res = http.request(url)
-	var response = yield(http,"request_completed")
-	if res != OK:
-		printerr("****** error creating the request: ", res)
+	# Fetch the file
+	var fetch_res = http.request(url)
+	var fetch_response = yield(http,"request_completed")
+	if fetch_res != OK:
+		printerr("****** error creating the request: ", fetch_res)
 		return
 
-	response.append(content)
-	callv("download_file", response)
+	fetch_response.append(content)
+	callv("download_file", fetch_response)
 	http.queue_free()
 
 
