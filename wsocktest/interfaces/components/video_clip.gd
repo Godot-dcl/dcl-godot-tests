@@ -3,7 +3,7 @@ class_name DCL_VideoClip
 
 const _classid = 70
 
-const SUPPORTED_EXTENSIONS = ["ogg", "ogv"]
+const SUPPORTED_EXTENSIONS = ["ogg", "ogv", "webm"]
 
 var url : String
 
