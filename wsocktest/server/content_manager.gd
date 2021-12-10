@@ -85,6 +85,19 @@ func cache_file(content):
 				loading_scenes[scene].scene.contents_loaded()
 
 
+func download_binary_file_with_hash(_result, response_code, _headers, body, content):
+	if response_code >= 200 and response_code < 300:
+		var f = File.new()
+		var file_name = "user://%s.%s" % [content.hash, content.file.get_extension()]
+		if f.open(file_name, File.WRITE) == OK:
+			f.store_buffer(body)
+			f.close()
+
+	if httprequests.has(content.hash):
+		httprequests[content.hash].queue_free()
+		httprequests.erase(content.hash)
+	cache_file(content)
+
 func download_png(_result, response_code, _headers, body, content):
 	if response_code >= 200 and response_code < 300:
 		var image = Image.new()
@@ -133,26 +146,16 @@ func download_bin(_result, response_code, _headers, body, content):
 	cache_file(content)
 
 func download_mp3(_result, response_code, _headers, body, content):
-	if response_code >= 200 and response_code < 300:
-		var f = File.new()
-		var file_name = "user://%s.%s" % [content.hash, content.file.get_extension()]
-		if f.open(file_name, File.WRITE) == OK:
-			f.store_buffer(body)
-			f.close()
-
-	if httprequests.has(content.hash):
-		httprequests[content.hash].queue_free()
-		httprequests.erase(content.hash)
-	cache_file(content)
+	download_binary_file_with_hash(_result, response_code, _headers, body, content)
 
 func download_ogg(_result, response_code, _headers, body, content):
-	download_mp3(_result, response_code, _headers, body, content)
+	download_binary_file_with_hash(_result, response_code, _headers, body, content)
 
 func download_ogv(_result, response_code, _headers, body, content):
-	download_mp3(_result, response_code, _headers, body, content)
+	download_binary_file_with_hash(_result, response_code, _headers, body, content)
 
 func download_webm(_result, response_code, _headers, body, content):
-	download_mp3(_result, response_code, _headers, body, content)
+	download_binary_file_with_hash(_result, response_code, _headers, body, content)
 
 func get_instance(file_hash):
 	var f = file_hash.to_lower()

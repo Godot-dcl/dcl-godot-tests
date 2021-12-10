@@ -77,15 +77,5 @@ func _get_external_video(url: String):
 		return
 
 	fetch_response.append(content)
-	callv("download_file", fetch_response)
+	ContentManager.callv("download_binary_file_with_hash", fetch_response)
 	http.queue_free()
-
-
-func download_file(_result, response_code, _headers, body, content):
-	if response_code >= 200 and response_code < 300:
-		var f = File.new()
-		var file_name = "user://%s.%s" % [content.hash, content.file.get_extension()]
-		if f.open(file_name, File.WRITE) == OK:
-			f.store_buffer(body)
-			f.close()
-	ContentManager.cache_file(content)
