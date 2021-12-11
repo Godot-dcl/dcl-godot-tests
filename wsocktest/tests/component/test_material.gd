@@ -15,10 +15,9 @@ func test_material_creation():
 
 	# Create and attach a cube shape to the entity
 
-	var shape_component_id = "0"
-	utils.create_component(scene, shape_component_id, DCL_BoxShape._classid,
-			"shape")
-	utils.attach_component_to_entity(scene, shape_component_id, entity_id)
+	var shape_comp_id = "0"
+	utils.create_component(scene, shape_comp_id, DCL_BoxShape._classid, "shape")
+	utils.attach_component_to_entity(scene, shape_comp_id, entity_id)
 
 	# Create and attach a material to the entity
 
@@ -32,6 +31,10 @@ func test_material_creation():
 		"albedoColor": {
 			"r": 1, "g": 0.5, "b": 0.25
 		},
+		"emissiveIntensity": 0.6,
+		"emissiveColor": {
+			"r": 0.25, "g": 1, "b": 0.5
+		},
 		"metallic": 0.75,
 		"roughness": 0.4,
 		"alphaTest": 0.05
@@ -40,7 +43,17 @@ func test_material_creation():
 
 	assert_eq(material_comp.material.albedo_color,
 			Color(mat_vars["albedoColor"]["r"], mat_vars["albedoColor"]["g"],
-					mat_vars["albedoColor"]["b"]), "Albedo values modified")
+					mat_vars["albedoColor"]["b"]), "Albedo color value modified")
+
+	assert_eq(
+			material_comp.material.emission_enabled, true, "Emission enabled")
+	assert_almost_eq(material_comp.material.emission_energy,
+			mat_vars["emissiveIntensity"], utils.FLOAT_ERROR_MARGIN,
+			"Emissive intensity value modified")
+
+	assert_eq(material_comp.material.emission,
+			Color(mat_vars["emissiveColor"]["r"], mat_vars["emissiveColor"]["g"],
+					mat_vars["emissiveColor"]["b"]), "Emission color value modified")
 
 	assert_almost_eq(material_comp.material.metallic, mat_vars["metallic"],
 			utils.FLOAT_ERROR_MARGIN, "Metallic value modified")

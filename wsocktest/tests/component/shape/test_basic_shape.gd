@@ -4,7 +4,10 @@ extends "res://addons/gut/test.gd"
 var utils = TestUtils.new()
 
 
-func test_shape_creation():
+### Shape Creation ###
+
+
+func test_box_creation():
 	# Create a scene with a entity
 
 	var scene = autoqfree(Server.SCENE.instance())
@@ -13,38 +16,104 @@ func test_shape_creation():
 	var entity_id = "1"
 	var entity = utils.create_entity(scene, entity_id)
 
-	# Create all basic shape components
+	# Create cube shape component
 
-	var basic_shapes = {
-		DCL_BoxShape._classid: CubeMesh,
-		DCL_SphereShape._classid: SphereMesh
-	}
+	var component_id = "0"
 
-	var component_id = 0
-	for i in basic_shapes.keys():
-		var comp_mesh_inst = utils.create_component(scene, str(component_id),
-				i, str(component_id)).mesh_instance
+	var comp_mesh_inst = utils.create_component(scene, component_id,
+			DCL_BoxShape._classid, component_id).mesh_instance
 
-		assert_not_null(comp_mesh_inst.mesh)
-		assert_true(comp_mesh_inst.mesh is basic_shapes[i],
-				comp_mesh_inst.mesh.get_class() + " mesh generated")
+	assert_not_null(comp_mesh_inst.mesh)
+	assert_true(comp_mesh_inst.mesh is CubeMesh, "Cube mesh generated")
 
-		# Attach the component to the entity
+	# Attach the component to the entity
 
-		utils.attach_component_to_entity(
-				scene, str(component_id), entity_id)
+	utils.attach_component_to_entity(scene, component_id, entity_id)
 
-		assert_eq(entity.get_child_count(), component_id + 1)
+	assert_eq(entity.get_child_count(), 1)
 
-		var entity_mesh_inst = entity.get_child(component_id)
-		assert_true(entity_mesh_inst is MeshInstance,
-				"'MeshInstance' attached to the entity")
+	var entity_mesh_inst = entity.get_child(0)
+	assert_true(entity_mesh_inst is MeshInstance, "Mesh attached to the entity")
 
-		assert_not_null(entity_mesh_inst.mesh)
-		assert_eq(entity_mesh_inst.mesh, comp_mesh_inst.mesh,
-				"Entity's mesh matches the component's")
+	assert_not_null(entity_mesh_inst.mesh)
+	assert_eq(entity_mesh_inst.mesh, comp_mesh_inst.mesh,
+			"Entity's mesh matches the component's")
 
-		component_id += 1
+
+func test_plane_creation():
+	# Create a scene with a entity
+
+	var scene = autoqfree(Server.SCENE.instance())
+	add_child(scene)
+
+	var entity_id = "1"
+	var entity = utils.create_entity(scene, entity_id)
+
+	# Create plane shape component
+
+	var component_id = "0"
+
+	var comp_mesh_inst = utils.create_component(scene, component_id,
+			DCL_PlaneShape._classid, component_id).mesh_instance
+
+	assert_not_null(comp_mesh_inst.mesh)
+	assert_true(comp_mesh_inst.mesh is QuadMesh, "Plane mesh generated")
+
+	var plane_dimensions = {"width": 7.3, "height": 1.56}
+	utils.update_component(scene, component_id, to_json(plane_dimensions))
+
+	assert_eq(comp_mesh_inst.mesh.size,
+			Vector2(plane_dimensions["width"], plane_dimensions["height"]),
+			"Mesh values modified")
+
+	# Attach the component to the entity
+
+	utils.attach_component_to_entity(scene, component_id, entity_id)
+
+	assert_eq(entity.get_child_count(), 1)
+
+	var entity_mesh_inst = entity.get_child(0)
+	assert_true(entity_mesh_inst is MeshInstance, "Mesh attached to the entity")
+
+	assert_not_null(entity_mesh_inst.mesh)
+	assert_eq(entity_mesh_inst.mesh, comp_mesh_inst.mesh,
+			"Entity's mesh matches the component's")
+
+
+func test_sphere_creation():
+	# Create a scene with a entity
+
+	var scene = autoqfree(Server.SCENE.instance())
+	add_child(scene)
+
+	var entity_id = "1"
+	var entity = utils.create_entity(scene, entity_id)
+
+	# Create sphere shape component
+
+	var component_id = "0"
+
+	var comp_mesh_inst = utils.create_component(scene, component_id,
+			DCL_SphereShape._classid, component_id).mesh_instance
+
+	assert_not_null(comp_mesh_inst.mesh)
+	assert_true(comp_mesh_inst.mesh is SphereMesh, "Sphere mesh generated")
+
+	# Attach the component to the entity
+
+	utils.attach_component_to_entity(scene, component_id, entity_id)
+
+	assert_eq(entity.get_child_count(), 1)
+
+	var entity_mesh_inst = entity.get_child(0)
+	assert_true(entity_mesh_inst is MeshInstance, "Mesh attached to the entity")
+
+	assert_not_null(entity_mesh_inst.mesh)
+	assert_eq(entity_mesh_inst.mesh, comp_mesh_inst.mesh,
+			"Entity's mesh matches the component's")
+
+
+### Shape Collision ###
 
 
 func test_single_entity_multi_shape_collision():

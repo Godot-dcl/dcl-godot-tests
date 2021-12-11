@@ -6,12 +6,14 @@ const _classid = 18
 var width : float = 1
 var height : float = 1
 
+
 func _init(_name, _scene, _id).(_name, _scene, _id):
 	# QuadMesh seems to be a better Godot equivalent
 	# than Plane. Appears with the correct orientation
 	var plane = QuadMesh.new()
 	plane.size = Vector2(width,height)
 	mesh_instance.mesh = plane
+
 
 func update(data):
 	var json = JSON.parse(data).result

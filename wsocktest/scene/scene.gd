@@ -71,7 +71,7 @@ func message(scene_msg: PROTO.PB_SendSceneMessage):
 
 			DCL_SphereShape._classid:
 				components[c_id] = DCL_SphereShape.new(c_name, self, c_id)
-				
+
 			DCL_PlaneShape._classid:
 				components[c_id] = DCL_PlaneShape.new(c_name, self, c_id)
 
@@ -83,13 +83,13 @@ func message(scene_msg: PROTO.PB_SendSceneMessage):
 
 			DCL_AudioSource._classid:
 				components[c_id] = DCL_AudioSource.new(c_name, self, c_id)
-				
+
 			DCL_AudioClip._classid:
 				components[c_id] = DCL_AudioClip.new(c_name, self, c_id)
-				
+
 			DCL_VideoClip._classid:
 				components[c_id] = DCL_VideoClip.new(c_name, self, c_id)
-				
+
 			DCL_VideoTexture._classid:
 				components[c_id] = DCL_VideoTexture.new(c_name, self, c_id)
 
@@ -150,7 +150,7 @@ func message(scene_msg: PROTO.PB_SendSceneMessage):
 
 			DCL_AudioClip._classid:
 				DCL_AudioClip.update_component_in_entity(data, entities[entity_id], self)
-				
+
 			_:
 				printt("**** Unimplemented component update", classid)
 
