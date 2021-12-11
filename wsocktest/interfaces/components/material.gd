@@ -6,7 +6,7 @@ const _classid = 65
 var material : SpatialMaterial
 
 
-func _init(_name).(_name):
+func _init(_name, _scene, _id).(_name, _scene, _id):
 	material = SpatialMaterial.new()
 
 
@@ -18,7 +18,26 @@ func update(data):
 			json.albedoColor.g,
 			json.albedoColor.b
 		)
-
+	if json.has("albedoTexture"):
+		var tex_component = scene.components[json.albedoTexture]
+		# the texture reference in the component can change after it was assigned. Keep it up to date
+		tex_component.connect("texture_changed", self, "_on_albedo_texture_changed")
+		material.albedo_texture = tex_component.texture
+	
+	if json.has("emissiveTexture"):
+		material.emission_enabled = true
+		var tex_component = scene.components[json.emissiveTexture]
+		# the texture reference in the component can change after it was assigned. Keep it up to date
+		tex_component.connect("texture_changed", self, "_on_emissive_texture_changed")
+		material.emission_texture = tex_component.texture
+	
+	if json.has("emissiveIntensity"):
+		material.emission_enabled = true
+		material.emission_energy = json.get("emissiveIntensity", material.emission_energy)
+		if json.has("emissiveColor"):
+			var color_dict = json.emissiveColor
+			var color = Color(color_dict.r, color_dict.g, color_dict.b)
+	
 	if json.has("metallic"):
 		material.metallic = json.metallic
 
@@ -35,3 +54,9 @@ func update(data):
 func attach_to(entity):
 	if entity.has_node("shape"):
 		entity.get_node("shape").set("material/0", material)
+
+func _on_albedo_texture_changed(value):
+	material.albedo_texture = value
+
+func _on_emissive_texture_changed(value):
+	material.emission_texture = value

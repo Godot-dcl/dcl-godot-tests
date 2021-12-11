@@ -4,10 +4,9 @@ class_name DCL_AudioClip
 const _classid = 200
 
 var audio_clip : AudioStreamMP3
-var id
 var volume : float = 1
 
-func _init(_name).(_name):
+func _init(_name, _scene, _id).(_name, _scene, _id):
 	audio_clip = AudioStreamMP3.new()
 
 

@@ -15,7 +15,7 @@ func load_contents(scene, payload):
 		var content = payload.contents[i]
 
 		# for now, just filter content
-		if content.file.get_extension() in ["gltf", "glb", "bin", "png", "mp3"]:
+		if content.file.get_extension() in ["gltf", "glb", "bin", "png", "mp3", "ogg", "ogv", "webm"]:
 			content.hash = content.hash.trim_suffix(content.file.get_extension())
 			loading_scenes[scene.id].contents.push_back(content)
 
@@ -43,7 +43,7 @@ func file_downloaded(content):
 	var ext = content.file.get_extension()
 	var file_name : String
 	match ext:
-		"glb", "gltf", "mp3":
+		"glb", "gltf", "mp3", "ogv", "ogg", "webm":
 			file_name = "user://%s.%s" % [content.hash, ext]
 		"png", "bin":
 			file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
@@ -69,7 +69,14 @@ func cache_file(content):
 				s.data = file.get_buffer(file.get_len())
 				file.close()
 				contents[f] = s
-
+			"ogv", "ogg":  #TODO: handle ogg being an audio file
+				var v := VideoStreamTheora.new()
+				v.set_file("user://%s.%s" % [content.hash, ext])
+				contents[f] = v
+			"webm":
+				var v := VideoStreamWebm.new()
+				v.set_file("user://%s.%s" % [content.hash, ext])
+				contents[f] = v
 
 	for scene in loading_scenes.keys():
 		if content in loading_scenes[scene].contents:
@@ -77,6 +84,19 @@ func cache_file(content):
 			if loading_scenes[scene].loaded == loading_scenes[scene].contents.size():
 				loading_scenes[scene].scene.contents_loaded()
 
+
+func download_binary_file_with_hash(_result, response_code, _headers, body, content):
+	if response_code >= 200 and response_code < 300:
+		var f = File.new()
+		var file_name = "user://%s.%s" % [content.hash, content.file.get_extension()]
+		if f.open(file_name, File.WRITE) == OK:
+			f.store_buffer(body)
+			f.close()
+
+	if httprequests.has(content.hash):
+		httprequests[content.hash].queue_free()
+		httprequests.erase(content.hash)
+	cache_file(content)
 
 func download_png(_result, response_code, _headers, body, content):
 	if response_code >= 200 and response_code < 300:
@@ -126,17 +146,16 @@ func download_bin(_result, response_code, _headers, body, content):
 	cache_file(content)
 
 func download_mp3(_result, response_code, _headers, body, content):
-	if response_code >= 200 and response_code < 300:
-		var f = File.new()
-		var file_name = "user://%s.%s" % [content.hash, content.file.get_extension()]
-		if f.open(file_name, File.WRITE) == OK:
-			f.store_buffer(body)
-			f.close()
+	download_binary_file_with_hash(_result, response_code, _headers, body, content)
 
-	if httprequests.has(content.hash):
-		httprequests[content.hash].queue_free()
-		httprequests.erase(content.hash)
-	cache_file(content)
+func download_ogg(_result, response_code, _headers, body, content):
+	download_binary_file_with_hash(_result, response_code, _headers, body, content)
+
+func download_ogv(_result, response_code, _headers, body, content):
+	download_binary_file_with_hash(_result, response_code, _headers, body, content)
+
+func download_webm(_result, response_code, _headers, body, content):
+	download_binary_file_with_hash(_result, response_code, _headers, body, content)
 
 func get_instance(file_hash):
 	var f = file_hash.to_lower()

@@ -80,6 +80,16 @@ _global_script_classes=[ {
 "path": "res://interfaces/components/uuid_callback.gd"
 }, {
 "base": "Reference",
+"class": "DCL_VideoClip",
+"language": "GDScript",
+"path": "res://interfaces/components/video_clip.gd"
+}, {
+"base": "Reference",
+"class": "DCL_VideoTexture",
+"language": "GDScript",
+"path": "res://interfaces/components/video_texture.gd"
+}, {
+"base": "Reference",
 "class": "Event",
 "language": "GDScript",
 "path": "res://interfaces/event.gd"
@@ -104,6 +114,8 @@ _global_script_class_icons={
 "DCL_TextShape": "",
 "DCL_Transform": "",
 "DCL_UUIDCallback": "",
+"DCL_VideoClip": "",
+"DCL_VideoTexture": "",
 "Event": "",
 "TestUtils": ""
 }

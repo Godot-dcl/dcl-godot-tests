@@ -67,26 +67,35 @@ func message(scene_msg: PROTO.PB_SendSceneMessage):
 		var c_name = scene_msg.get_componentCreated().get_name()
 		match classid:
 			DCL_BoxShape._classid:
-				components[c_id] = DCL_BoxShape.new(c_name)
+				components[c_id] = DCL_BoxShape.new(c_name, self, c_id)
 
 			DCL_SphereShape._classid:
-				components[c_id] = DCL_SphereShape.new(c_name)
+				components[c_id] = DCL_SphereShape.new(c_name, self, c_id)
+				
+			DCL_PlaneShape._classid:
+				components[c_id] = DCL_PlaneShape.new(c_name, self, c_id)
 
 			DCL_Material._classid:
-				components[c_id] = DCL_Material.new(c_name)
+				components[c_id] = DCL_Material.new(c_name, self, c_id)
 
 			DCL_GLTFShape._classid:
-				components[c_id] = DCL_GLTFShape.new(c_name)
+				components[c_id] = DCL_GLTFShape.new(c_name, self, c_id)
 
 			DCL_AudioSource._classid:
-				components[c_id] = DCL_AudioSource.new(c_name)
-
+				components[c_id] = DCL_AudioSource.new(c_name, self, c_id)
+				
 			DCL_AudioClip._classid:
-				components[c_id] = DCL_AudioClip.new(c_name)
+				components[c_id] = DCL_AudioClip.new(c_name, self, c_id)
+				
+			DCL_VideoClip._classid:
+				components[c_id] = DCL_VideoClip.new(c_name, self, c_id)
+				
+			DCL_VideoTexture._classid:
+				components[c_id] = DCL_VideoTexture.new(c_name, self, c_id)
 
 			_:
 				printt("**** Unimplemented component creation", classid)
-				components[c_id] = DCL_Component.new(c_name)
+				components[c_id] = DCL_Component.new(c_name, self, c_id)
 
 	if scene_msg.has_componentDisposed():
 		pass#print("component disposed ", scene_msg.get_componentDisposed().get_id())
@@ -141,6 +150,7 @@ func message(scene_msg: PROTO.PB_SendSceneMessage):
 
 			DCL_AudioClip._classid:
 				DCL_AudioClip.update_component_in_entity(data, entities[entity_id], self)
+				
 			_:
 				printt("**** Unimplemented component update", classid)
 
