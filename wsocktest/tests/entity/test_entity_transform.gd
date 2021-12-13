@@ -33,8 +33,8 @@ func test_entity_transformation():
 	trans_comp.get_scale().set_y(scale.y)
 	trans_comp.get_scale().set_z(scale.z)
 
-	utils.update_entity_component(
-			scene, entity_id, DCL_Transform._classid, trans_comp)
+	utils.update_entity_component(scene, entity_id, DCL_Transform._classid,
+			Marshalls.raw_to_base64(trans_comp.to_bytes()))
 
 	var trans = Transform(rotation).scaled(scale)
 	trans.origin = position

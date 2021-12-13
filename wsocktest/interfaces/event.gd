@@ -15,21 +15,19 @@ const ActionsMap = {
 	"ANY": Action.ANY,
 }
 
-
 enum Type {
 	DOWN,
 	UP
 }
 
-
 var scene_id
-var entity : Node
+var entity: Node
 var uuid : String
 var type
 var action
-var text : String
-var distance : int
-var show_feedback : bool
+var text: String
+var distance: int
+var show_feedback: bool
 
 
 func _init(_scene_id, _entity, data):
@@ -66,23 +64,23 @@ func is_near_player():
 			Server.player.global_transform.origin) < distance
 
 
-func check(_entity, _collider = ""):
-	if  ( _entity is int and _entity == 0 ) or \
-		( _entity == entity and is_near_player() ):
-			var response = {
-				"eventType":"uuidEvent",
-				"sceneId": scene_id,
+func check(_entity, _collider=""):
+	if (_entity is int and _entity == 0) or\
+			(_entity == entity and is_near_player()):
+		var response = {
+			"eventType":"uuidEvent",
+			"sceneId": scene_id,
+			"payload": {
+				"uuid": uuid,
 				"payload": {
-					"uuid": uuid,
-					"payload": {
-						"buttonId": action,
-						"hit": {
-							"meshName": _collider if _entity is int else _collider.name,
-							"entityId": entity.name,
-						}
+					"buttonId": action,
+					"hit": {
+						"meshName": _collider if _entity is int else _collider.name,
+						"entityId": entity.name,
 					}
 				}
 			}
+		}
 
-			var message = {"type": "SceneEvent", "payload": JSON.print(response)}
-			Server.send(message)
+		var message = {"type": "SceneEvent", "payload": JSON.print(response)}
+		Server.send(message)

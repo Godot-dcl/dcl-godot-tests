@@ -1,6 +1,7 @@
 extends "res://interfaces/component.gd"
 class_name DCL_UUIDCallback
 
+
 const EVENT = preload("res://interfaces/event.gd")
 const PROTO = preload("res://server/engineinterface.gd")
 const _classid = 8

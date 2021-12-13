@@ -33,8 +33,7 @@ func update_entity_component(
 	msg.new_updateEntityComponent()
 	msg.get_updateEntityComponent().set_entityId(entity_id)
 	msg.get_updateEntityComponent().set_classId(class_id)
-	msg.get_updateEntityComponent().set_data(
-			Marshalls.raw_to_base64(data.to_bytes()))
+	msg.get_updateEntityComponent().set_data(data)
 	scene.message(msg)
 
 

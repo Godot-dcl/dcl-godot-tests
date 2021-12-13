@@ -43,23 +43,22 @@ func test_material_creation():
 
 	assert_eq(material_comp.material.albedo_color,
 			Color(mat_vars["albedoColor"]["r"], mat_vars["albedoColor"]["g"],
-					mat_vars["albedoColor"]["b"]), "Albedo color value modified")
+					mat_vars["albedoColor"]["b"]))
 
 	assert_eq(
 			material_comp.material.emission_enabled, true, "Emission enabled")
 	assert_almost_eq(material_comp.material.emission_energy,
-			mat_vars["emissiveIntensity"], utils.FLOAT_ERROR_MARGIN,
-			"Emissive intensity value modified")
+			mat_vars["emissiveIntensity"], utils.FLOAT_ERROR_MARGIN)
 
 	assert_eq(material_comp.material.emission,
 			Color(mat_vars["emissiveColor"]["r"], mat_vars["emissiveColor"]["g"],
-					mat_vars["emissiveColor"]["b"]), "Emission color value modified")
+					mat_vars["emissiveColor"]["b"]))
 
 	assert_almost_eq(material_comp.material.metallic, mat_vars["metallic"],
-			utils.FLOAT_ERROR_MARGIN, "Metallic value modified")
+			utils.FLOAT_ERROR_MARGIN)
 
 	assert_almost_eq(material_comp.material.roughness, mat_vars["roughness"],
-			utils.FLOAT_ERROR_MARGIN, "Roughness value modified")
+			utils.FLOAT_ERROR_MARGIN)
 
 	assert_true(material_comp.material.flags_transparent,
 			"Alpha test value modified (1/4)")
