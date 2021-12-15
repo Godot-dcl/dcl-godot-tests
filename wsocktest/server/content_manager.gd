@@ -77,6 +77,15 @@ func cache_file(content):
 				var v := VideoStreamWebm.new()
 				v.set_file("user://%s.%s" % [content.hash, ext])
 				contents[f] = v
+			"png":
+				var i := Image.new()
+				var file = File.new()
+				file.open("user://%s" % content.file.right(content.file.rfind("/") + 1),File.READ)
+				i.load_png_from_buffer(file.get_buffer(file.get_len()))
+				file.close()
+				contents[f] = i
+				
+				
 
 	for scene in loading_scenes.keys():
 		if content in loading_scenes[scene].contents:
