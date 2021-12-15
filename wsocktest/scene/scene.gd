@@ -92,7 +92,9 @@ func message(scene_msg: PROTO.PB_SendSceneMessage):
 
 			DCL_VideoTexture._classid:
 				components[c_id] = DCL_VideoTexture.new(c_name, self, c_id)
-
+				
+			DCL_NFTShape._classid:
+				components[c_id] = DCL_NFTShape.new(c_name, self, c_id)
 			_:
 				printt("**** Unimplemented component creation", classid)
 				components[c_id] = DCL_Component.new(c_name, self, c_id)
