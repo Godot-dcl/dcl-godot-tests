@@ -31,7 +31,7 @@ jobs:
       - name: Export Mac OSX
         run: |
           cd wsocktest
-          /godot-bin/godot_server.x11.opt.tools.64 --export MacOSX
+          /godot-bin/godot_server.x11.opt.tools.64 --export-debug MacOSX
       - name: Prepare publish
         run: |
           mkdir -p output
