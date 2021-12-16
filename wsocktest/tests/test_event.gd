@@ -26,7 +26,7 @@ func test_uuid_callback_component():
 		"button": "POINTER",
 		"hoverText": "something",
 		"distance": 10,
-		"showFeedback": true
+		"showFeedback": true,
 	}
 
 	utils.update_entity_component(
@@ -40,9 +40,9 @@ func test_uuid_callback_component():
 
 	assert_eq(event.scene_id, scene.id)
 	assert_eq(event.entity, entity)
-	assert_eq(event.uuid, event_dict["uuid"])
-	assert_eq(event.type, event_dict["type"])
+	assert_eq(event.uuid, event_dict.uuid)
+	assert_eq(event.type, event_dict.type)
 	assert_eq(event.action, Event.Action.POINTER)
-	assert_eq(event.text, event_dict["hoverText"])
-	assert_eq(event.distance, event_dict["distance"])
-	assert_eq(event.show_feedback, event_dict["showFeedback"])
+	assert_eq(event.text, event_dict.hoverText)
+	assert_eq(event.distance, event_dict.distance)
+	assert_eq(event.show_feedback, event_dict.showFeedback)

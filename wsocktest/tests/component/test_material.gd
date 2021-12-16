@@ -37,27 +37,24 @@ func test_material_creation():
 		},
 		"metallic": 0.75,
 		"roughness": 0.4,
-		"alphaTest": 0.05
+		"alphaTest": 0.05,
 	}
 	utils.update_component(scene, material_comp_id, to_json(mat_vars))
 
-	assert_eq(material_comp.material.albedo_color,
-			Color(mat_vars["albedoColor"]["r"], mat_vars["albedoColor"]["g"],
-					mat_vars["albedoColor"]["b"]))
+	assert_eq(material_comp.material.albedo_color, Color(mat_vars.albedoColor.r,
+			mat_vars.albedoColor.g, mat_vars.albedoColor.b))
 
-	assert_eq(
-			material_comp.material.emission_enabled, true, "Emission enabled")
+	assert_eq(material_comp.material.emission_enabled, true, "Emission enabled")
 	assert_almost_eq(material_comp.material.emission_energy,
-			mat_vars["emissiveIntensity"], utils.FLOAT_ERROR_MARGIN)
+			mat_vars.emissiveIntensity, utils.FLOAT_ERROR_MARGIN)
 
-	assert_eq(material_comp.material.emission,
-			Color(mat_vars["emissiveColor"]["r"], mat_vars["emissiveColor"]["g"],
-					mat_vars["emissiveColor"]["b"]))
+	assert_eq(material_comp.material.emission, Color(mat_vars.emissiveColor.r,
+			mat_vars.emissiveColor.g, mat_vars.emissiveColor.g))
 
-	assert_almost_eq(material_comp.material.metallic, mat_vars["metallic"],
+	assert_almost_eq(material_comp.material.metallic, mat_vars.metallic,
 			utils.FLOAT_ERROR_MARGIN)
 
-	assert_almost_eq(material_comp.material.roughness, mat_vars["roughness"],
+	assert_almost_eq(material_comp.material.roughness, mat_vars.roughness,
 			utils.FLOAT_ERROR_MARGIN)
 
 	assert_true(material_comp.material.flags_transparent,

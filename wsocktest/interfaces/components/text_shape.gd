@@ -1,9 +1,11 @@
 extends "res://interfaces/component.gd"
 class_name DCL_TextShape
 
+
 const WAYPOINT = preload("res://ui/waypoint/waypoint.tscn")
 const PROTO = preload("res://server/engineinterface.gd")
 const _classid = 21
+
 
 static func update_component_in_entity(data, entity, _scene):
 	var parsed = JSON.parse(data).result
