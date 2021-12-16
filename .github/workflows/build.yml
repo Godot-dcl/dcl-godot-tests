@@ -46,6 +46,7 @@ jobs:
           cp ../wsocktest/DCLGodot.pck windows
           zip -r windows.zip windows
 
+          cp -r ../wsocktest/mac mac
           zip -r mac.zip mac
       - name: Publish
         uses: actions/upload-artifact@v2
