@@ -26,12 +26,12 @@ jobs:
           /godot-bin/godot_server.x11.opt.tools.64 --export-pack Linux/X11 DCLGodot.pck
       - name: Prepare Mac OSX Export
         run: |
-          zip -q -9 -r /godot-bin/osx.zip /godot-bin/osx_template.app
-          cd wsocktest && mkdir -p mac
+          cd /godot-bin/
+          zip -q -9 -r osx.zip osx_template.app
       - name: Export Mac OSX
         run: |
-          cd wsocktest
-          /godot-bin/godot_server.x11.opt.tools.64 --export-debug MacOSX
+          cd wsocktest && mkdir -p mac
+          /godot-bin/godot_server.x11.opt.tools.64 --export MacOSX
       - name: Prepare publish
         run: |
           mkdir -p output
