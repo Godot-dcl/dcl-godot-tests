@@ -5,7 +5,7 @@ const _classid = 54
 
 var meshes = [] #MeshInstance
 var colliders = [] #PhysicsBody
-var animation : AnimationPlayer
+var animations = {} #Animation
 
 func _init(_name, _scene, _id).(_name, _scene, _id):
 	pass
@@ -39,7 +39,8 @@ func update(data):
 							meshes.push_back(child)
 
 					if child is AnimationPlayer:
-						animation = child
+						for anim_name in child.get_animation_list():
+							animations[anim_name] = child.get_animation(anim_name).duplicate()
 
 	if json.has("withCollisions"):
 		if colliders.empty():
@@ -60,5 +61,18 @@ func attach_to(entity):
 	for m in meshes:
 		entity.add_child(m.duplicate())
 
-	if is_instance_valid(animation):
-		entity.add_child(animation.duplicate())
+	if animations.size() > 0:
+		var anim_player = AnimationPlayer.new()
+		anim_player.name = "AnimationPlayer"
+		for anim_name in animations.keys():
+			if anim_player.add_animation(anim_name, animations[anim_name].duplicate()) != OK:
+				printerr("Error adding animation to AnimationPlayer")
+		entity.add_child(anim_player)
+
+		var anim_tree = AnimationTree.new()
+		anim_tree.name = "AnimationTree"
+		entity.add_child(anim_tree)
+
+		anim_tree.anim_player = anim_tree.get_path_to(anim_player)
+		anim_tree.tree_root = AnimationRootNode.new() # set a default root node
+		anim_tree.set_active(true)
