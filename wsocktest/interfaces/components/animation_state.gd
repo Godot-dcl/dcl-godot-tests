@@ -17,6 +17,7 @@ static func update_component_in_entity(data, entity, _scene):
 	var last_animation_node = "Transition"
 	for anim in parsed.states:
 		if not anim.playing: continue
+		assert(anim_player.has_animation(anim.clip))
 
 		var animation_node = AnimationNodeAnimation.new()
 		var animation = anim_player.get_animation(anim.clip) as Animation
@@ -34,12 +35,21 @@ static func update_component_in_entity(data, entity, _scene):
 		var used_bones = []
 		for i in animation.get_track_count():
 			used_bones.push_back(animation.track_get_path(i))
-		#blend_node.filter_enabled = true
+		blend_node.filter_enabled = true
 		blend_node.filters = used_bones
 
 		tree.add_node(node_name, blend_node)
 		tree.connect_node(node_name, 0, last_animation_node)
-		tree.connect_node(node_name, 1, anim.name)
+		if anim.speed == 1:
+			tree.connect_node(node_name, 1, anim.name)
+		else:
+			var speed_node = AnimationNodeTimeScale.new()
+			var speed_node_name = "%s_speed" % anim.name
+
+			tree.add_node(speed_node_name, speed_node)
+			tree.connect_node(speed_node_name, 0, anim.name)
+			tree.connect_node(node_name, 1, speed_node_name)
+			anim_tree.call_deferred("set", "parameters/%s/scale" % speed_node_name, anim.speed)
 
 		last_animation_node = node_name
 
