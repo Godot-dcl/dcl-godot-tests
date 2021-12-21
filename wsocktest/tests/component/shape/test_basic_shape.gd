@@ -131,7 +131,7 @@ func test_single_entity_multi_shape_collision():
 	utils.create_component(
 			scene, component_id_0, DCL_BoxShape._classid, component_id_0)
 	utils.update_component(scene, component_id_0,
-			"{\"withCollisions\": true, \"isPointerBlocker\": true}")
+			'{"withCollisions": true, "isPointerBlocker": true}')
 	utils.attach_component_to_entity(scene, component_id_0, entity_id)
 
 	var component_id_1 = "1"
@@ -143,7 +143,7 @@ func test_single_entity_multi_shape_collision():
 	utils.create_component(
 			scene, component_id_2, DCL_BoxShape._classid, component_id_2)
 	utils.update_component(scene, component_id_2,
-			"{\"withCollisions\": true, \"isPointerBlocker\": true}")
+			'{"withCollisions": true, "isPointerBlocker": true}')
 	utils.attach_component_to_entity(scene, component_id_2, entity_id)
 
 	# TODO: Implement the test once a proper character scene is made

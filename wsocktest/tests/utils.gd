@@ -2,6 +2,7 @@ class_name TestUtils
 
 
 const FLOAT_ERROR_MARGIN = 0.000001
+const ASSETS_DIR = "res://tests/assets/"
 
 
 # Entity manipulation
