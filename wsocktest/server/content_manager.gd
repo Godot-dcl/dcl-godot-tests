@@ -1,57 +1,102 @@
 tool
 extends Node
 
-var httprequests : Dictionary
+
 var contents : Dictionary
-var loading_scenes : Dictionary
+var available_extensions = ["gltf", "glb", "bin", "png", "mp3", "ogg", "ogv", "webm"]
 
-func load_contents(scene, payload):
-	if payload.contents.size() < 1:
-		scene.contents_loaded()
-		return
 
-	loading_scenes[scene.id] = {"contents": [], "scene": scene, "loaded": 0}
+func load_contents(payload):
 	for i in range(payload.contents.size()):
 		var content = payload.contents[i]
+		if not contents.has(content.file.to_lower()) and \
+		  content.file.get_extension() in available_extensions:
 
-		# for now, just filter content
-		if content.file.get_extension() in ["gltf", "glb", "bin", "png", "mp3", "ogg", "ogv", "webm"]:
+			content.thread = Thread.new()
 			content.hash = content.hash.trim_suffix(content.file.get_extension())
-			loading_scenes[scene.id].contents.push_back(content)
+			content.base_url = payload.baseUrl
 
-	for i in range(loading_scenes[scene.id].contents.size()):
-		var content = loading_scenes[scene.id].contents[i]
-		if file_downloaded(content):
-			cache_file(content)
-		else:
-			var http = HTTPRequest.new()
-			http.use_threads = true
-			var func_name = "download_" + content.file.get_extension()
-			http.connect("request_completed", self, func_name, [content])
-			add_child(http)
+			contents[content.file.to_lower()] = content
 
-			var file : String = payload.baseUrl + content.hash
-			var res = http.request(file)
-			if res != OK:
-				printerr("****** error creating the glb request: ", res)
-				http.queue_free()
+			var ext = content.file.get_extension()
+			var file_name : String
+			match ext:
+				"glb", "gltf", "mp3", "ogv", "ogg", "webm":
+					file_name = "user://%s.%s" % [content.hash, ext]
+				"png", "bin":
+					file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
+				_:
+					push_warning("*** undefined extension")
+
+			var f = File.new()
+			if f.file_exists(file_name):
+				content.thread.start(self, "cache_file", content)
 			else:
-				httprequests[content.hash] = http
+				content.thread.start(self, "download_file", content)
 
 
-func file_downloaded(content):
-	var ext = content.file.get_extension()
-	var file_name : String
-	match ext:
-		"glb", "gltf", "mp3", "ogv", "ogg", "webm":
-			file_name = "user://%s.%s" % [content.hash, ext]
-		"png", "bin":
-			file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
-		_:
-			push_warning("*** undefined extension")
+func download_file(info):
+	var http = HTTPRequest.new()
+	http.use_threads = true
+	add_child(http)
 
-	var f = File.new()
-	return f.file_exists(file_name)
+	if http.request(info.base_url + info.hash) != OK:
+		http.queue_free()
+		printerr("*** error creating the download request for ", info.file)
+		return null
+
+	var result = yield(http, "request_completed")
+	result.push_back(info)
+	callv("downloaded_" + info.file.get_extension(), result)
+	http.queue_free()
+
+	return cache_file(info)
+
+
+func downloaded_gltf(_result, response_code, _headers, body, content):
+	downloaded_binary_file_with_hash(_result, response_code, _headers, body, content)
+
+func downloaded_glb(_result, response_code, _headers, body, content):
+	downloaded_binary_file_with_hash(_result, response_code, _headers, body, content)
+
+func downloaded_mp3(_result, response_code, _headers, body, content):
+	downloaded_binary_file_with_hash(_result, response_code, _headers, body, content)
+
+func downloaded_ogg(_result, response_code, _headers, body, content):
+	downloaded_binary_file_with_hash(_result, response_code, _headers, body, content)
+
+func downloaded_ogv(_result, response_code, _headers, body, content):
+	downloaded_binary_file_with_hash(_result, response_code, _headers, body, content)
+
+func downloaded_webm(_result, response_code, _headers, body, content):
+	downloaded_binary_file_with_hash(_result, response_code, _headers, body, content)
+
+
+func downloaded_binary_file_with_hash(_result, response_code, _headers, body, content):
+	if response_code >= 200 and response_code < 300:
+		var f = File.new()
+		var file_name = "user://%s.%s" % [content.hash, content.file.get_extension()]
+		if f.open(file_name, File.WRITE) == OK:
+			f.store_buffer(body)
+			f.close()
+
+
+func downloaded_png(_result, response_code, _headers, body, content):
+	if response_code >= 200 and response_code < 300:
+		var image = Image.new()
+		if image.load_png_from_buffer(body) != OK:
+			pass
+		var file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
+		image.save_png(file_name)
+
+
+func downloaded_bin(_result, response_code, _headers, body, content):
+	if response_code >= 200 and response_code < 300:
+		var f = File.new()
+		var file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
+		if f.open(file_name, File.WRITE) == OK:
+			f.store_buffer(body)
+			f.close()
 
 
 func cache_file(content):
@@ -61,111 +106,36 @@ func cache_file(content):
 		match ext:
 			"glb", "gltf":
 				var l = DynamicGLTFLoader.new()
-				contents[f] = l.import_scene("user://%s.%s" % [content.hash, ext], 1, 1)
+				contents[f].asset = l.import_scene("user://%s.%s" % [content.hash, ext], 1, 1)
+
 			"mp3":
 				var s := AudioStreamMP3.new()
 				var file = File.new()
 				file.open("user://%s.%s" % [content.hash, ext],File.READ)
 				s.data = file.get_buffer(file.get_len())
 				file.close()
-				contents[f] = s
+				contents[f].asset = s
+
 			"ogv", "ogg":  #TODO: handle ogg being an audio file
 				var v := VideoStreamTheora.new()
 				v.set_file("user://%s.%s" % [content.hash, ext])
-				contents[f] = v
+				contents[f].asset = v
+
 			"webm":
 				var v := VideoStreamWebm.new()
 				v.set_file("user://%s.%s" % [content.hash, ext])
-				contents[f] = v
+				contents[f].asset = v
 
-	for scene in loading_scenes.keys():
-		if content in loading_scenes[scene].contents:
-			loading_scenes[scene].loaded += 1
-			if loading_scenes[scene].loaded == loading_scenes[scene].contents.size():
-				loading_scenes[scene].scene.contents_loaded()
+			_:
+				printerr("Content Manager: Unknown file type for caching")
+				return null
 
+	return contents[f].asset
 
-func download_binary_file_with_hash(_result, response_code, _headers, body, content):
-	if response_code >= 200 and response_code < 300:
-		var f = File.new()
-		var file_name = "user://%s.%s" % [content.hash, content.file.get_extension()]
-		if f.open(file_name, File.WRITE) == OK:
-			f.store_buffer(body)
-			f.close()
-
-	if httprequests.has(content.hash):
-		httprequests[content.hash].queue_free()
-		httprequests.erase(content.hash)
-	cache_file(content)
-
-func download_png(_result, response_code, _headers, body, content):
-	if response_code >= 200 and response_code < 300:
-		var image = Image.new()
-		if image.load_png_from_buffer(body) != OK:
-			pass
-		var file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
-		image.save_png(file_name)
-
-
-	if httprequests.has(content.hash):
-		httprequests[content.hash].queue_free()
-		httprequests.erase(content.hash)
-	cache_file(content)
-
-
-func download_gltf(_result, response_code, _headers, body, content):
-	download_glb(_result, response_code, _headers, body, content)
-
-
-func download_glb(_result, response_code, _headers, body, content):
-	if response_code >= 200 and response_code < 300:
-		var f = File.new()
-		var file_name = "user://%s.%s" % [content.hash, content.file.get_extension()]
-		if f.open(file_name, File.WRITE) == OK:
-			f.store_buffer(body)
-			f.close()
-
-	if httprequests.has(content.hash):
-		httprequests[content.hash].queue_free()
-		httprequests.erase(content.hash)
-
-	cache_file(content)
-
-
-func download_bin(_result, response_code, _headers, body, content):
-	if response_code >= 200 and response_code < 300:
-		var f = File.new()
-		var file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
-		if f.open(file_name, File.WRITE) == OK:
-			f.store_buffer(body)
-			f.close()
-
-	if httprequests.has(content.hash):
-		httprequests[content.hash].queue_free()
-		httprequests.erase(content.hash)
-	cache_file(content)
-
-func download_mp3(_result, response_code, _headers, body, content):
-	download_binary_file_with_hash(_result, response_code, _headers, body, content)
-
-func download_ogg(_result, response_code, _headers, body, content):
-	download_binary_file_with_hash(_result, response_code, _headers, body, content)
-
-func download_ogv(_result, response_code, _headers, body, content):
-	download_binary_file_with_hash(_result, response_code, _headers, body, content)
-
-func download_webm(_result, response_code, _headers, body, content):
-	download_binary_file_with_hash(_result, response_code, _headers, body, content)
 
 func get_instance(file_hash):
 	var f = file_hash.to_lower()
-	if f in contents:
-		if !is_instance_valid(contents[f]):
-			printerr("content null %s" % f)
-			return null
+	if contents[f].thread.is_active():
+		return contents[f].thread.wait_to_finish()
 
-		var instance = contents[f].duplicate()
-		return instance
-	else:
-		printerr("content not found %s" % f)
-		return null
+	return contents[f].asset
