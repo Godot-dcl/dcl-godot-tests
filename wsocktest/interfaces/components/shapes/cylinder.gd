@@ -10,3 +10,4 @@ func _init(_name, _scene, _id).(_name, _scene, _id):
 	cylinder.top_radius = 1.0
 	cylinder.bottom_radius = 1.0
 	mesh_instance.mesh = cylinder
+	mesh_instance.set_surface_material(0, material)

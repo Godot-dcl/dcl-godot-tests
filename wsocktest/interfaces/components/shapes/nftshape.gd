@@ -14,10 +14,11 @@ func _init(_name, _scene, _id).(_name, _scene, _id):
 	var plane = QuadMesh.new()
 	plane.size = Vector2(1,1)
 	mesh_instance.mesh = plane
-	# material/0 is set in the parent class, but it does nothing since a mesh is not set and is not available
-	mesh_instance.set("material/0", material) 
+	mesh_instance.set_surface_material(0, material)
+	
 	material.params_cull_mode = SpatialMaterial.CULL_DISABLED
 	material.flags_transparent = true
+	
 	#material.albedo_color = color  # Do not use for now or it'll tint the texture
 	name = "NFT Shape"
 	pass

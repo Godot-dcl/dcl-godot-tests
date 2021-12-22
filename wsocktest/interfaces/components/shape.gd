@@ -7,7 +7,9 @@ var material : SpatialMaterial
 func _init(_name, _scene, _id).(_name, _scene, _id):
 	material = SpatialMaterial.new()
 	mesh_instance.name = name
-	mesh_instance.set("material/0", material)
+	# This needs to be set in the children classes since the surface count
+	# for an MeshInstance with no mesh is 0
+	#mesh_instance.set("material/0", material)
 
 
 func update(data):
