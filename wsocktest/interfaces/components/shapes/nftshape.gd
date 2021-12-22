@@ -9,6 +9,7 @@ var color := Color(0.6404918, 0.611472, 0.8584906)
 var style := 0
 
 var nft_data : Dictionary
+var image := Image.new()
 
 func _init(_name, _scene, _id).(_name, _scene, _id):
 	var plane = QuadMesh.new()
@@ -28,56 +29,82 @@ func update(data):
 	var json = JSON.parse(data).result
 	if json.has("src"):
 		src = json.src
-		var data_download = _get_ntf_data(src)
-		if data_download is GDScriptFunctionState:
-				nft_data = yield(data_download,"completed")
+
+		var data_download_error = _get_ntf_data(src)
+		# Wait for nft_data
+		if data_download_error is GDScriptFunctionState:
+			data_download_error = yield(data_download_error,"completed")
+
+		if data_download_error != OK:
+			push_error("Error downloading nft_data: %s" % data_download_error)
+			return
+		
+		if not nft_data.has("image_url"):
+			push_error("image_url not found in dictionary: %s" % nft_data)
+			return
+
 		var filename = nft_data.image_url.sha1_text() + "_" + Array((nft_data.image_original_url as String).split("/")).pop_back()
+		
+		
+		var image_download_error = _get_external_image(nft_data.image_url, filename)
+		# Wait for image download if not already in cache
+		if image_download_error is GDScriptFunctionState:
+			image_download_error = yield(image_download_error, "completed")
+		
+		if image_download_error != OK:
+			push_error("Image didn't download correctly. Response: %s" % image_download_error)
+			return
 
-		var texture_download = _get_external_image(nft_data.image_url, filename)
-		if texture_download is GDScriptFunctionState:
-			yield(texture_download, "completed")
-		var image = ContentManager.get_instance(filename)
-		var tex = ImageTexture.new()
-		tex.create_from_image(image)
-		material.albedo_texture = tex
+		var new_image = ContentManager.get_instance(filename)
+		
+		# No need to recreate the texture if the image doesn't change
+		if image != new_image:
+			image = new_image
+			var tex = ImageTexture.new()
+			tex.create_from_image(image)
+			material.albedo_texture = tex
 
 
-func _get_ntf_data(url: String) -> Dictionary:
+func _get_ntf_data(url: String) -> int:
 	if not url.begins_with("ethereum://"):
 		printerr("malformed url")
+		return ERR_FILE_BAD_PATH
+ 
 	var http = HTTPRequest.new()
-	http.use_threads = false 
 	scene.add_child(http)
 	
 	var res = http.request(OPENSEA_API_ENDPOINT + url.trim_prefix("ethereum://"))
 	var response = yield(http,"request_completed")
 	if res != OK:
 		printerr("****** error creating the request: ", res)
-		return
+		return res
 	var body : PoolByteArray = response[3] #body
 	var data = body.get_string_from_utf8()
 	http.queue_free()
-	return JSON.parse(data).result
+	var data_dict = JSON.parse(data).result
+	if typeof(data_dict) == TYPE_DICTIONARY:
+		nft_data = data_dict
+		return OK
+	else:
+		return ERR_INVALID_DATA
 
 
-func _get_external_image(url: String, filename: String):
-	# Get ETag and Last-Modified headers
+func _get_external_image(url: String, filename: String) -> int:
 	var http = HTTPRequest.new()
-	http.use_threads = false 
 	scene.add_child(http)
 	
 	var content = {"file": filename, "hash" : url.sha1_text() }
 	if ContentManager.file_downloaded(content):
 		ContentManager.cache_file(content)
-		return
+		return OK
 	
-	# Fetch the file
-	var fetch_res = http.request(url)
-	var fetch_response = yield(http,"request_completed")
-	if fetch_res != OK:
-		printerr("****** error creating the request: ", fetch_res)
-		return
+	var res = http.request(url)
+	var response = yield(http,"request_completed")
+	if res != OK:
+		printerr("****** error creating the request: ", res)
+		return res
 
-	fetch_response.append(content)
-	ContentManager.callv("download_png", fetch_response)
+	response.append(content)
+	ContentManager.callv("download_png", response)
 	http.queue_free()
+	return OK
