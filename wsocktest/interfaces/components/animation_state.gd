@@ -6,7 +6,7 @@ const _classid = 33
 
 static func update_component_in_entity(data, entity, _scene):
 	var parsed = JSON.parse(data).result
-	if not parsed.has("states"):
+	if not parsed.has("states") or parsed.states.empty():
 		return
 
 	var anim_player = entity.get_node("AnimationPlayer")
