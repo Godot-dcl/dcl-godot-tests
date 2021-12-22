@@ -55,6 +55,11 @@ _global_script_classes=[ {
 "path": "res://interfaces/components/material.gd"
 }, {
 "base": "Reference",
+"class": "DCL_NFTShape",
+"language": "GDScript",
+"path": "res://interfaces/components/shapes/nftshape.gd"
+}, {
+"base": "Reference",
 "class": "DCL_PlaneShape",
 "language": "GDScript",
 "path": "res://interfaces/components/shapes/plane.gd"
@@ -109,6 +114,7 @@ _global_script_class_icons={
 "DCL_CylinderShape": "",
 "DCL_GLTFShape": "",
 "DCL_Material": "",
+"DCL_NFTShape": "",
 "DCL_PlaneShape": "",
 "DCL_SphereShape": "",
 "DCL_TextShape": "",
