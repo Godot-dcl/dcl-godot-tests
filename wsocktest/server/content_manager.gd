@@ -101,7 +101,7 @@ func downloaded_bin(_result, response_code, _headers, body, content):
 
 func cache_file(content):
 	var f = content.file.to_lower()
-	if not f in contents:
+	if (not "asset" in contents[f]):
 		var ext = content.file.get_extension()
 		match ext:
 			"glb", "gltf":
@@ -125,9 +125,11 @@ func cache_file(content):
 				var v := VideoStreamWebm.new()
 				v.set_file("user://%s.%s" % [content.hash, ext])
 				contents[f].asset = v
+			"png":
+				pass
 
 			_:
-				printerr("Content Manager: Unknown file type for caching")
+				printerr("Content Manager: Unknown file type for caching" + ext + " " + str(content))
 				return null
 
 	return contents[f].asset
@@ -136,6 +138,6 @@ func cache_file(content):
 func get_instance(file_hash):
 	var f = file_hash.to_lower()
 	if contents[f].thread.is_active():
-		return contents[f].thread.wait_to_finish()
+		contents[f].thread.wait_to_finish()
 
 	return contents[f].asset
