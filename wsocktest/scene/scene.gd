@@ -28,8 +28,7 @@ func create(msg, p_peer, is_global):
 
 	if msg.payload.name != "DCL Scene":
 		if msg.payload.contents.size() > 0:
-			#yield(ContentManager.load_contents(msg.payload), "finished")
-			ContentManager.load_contents(msg.payload)
+			yield(ContentManager.load_contents(msg.payload), "finished")
 
 	if msg.payload.contents.size() > 0:
 		transform.origin = Vector3(msg.payload.basePosition.x, 0, msg.payload.basePosition.y) * parcel_size
