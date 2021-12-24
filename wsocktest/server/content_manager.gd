@@ -2,6 +2,9 @@ tool
 extends Node
 
 
+signal finished
+
+
 var contents : Dictionary
 var available_extensions = ["gltf", "glb", "bin", "png", "mp3", "ogg", "ogv", "webm"]
 
@@ -33,6 +36,7 @@ func load_contents(payload):
 				content.thread.start(self, "cache_file", content)
 			else:
 				content.thread.start(self, "download_file", content)
+	return self
 
 
 func download_file(info):
@@ -101,7 +105,7 @@ func downloaded_bin(_result, response_code, _headers, body, content):
 
 func cache_file(content):
 	var f = content.file.to_lower()
-	if (not "asset" in contents[f]):
+	if not "asset" in contents[f]:
 		var ext = content.file.get_extension()
 		match ext:
 			"glb", "gltf":
@@ -129,10 +133,7 @@ func cache_file(content):
 				pass
 
 			_:
-				printerr("Content Manager: Unknown file type for caching" + ext + " " + str(content))
-				return null
-
-	return contents[f].asset
+				printerr("Content Manager: Unknown file type for caching " + ext + " - " + str(content))
 
 
 func get_instance(file_hash):
