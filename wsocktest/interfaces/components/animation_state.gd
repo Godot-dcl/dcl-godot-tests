@@ -56,6 +56,3 @@ static func update_component_in_entity(data, entity, _scene):
 	tree.connect_node("output", 0, last_animation_node)
 	anim_tree.tree_root = tree
 
-	if parsed.states.size() > 1:
-		ResourceSaver.save("res://Hummingbird_tree.tres", tree)
-

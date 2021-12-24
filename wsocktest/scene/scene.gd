@@ -27,13 +27,13 @@ func create(msg, p_peer, is_global):
 	peer = p_peer
 
 	if msg.payload.name != "DCL Scene":
-		ContentManager.load_contents(self, msg.payload)
+		if msg.payload.contents.size() > 0:
+			#yield(ContentManager.load_contents(msg.payload), "finished")
+			ContentManager.load_contents(msg.payload)
 
 	if msg.payload.contents.size() > 0:
 		transform.origin = Vector3(msg.payload.basePosition.x, 0, msg.payload.basePosition.y) * parcel_size
 
-
-func contents_loaded():
 	var response = {"eventType":"SceneReady", "payload": {"sceneId": id}}
 	Server.send({"type": "ControlEvent", "payload": JSON.print(response)}, peer)
 
