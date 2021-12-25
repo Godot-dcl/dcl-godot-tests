@@ -2,12 +2,8 @@ tool
 extends Node
 
 
-signal finished
-
-
 var contents : Dictionary
 var available_extensions = ["gltf", "glb", "bin", "png", "mp3", "ogg", "ogv", "webm"]
-var remaining_assets = 0
 
 
 func load_contents(payload):
@@ -16,7 +12,6 @@ func load_contents(payload):
 		if not contents.has(content.file.to_lower()) and \
 		  content.file.get_extension() in available_extensions:
 
-			remaining_assets += 1
 			content.thread = Thread.new()
 			content.hash = content.hash.trim_suffix(content.file.get_extension())
 			content.base_url = payload.baseUrl
@@ -38,8 +33,6 @@ func load_contents(payload):
 				content.thread.start(self, "cache_file", content)
 			else:
 				content.thread.start(self, "download_file", content)
-
-	return self
 
 
 func download_file(info):
@@ -137,10 +130,6 @@ func cache_file(content):
 
 			_:
 				printerr("Content Manager: Unknown file type for caching " + ext + " - " + str(content))
-
-		remaining_assets -= 1
-		if remaining_assets < 1:
-			emit_signal("finished")
 
 
 func get_instance(file_hash):
