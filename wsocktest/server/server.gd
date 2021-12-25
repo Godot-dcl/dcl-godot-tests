@@ -131,9 +131,9 @@ func create_scene(msg, peer, p_global):
 	var scene = SCENE.instance()
 	scene.set_name(msg.payload.id)
 
-	scene.create(msg, peer, true)
 	if not Engine.editor_hint:
 		get_tree().root.add_child(scene)
+	scene.create(msg, peer, true)
 
 	if p_global:
 		global_scenes[msg.payload.id] = [scene, peer]

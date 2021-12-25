@@ -2,9 +2,6 @@ tool
 extends Node
 
 
-signal finished
-
-
 var contents : Dictionary
 var available_extensions = ["gltf", "glb", "bin", "png", "mp3", "ogg", "ogv", "webm"]
 
@@ -36,7 +33,6 @@ func load_contents(payload):
 				content.thread.start(self, "cache_file", content)
 			else:
 				content.thread.start(self, "download_file", content)
-	return self
 
 
 func download_file(info):
