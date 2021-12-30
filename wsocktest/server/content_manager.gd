@@ -35,6 +35,41 @@ func load_contents(payload):
 				content.thread.start(self, "download_file", content)
 
 
+func load_external_contents(url):
+	var file_name = url.right(url.rfind("/") + 1).to_lower() + ".png"
+	if not contents.has(file_name.to_lower()) and \
+	  file_name.get_extension() in available_extensions:
+			contents[file_name] = {
+				"file": file_name,
+				"thread" : Thread.new(),
+				"url": url
+			}
+
+			var f = File.new()
+			if f.file_exists("user://%s" % file_name):
+				contents[file_name].thread.start(self, "cache_file", contents[file_name])
+			else:
+				contents[file_name].thread.start(self, "download_external_file", contents[file_name])
+
+
+func download_external_file(info):
+	var http = HTTPRequest.new()
+	http.use_threads = true
+	add_child(http)
+
+	if http.request(info.url) != OK:
+		http.queue_free()
+		printerr("*** error creating the download request for ", info.file)
+		return null
+
+	var result = yield(http, "request_completed")
+	result.push_back(info)
+	callv("downloaded_" + info.file.get_extension(), result)
+	http.queue_free()
+
+	return cache_file(info)
+
+
 func download_file(info):
 	var http = HTTPRequest.new()
 	http.use_threads = true
@@ -84,10 +119,9 @@ func downloaded_binary_file_with_hash(_result, response_code, _headers, body, co
 func downloaded_png(_result, response_code, _headers, body, content):
 	if response_code >= 200 and response_code < 300:
 		var image = Image.new()
-		if image.load_png_from_buffer(body) != OK:
-			pass
-		var file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
-		image.save_png(file_name)
+		if image.load_png_from_buffer(body) == OK:
+			var file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
+			image.save_png(file_name)
 
 
 func downloaded_bin(_result, response_code, _headers, body, content):
@@ -126,7 +160,9 @@ func cache_file(content):
 				v.set_file("user://%s.%s" % [content.hash, ext])
 				contents[f].asset = v
 			"png":
-				pass
+				var i = Image.new()
+				i.load("user://%s" % content.file.right(content.file.rfind("/") + 1))
+				contents[f].asset = i
 
 			_:
 				printerr("Content Manager: Unknown file type for caching " + ext + " - " + str(content))
@@ -134,7 +170,11 @@ func cache_file(content):
 
 func get_instance(file_hash):
 	var f = file_hash.to_lower()
-	if contents[f].thread.is_active():
-		contents[f].thread.wait_to_finish()
+	if contents.has(f):
+		if contents[f].thread.is_active():
+			contents[f].thread.wait_to_finish()
 
-	return contents[f].asset
+		if contents[f].has("asset"):
+			return contents[f].asset
+
+	printerr("Content Manager: Asset not found " + f)
