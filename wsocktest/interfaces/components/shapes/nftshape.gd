@@ -43,17 +43,6 @@ func update(data):
 			push_error("image_url not found in dictionary: %s" % nft_data)
 			return
 
-		#var filename = nft_data.image_url.sha1_text() + "_" + Array((nft_data.image_original_url as String).split("/")).pop_back()
-
-
-		#var image_download_error = _get_external_image(nft_data.image_url, filename)
-		# Wait for image download if not already in cache
-		#if image_download_error is GDScriptFunctionState:
-		#	image_download_error = yield(image_download_error, "completed")
-
-		#if image_download_error != OK:
-		#	push_error("Image didn't download correctly. Response: %s" % image_download_error)
-		#	return
 		var filename = nft_data.image_url.right(nft_data.image_url.rfind("/") + 1).to_lower()
 		ContentManager.load_external_contents(nft_data.image_url)
 		var new_image = ContentManager.get_instance(filename + ".png")
