@@ -10,10 +10,10 @@ func load_contents(payload):
 	for i in range(payload.contents.size()):
 		var content = payload.contents[i]
 		if not contents.has(content.file.to_lower()) and \
-		  content.file.get_extension() in available_extensions:
+			content.file.get_extension() in available_extensions:
 
 			content.thread = Thread.new()
-			content.hash = content.hash.trim_suffix(content.file.get_extension())
+			content.hash = content.hash.trim_suffix("." + content.file.get_extension())
 			content.base_url = payload.baseUrl
 
 			contents[content.file.to_lower()] = content

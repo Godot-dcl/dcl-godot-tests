@@ -15,28 +15,32 @@ func test_gltf_creation():
 
 	# Cache a GLTF file containing 3 shapes
 
-	var content = {
-		"file": "shapes.gltf",
-		"hash": "test_gltf",
+	var payload = {
+		"contents": [{
+			"file": "shapes.gltf",
+			"hash": "test_gltf.gltf",
+		}],
+		"baseUrl": "",
 	}
 
 	var dir = Directory.new()
-	dir.copy(utils.ASSETS_DIR + "shapes.gltf", "user://" + content.hash + ".gltf")
+	dir.copy(utils.ASSETS_DIR + "shapes.gltf",
+			"user://" + payload.contents[0].hash + ".gltf")
 
-	ContentManager.cache_file(content)
+	ContentManager.load_contents(payload)
+	payload.contents[0].thread.wait_to_finish()
 
-	var content_inst = ContentManager.get_instance(content.file)
+	var content_inst = ContentManager.get_instance(payload.contents[0].file)
 	assert_not_null(content_inst, "GLTF file cached")
 	assert_eq(content_inst.get_child_count(), 3)
 
 	# Create and attach a GLTF shape component to the entity
 
 	var component_id = "0"
-	var component = utils.create_component(scene, component_id,
-			DCL_GLTFShape._classid, component_id)
+	utils.create_component(scene, component_id, DCL_GLTFShape._classid, component_id)
 
 	utils.update_component(
-			scene, component_id, '{"src": "' + content.file + '"}')
+			scene, component_id, '{"src": "' + payload.contents[0].file + '"}')
 
 	utils.attach_component_to_entity(scene, component_id, entity_id)
 	assert_eq(entity.get_child_count(), 3)
@@ -63,28 +67,32 @@ func test_glb_creation():
 
 	# Cache a GLB file containing 3 shapes
 
-	var content = {
-		"file": "shapes.glb",
-		"hash": "test_glb",
+	var payload = {
+		"contents": [{
+			"file": "shapes.glb",
+			"hash": "test_glb.glb",
+		}],
+		"baseUrl": "",
 	}
 
 	var dir = Directory.new()
-	dir.copy(utils.ASSETS_DIR + "shapes.glb", "user://" + content.hash + ".glb")
+	dir.copy(utils.ASSETS_DIR + "shapes.glb",
+			"user://" + payload.contents[0].hash + ".glb")
 
-	ContentManager.cache_file(content)
+	ContentManager.load_contents(payload)
+	payload.contents[0].thread.wait_to_finish()
 
-	var content_inst = ContentManager.get_instance(content.file)
+	var content_inst = ContentManager.get_instance(payload.contents[0].file)
 	assert_not_null(content_inst, "GLB file cached")
 	assert_eq(content_inst.get_child_count(), 3)
 
 	# Create and attach a GLTF shape component to the entity
 
 	var component_id = "0"
-	var component = utils.create_component(scene, component_id,
-			DCL_GLTFShape._classid, component_id)
+	utils.create_component(scene, component_id, DCL_GLTFShape._classid, component_id)
 
 	utils.update_component(
-			scene, component_id, '{"src": "' + content.file + '"}')
+			scene, component_id, '{"src": "' + payload.contents[0].file + '"}')
 
 	utils.attach_component_to_entity(scene, component_id, entity_id)
 	assert_eq(entity.get_child_count(), 3)
