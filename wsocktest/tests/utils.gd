@@ -63,3 +63,17 @@ func attach_component_to_entity(
 	msg.new_attachEntityComponent().set_id(component_id)
 	msg.get_attachEntityComponent().set_entityId(entity_id)
 	scene.message(msg)
+
+
+# Misc
+
+func cache_test_files(payload: Dictionary):
+	var dir = Directory.new()
+	for i in payload.contents:
+		dir.copy(ASSETS_DIR + i.file, "user://" + i.hash)
+
+	ContentManager.load_contents(payload)
+
+	for i in payload.contents:
+		if i.has("thread"):
+			i.thread.wait_to_finish()

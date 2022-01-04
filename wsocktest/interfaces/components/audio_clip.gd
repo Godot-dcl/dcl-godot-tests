@@ -1,10 +1,12 @@
 extends "res://interfaces/component.gd"
 class_name DCL_AudioClip
 
+
 const _classid = 200
 
-var audio_clip : AudioStreamMP3
-var volume : float = 1
+var audio_clip: AudioStreamMP3
+var volume := 1.0
+
 
 func _init(_name, _scene, _id).(_name, _scene, _id):
 	audio_clip = AudioStreamMP3.new()
@@ -19,7 +21,8 @@ func update(data):
 	if json.has("loop"):
 		audio_clip.loop = json.loop
 
-#Unused in test scene
+
+# Unused in test scene
 func attach_to(entity):
 	if entity.has_node("AudioSource"):
 		entity.get_node("AudioSource").stream = audio_clip

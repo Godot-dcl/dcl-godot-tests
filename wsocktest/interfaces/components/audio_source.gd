@@ -1,27 +1,32 @@
 extends "res://interfaces/component.gd"
 class_name DCL_AudioSource
 
+
 const _classid = 201
 
-var audio_player : = AudioStreamPlayer.new()
-var audio_clip : AudioStreamMP3
+var audio_player := AudioStreamPlayer.new()
+var audio_clip: AudioStreamMP3
+
 
 # Unused in test scene
 func _init(_name, _scene, _id).(_name, _scene, _id):
 	audio_player.name = name
 	print("Component name is", name)
 
+
 # Unused in test scene
 func update(data):
 	var json = JSON.parse(data).result
-	print("Audio source data: ",json)
+	print("Audio source data: ", json)
+
 
 # Unused in test scene
 func attach_to(entity):
 	entity.add_child(audio_player.duplicate())
-	
+
+
 static func update_component_in_entity(data, entity, scene):
-	var player : AudioStreamPlayer
+	var player: AudioStreamPlayer
 	var json = JSON.parse(data).result
 	if json.has("playing"):
 		player = entity.get_node_or_null("AudioSource")

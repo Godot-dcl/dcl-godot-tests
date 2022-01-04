@@ -24,8 +24,7 @@ func test_gltf_creation():
 	}
 
 	var dir = Directory.new()
-	dir.copy(utils.ASSETS_DIR + "shapes.gltf",
-			"user://" + payload.contents[0].hash + ".gltf")
+	dir.copy(utils.ASSETS_DIR + "shapes.gltf", "user://" + payload.contents[0].hash)
 
 	ContentManager.load_contents(payload)
 	payload.contents[0].thread.wait_to_finish()
@@ -47,7 +46,7 @@ func test_gltf_creation():
 
 	var index = 0
 	for i in entity.get_children():
-		assert_true(i is MeshInstance)
+		assert_is(i, MeshInstance)
 		assert_eq(i.mesh, content_inst.get_child(index).mesh)
 		assert_not_null(i.mesh)
 
