@@ -22,12 +22,7 @@ func test_gltf_creation():
 		}],
 		"baseUrl": "",
 	}
-
-	var dir = Directory.new()
-	dir.copy(utils.ASSETS_DIR + "shapes.gltf", "user://" + payload.contents[0].hash)
-
-	ContentManager.load_contents(payload)
-	payload.contents[0].thread.wait_to_finish()
+	utils.cache_test_files(payload)
 
 	var content_inst = ContentManager.get_instance(payload.contents[0].file)
 	assert_not_null(content_inst, "GLTF file cached")
@@ -73,13 +68,7 @@ func test_glb_creation():
 		}],
 		"baseUrl": "",
 	}
-
-	var dir = Directory.new()
-	dir.copy(utils.ASSETS_DIR + "shapes.glb",
-			"user://" + payload.contents[0].hash + ".glb")
-
-	ContentManager.load_contents(payload)
-	payload.contents[0].thread.wait_to_finish()
+	utils.cache_test_files(payload)
 
 	var content_inst = ContentManager.get_instance(payload.contents[0].file)
 	assert_not_null(content_inst, "GLB file cached")
