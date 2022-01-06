@@ -40,11 +40,11 @@ func test_video_components():
 
 	# Create and add a video texture component to the scene
 
-	var tex_comp_id = "1"
-	var tex_comp = utils.create_component(
-			scene, tex_comp_id, DCL_VideoTexture._classid, tex_comp_id)
+	var texture_comp_id = "1"
+	var texture_comp = utils.create_component(
+			scene, texture_comp_id, DCL_VideoTexture._classid, texture_comp_id)
 
-	assert_eq(scene, tex_comp.video_player.get_parent(),
+	assert_eq(scene, texture_comp.video_player.get_parent(),
 			"VideoPlayer attached to scene")
 
 	var data = {
@@ -55,10 +55,21 @@ func test_video_components():
 		#"seek", # Not supported
 		"loop": true,
 	}
-	utils.update_component(scene, tex_comp_id, to_json(data))
+	utils.update_component(scene, texture_comp_id, to_json(data))
 
-	assert_eq(tex_comp.video_player.stream, clip_comp.video_clip)
-	assert_eq(tex_comp.video_player.is_playing(), data.playing)
-	assert_almost_eq(tex_comp.video_player.volume, data.volume,
+	assert_eq(texture_comp.video_player.stream, clip_comp.video_clip)
+	assert_eq(texture_comp.video_player.is_playing(), data.playing)
+	assert_almost_eq(texture_comp.video_player.volume, data.volume,
 			utils.FLOAT_ERROR_MARGIN)
-	assert_eq(tex_comp.loop, data.loop)
+	assert_eq(texture_comp.loop, data.loop)
+
+	# Attach the video texture to a material component
+
+	var material_comp_id = "2"
+	var material_comp = utils.create_component(scene, material_comp_id,
+			DCL_Material._classid, material_comp_id)
+
+	utils.update_component(scene, material_comp_id, '{"albedoTexture": "' +
+			texture_comp_id + '", "emissiveTexture": "' + texture_comp_id + '"}')
+	assert_eq(material_comp.material.albedo_texture, texture_comp.texture)
+	assert_eq(material_comp.material.emission_texture, texture_comp.texture)
