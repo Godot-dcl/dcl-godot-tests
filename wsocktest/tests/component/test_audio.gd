@@ -39,7 +39,7 @@ func test_audio_source_creation():
 	var component = utils.create_component(
 			scene, src_comp_id, DCL_AudioSource._classid, src_comp_id)
 
-	# Update and attach the audio source component
+	# Update and attach the audio source component to the entity
 
 	var data = {
 		"playing": true,

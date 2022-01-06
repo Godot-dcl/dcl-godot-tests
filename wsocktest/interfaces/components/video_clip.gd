@@ -1,19 +1,22 @@
 extends "res://interfaces/component.gd"
 class_name DCL_VideoClip
 
+
 const _classid = 70
 
 const SUPPORTED_EXTENSIONS = ["ogg", "ogv", "webm"]
 
-var url : String
+var url: String
 
-var video_clip : VideoStream
+var video_clip: VideoStream
 
-enum { STATUS_READY, STATUS_ERRORED, STATUS_PREPARING }
+enum {STATUS_READY, STATUS_ERRORED, STATUS_PREPARING}
 var status = STATUS_ERRORED
+
 
 func _init(_name, _scene, _id).(_name, _scene, _id):
 	pass
+
 
 func update(data):
 	var json = JSON.parse(data).result
@@ -39,23 +42,24 @@ func update(data):
 			var download = _get_external_video(url)
 			if download is GDScriptFunctionState:
 				yield(download,"completed")
-			if not url == json.url: #If it doesn't match a new url was set and we no longer want the file
+			if url != json.url: #If it doesn't match a new url was set and we no longer want the file
 				return
 
 		video_clip = ContentManager.get_instance(url)
 		status = STATUS_READY
 
+
 func _get_external_video(url: String):
 	# Get ETag and Last-Modified headers
 	var http = HTTPRequest.new()
-	http.use_threads = false 
+	http.use_threads = false
 	scene.add_child(http)
 	var check_res = http.request(url, [], true,HTTPClient.METHOD_HEAD)
 	var check_response = yield(http,"request_completed")
 	if check_res != OK:
 		printerr("****** error creating the request: ", check_res)
 		return
-	
+
 	var e_tag = ""
 	var last_modified = ""
 	for header in check_response[2]:
@@ -63,12 +67,12 @@ func _get_external_video(url: String):
 			e_tag = header
 		if header.begins_with("Last-Modified:"):
 			last_modified = header
-	
-	var content = {"file": url, "hash" : (url + e_tag + last_modified).sha1_text() }
+
+	var content = {"file": url, "hash": (url + e_tag + last_modified).sha1_text()}
 	if ContentManager.file_downloaded(content):
 		ContentManager.cache_file(content)
 		return
-	
+
 	# Fetch the file
 	var fetch_res = http.request(url)
 	var fetch_response = yield(http,"request_completed")
