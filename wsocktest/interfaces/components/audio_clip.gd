@@ -20,9 +20,3 @@ func update(data):
 		volume = json.volume
 	if json.has("loop"):
 		audio_clip.loop = json.loop
-
-
-# Unused in test scene
-func attach_to(entity):
-	if entity.has_node("AudioSource"):
-		entity.get_node("AudioSource").stream = audio_clip

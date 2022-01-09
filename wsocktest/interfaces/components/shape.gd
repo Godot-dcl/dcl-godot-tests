@@ -24,3 +24,10 @@ func update(data):
 
 func attach_to(entity):
 	entity.add_child(mesh_instance.duplicate())
+
+	.attach_to(entity)
+
+func detach_from(entity):
+	entity.get_node(name).queue_free()
+
+	.detach_from(entity)

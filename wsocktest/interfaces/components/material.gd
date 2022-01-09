@@ -55,6 +55,14 @@ func attach_to(entity):
 	if entity.has_node("shape"):
 		entity.get_node("shape").set("material/0", material)
 
+	.attach_to(entity)
+
+func detach_from(entity):
+	if entity.has_node("shape"):
+		entity.get_node("shape").set("material/0", SpatialMaterial.new())
+
+	.detach_from(entity)
+
 func _on_albedo_texture_changed(value):
 	material.albedo_texture = value
 

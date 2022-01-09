@@ -49,12 +49,12 @@ func update(data):
 		status = STATUS_READY
 
 
-func _get_external_video(url: String):
+func _get_external_video(_url: String):
 	# Get ETag and Last-Modified headers
 	var http = HTTPRequest.new()
 	http.use_threads = false
 	scene.add_child(http)
-	var check_res = http.request(url, [], true,HTTPClient.METHOD_HEAD)
+	var check_res = http.request(_url, [], true,HTTPClient.METHOD_HEAD)
 	var check_response = yield(http,"request_completed")
 	if check_res != OK:
 		printerr("****** error creating the request: ", check_res)
@@ -68,13 +68,13 @@ func _get_external_video(url: String):
 		if header.begins_with("Last-Modified:"):
 			last_modified = header
 
-	var content = {"file": url, "hash": (url + e_tag + last_modified).sha1_text()}
+	var content = { "file": _url, "hash" : (_url + e_tag + last_modified).sha1_text() }
 	if ContentManager.file_downloaded(content):
 		ContentManager.cache_file(content)
 		return
 
 	# Fetch the file
-	var fetch_res = http.request(url)
+	var fetch_res = http.request(_url)
 	var fetch_response = yield(http,"request_completed")
 	if fetch_res != OK:
 		printerr("****** error creating the request: ", fetch_res)

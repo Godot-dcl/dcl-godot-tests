@@ -76,9 +76,8 @@ func _on_finished():
 	if loop:
 		video_player.play()
 
-
-static func _create_error_texture(text: String, scene, viewports: Array ) -> Texture:
-	var ret: Texture
+static func _create_error_texture(text : String, scene, _viewports : Array ) -> Texture:
+	var ret : Texture
 	var vport_name = "error_texture" + str(text.hash())
 	if scene.has_node(vport_name):
 		ret = scene.get_node(vport_name).get_texture()
@@ -92,7 +91,7 @@ static func _create_error_texture(text: String, scene, viewports: Array ) -> Tex
 		vport.render_target_v_flip = true
 
 		scene.add_child(vport)
-		viewports.append(vport)
+		_viewports.append(vport)
 
 		var label = Label.new()
 		vport.add_child(label)

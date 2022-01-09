@@ -4,26 +4,9 @@ class_name DCL_AudioSource
 
 const _classid = 201
 
-var audio_player := AudioStreamPlayer.new()
-var audio_clip: AudioStreamMP3
-
-
-# Unused in test scene
+# Unused
 func _init(_name, _scene, _id).(_name, _scene, _id):
-	audio_player.name = name
-	print("Component name is", name)
-
-
-# Unused in test scene
-func update(data):
-	var json = JSON.parse(data).result
-	print("Audio source data: ", json)
-
-
-# Unused in test scene
-func attach_to(entity):
-	entity.add_child(audio_player.duplicate())
-
+	pass
 
 static func update_component_in_entity(data, entity, scene):
 	var player: AudioStreamPlayer
@@ -38,7 +21,7 @@ static func update_component_in_entity(data, entity, scene):
 		if json.playing == false:
 			player.stop()
 		else:
-			player.stream = scene.components[json.audioClipId].audio_clip.duplicate()
+			player.stream = scene.components[json.audioClipId].audio_clip
 			player.stream.loop = json.loop
 			player.volume_db = linear2db(json.volume)
 			player.pitch_scale = json.pitch

@@ -164,6 +164,10 @@ func cache_file(content):
 				i.load("user://%s" % content.file.right(content.file.rfind("/") + 1))
 				contents[f].asset = i
 
+			# dont cache this
+			"bin":
+				pass
+
 			_:
 				printerr("Content Manager: Unknown file type for caching " + ext + " - " + str(content))
 

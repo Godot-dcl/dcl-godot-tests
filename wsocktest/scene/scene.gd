@@ -151,9 +151,6 @@ func message(scene_msg: PROTO.PB_SendSceneMessage):
 			DCL_AudioSource._classid:
 				DCL_AudioSource.update_component_in_entity(data, entities[entity_id], self)
 
-			DCL_AudioClip._classid:
-				DCL_AudioClip.update_component_in_entity(data, entities[entity_id], self)
-
 			_:
 				printt("**** Unimplemented component update", classid)
 
