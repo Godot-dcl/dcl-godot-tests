@@ -11,6 +11,7 @@ Notes on porting to godot 4
 	* Quat to Quaternion
 	* Transform to Transform3D
 	* PoolByteArray to PackedByteArray
+	* Reference to RefCounted
 
 # Syntax Changes
 
@@ -94,3 +95,6 @@ func update(data):
 	super.update(data)
 ```
 
+# General changes
+
+`Array.remove(i)` becomes `Array.remove_at(i)`
