@@ -9,14 +9,21 @@ var audio_clip: AudioStreamMP3
 
 
 # Unused in test scene
-func _init(_name, _scene, _id).(_name, _scene, _id):
+func _init(_name, _scene, _id):
+	super(_name, _scene, _id)
 	audio_player.name = name
 	print("Component name is", name)
 
 
 # Unused in test scene
 func update(data):
-	var json = JSON.parse(data).result
+	var parser = JSON.new()
+	var err = parser.parse(data)
+	if err != OK:
+		return
+
+	var json = parser.get_data()
+
 	print("Audio source data: ", json)
 
 
@@ -27,7 +34,13 @@ func attach_to(entity):
 
 static func update_component_in_entity(data, entity, scene):
 	var player: AudioStreamPlayer
-	var json = JSON.parse(data).result
+	var parser = JSON.new()
+	var err = parser.parse(data)
+	if err != OK:
+		return
+
+	var json = parser.get_data()
+	
 	if json.has("playing"):
 		player = entity.get_node_or_null("AudioSource")
 		if not player:

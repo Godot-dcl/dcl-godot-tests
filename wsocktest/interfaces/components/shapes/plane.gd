@@ -7,7 +7,8 @@ var width : float = 1
 var height : float = 1
 
 
-func _init(_name, _scene, _id).(_name, _scene, _id):
+func _init(_name, _scene, _id):
+	super(_name, _scene, _id)
 	# Planes are double-sided in the reference implementation
 	material.params_cull_mode = material.CULL_DISABLED
 	
@@ -21,8 +22,14 @@ func _init(_name, _scene, _id).(_name, _scene, _id):
 
 
 func update(data):
-	var json = JSON.parse(data).result
+	var parser = JSON.new()
+	var err = parser.parse(data)
+	if err != OK:
+		return
+
+	var json = parser.get_data()
 	width = json.get("width", width)
 	height = json.get("height", height)
 	mesh_instance.mesh.size = Vector2(width,height)
-	.update(data)
+
+	super.update(data)

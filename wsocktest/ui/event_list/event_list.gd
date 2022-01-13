@@ -22,7 +22,7 @@ func set_scene(scene):
 	for i in scene_current.get_meta("events"):
 		var button = Button.new()
 		button.text = i["hoverText"]
-		button.connect("pressed", self, "_on_event_pressed", [i])
+		button.connect("pressed", Callable(self, "_on_event_pressed"), [i])
 		events.add_child(button)
 
 

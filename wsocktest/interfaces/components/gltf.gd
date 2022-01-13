@@ -7,12 +7,19 @@ var meshes = [] #MeshInstance
 var colliders = [] #PhysicsBody
 var animations = {} #Animation
 
-func _init(_name, _scene, _id).(_name, _scene, _id):
+func _init(_name, _scene, _id):
+	super(_name, _scene, _id)
 	pass
 
 
 func update(data):
-	var json = JSON.parse(data).result
+	var parser = JSON.new()
+	var err = parser.parse(data)
+	if err != OK:
+		return
+
+	var json = parser.get_data()
+
 	if json.has("src"):
 		for m in meshes:
 			m.queue_free()
@@ -25,7 +32,7 @@ func update(data):
 			if is_instance_valid(content):
 
 				for child in content.get_children():
-					if child is MeshInstance:
+					if child is MeshInstance3D:
 						if child.name.ends_with("_collider"):
 							child.create_trimesh_collision()
 							var collider = child.get_child(0)
@@ -34,8 +41,8 @@ func update(data):
 						else:
 							meshes.push_back(child)
 
-					if child is Spatial and child.get_child_count() > 0:
-						if child.get_child(0) is Skeleton:
+					if child is Node3D and child.get_child_count() > 0:
+						if child.get_child(0) is Skeleton3D:
 							meshes.push_back(child)
 
 					if child is AnimationPlayer:
@@ -45,7 +52,7 @@ func update(data):
 	if json.has("withCollisions"):
 		if colliders.empty():
 			for m in meshes:
-				if m is MeshInstance:
+				if m is MeshInstance3D:
 					m.create_trimesh_collision()
 					var c = m.get_child(0)
 					if is_instance_valid(c):

@@ -14,12 +14,20 @@ enum {STATUS_READY, STATUS_ERRORED, STATUS_PREPARING}
 var status = STATUS_ERRORED
 
 
-func _init(_name, _scene, _id).(_name, _scene, _id):
+func _init(_name, _scene, _id):
+	super(_name, _scene, _id)
 	pass
 
 
 func update(data):
-	var json = JSON.parse(data).result
+
+	var parser = JSON.new()
+	var err = parser.parse(data)
+	if err != OK:
+		return
+
+	var json = parser.get_data()
+
 	if json.has("url"):
 		url = json.url
 		status = STATUS_ERRORED
@@ -39,9 +47,7 @@ func update(data):
 				return
 
 			status = STATUS_PREPARING
-			var download = _get_external_video(url)
-			if download is GDScriptFunctionState:
-				yield(download,"completed")
+			var download = await _get_external_video(url)
 			if url != json.url: #If it doesn't match a new url was set and we no longer want the file
 				return
 
@@ -55,7 +61,7 @@ func _get_external_video(url: String):
 	http.use_threads = false
 	scene.add_child(http)
 	var check_res = http.request(url, [], true,HTTPClient.METHOD_HEAD)
-	var check_response = yield(http,"request_completed")
+	var check_response = await http.request_completed
 	if check_res != OK:
 		printerr("****** error creating the request: ", check_res)
 		return
@@ -75,7 +81,7 @@ func _get_external_video(url: String):
 
 	# Fetch the file
 	var fetch_res = http.request(url)
-	var fetch_response = yield(http,"request_completed")
+	var fetch_response = await http.request_completed
 	if fetch_res != OK:
 		printerr("****** error creating the request: ", fetch_res)
 		return

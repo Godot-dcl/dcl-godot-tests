@@ -1,4 +1,4 @@
-extends Spatial
+extends Node3D
 
 
 const ActionsMap = {
@@ -14,7 +14,7 @@ func _ready():
 	Server.loading_screen = $Control/Loading
 	Server.player = $CameraRig
 
-	EventManager.connect("entity_hover_changed", self, "_on_entity_hovered_changed")
+	EventManager.connect("entity_hover_changed", Callable(self, "_on_entity_hovered_changed"))
 
 
 func _process(_delta):

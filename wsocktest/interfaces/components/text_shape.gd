@@ -8,11 +8,17 @@ const _classid = 21
 
 
 static func update_component_in_entity(data, entity, _scene):
-	var parsed = JSON.parse(data).result
+	var parser = JSON.new()
+	var err = parser.parse(data)
+	if err != OK:
+		return
+
+	var parsed = parser.get_data()
+
 	if parsed.has("outlineWidth"):
 		var w = WAYPOINT.instance()
 		var label = w.get_node("Label") as Label
-		var font = label.get("custom_fonts/font") as DynamicFont
+		var font = label.get("custom_fonts/font") as Font
 		w.text = parsed.value
 		label.set("custom_colors/font_color", Color(parsed.color.r, parsed.color.g, parsed.color.b))
 		font.outline_color = Color(parsed.outlineColor.r, parsed.outlineColor.g, parsed.outlineColor.b)

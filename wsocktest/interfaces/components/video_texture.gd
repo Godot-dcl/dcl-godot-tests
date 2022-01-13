@@ -11,7 +11,7 @@ var seek := -1.0
 var playing := false
 var videoClipId: String
 
-var video_player: VideoPlayer
+var video_player: VideoStreamPlayer
 
 var viewports = [] # to queue free when deleting the component
 
@@ -19,9 +19,10 @@ var texture: Texture
 signal texture_changed(new_texture)
 
 
-func _init(_name, _scene, _id).(_name, _scene, _id):
-	video_player = VideoPlayer.new()
-	video_player.connect("finished", self, "_on_finished")
+func _init(_name, _scene, _id):
+	super(_name, _scene, _id)
+	video_player = VideoStreamPlayer.new()
+	video_player.connect("finished", Callable(self, "_on_finished"))
 	video_player.hide()
 	video_player.name = name + str(get_instance_id())
 
@@ -29,7 +30,13 @@ func _init(_name, _scene, _id).(_name, _scene, _id):
 
 
 func update(data):
-	var json = JSON.parse(data).result
+	var parser = JSON.new()
+	var err = parser.parse(data)
+	if err != OK:
+		return
+
+	var json = parser.get_data()
+
 	if json.has("videoClipId"):
 		videoClipId = json.videoClipId
 		var clip: DCL_VideoClip = scene.components[videoClipId]
@@ -39,7 +46,7 @@ func update(data):
 			emit_signal("texture_changed", texture)
 
 		while clip.status == DCL_VideoClip.STATUS_PREPARING:
-			yield(scene.get_tree(), "idle_frame")
+			await scene.get_tree().idle_frame
 
 		if clip.status == DCL_VideoClip.STATUS_ERRORED:
 			texture = _create_error_texture("Could not load: \n" + clip.url, scene, viewports)

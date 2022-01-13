@@ -3,22 +3,22 @@ extends Control
 # Some margin to keep the marker away from the screen's corners.
 const MARGIN = 8
 
-onready var camera = get_viewport().get_camera()
-onready var parent = get_parent()
-onready var label = $Label
-onready var marker = $Marker
+@onready var camera = get_viewport().get_camera()
+@onready var parent = get_parent()
+@onready var label = $Label
+@onready var marker = $Marker
 
 # The waypoint's text.
-export var text = "Waypoint" setget set_text
+@export var text = "Waypoint" : set=set_text
 
 # If `true`, the waypoint sticks to the viewport's edges when moving off-screen.
-export var sticky = false
+@export var sticky = false
 
 
 func _ready() -> void:
 	self.text = text
 
-	if not parent is Spatial:
+	if not parent is Node3D:
 		push_error("The waypoint's parent node must inherit from Spatial.")
 
 

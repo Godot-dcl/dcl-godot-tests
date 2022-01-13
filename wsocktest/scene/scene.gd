@@ -1,5 +1,5 @@
-tool
-extends Spatial
+@tool
+extends Node3D
 
 
 signal received_event(scene)
@@ -34,7 +34,7 @@ func create(msg, p_peer, is_global):
 		transform.origin = Vector3(msg.payload.basePosition.x, 0, msg.payload.basePosition.y) * parcel_size
 
 	# TODO: this should be called after all contents are loaded
-	yield(get_tree().create_timer(2), "timeout")
+	await get_tree().create_timer(2).timeout
 	var response = {"eventType":"SceneReady", "payload": {"sceneId": id}}
 	Server.send({"type": "ControlEvent", "payload": JSON.print(response)}, peer)
 
@@ -45,7 +45,7 @@ func message(scene_msg: PROTO.PB_SendSceneMessage):
 	if scene_msg.has_createEntity():
 		#print("create entity ", scene_msg.get_createEntity().get_id())
 		var entity_id = scene_msg.get_createEntity().get_id()
-		entities[entity_id] = Spatial.new()
+		entities[entity_id] = Node3D.new()
 		entities[entity_id].name = entity_id
 		add_child(entities[entity_id])
 

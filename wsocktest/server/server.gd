@@ -1,4 +1,4 @@
-tool
+@tool
 extends Node
 
 
@@ -24,16 +24,16 @@ var httprequests = []
 
 var loading_screen : Control
 
-var player : Spatial
+var player : Node3D
 
 
 func _ready():
 	set_process(false)
 
-	_server.connect("client_connected", self, "_connected")
-	_server.connect("client_disconnected", self, "_disconnected")
-	_server.connect("client_close_request", self, "_close_request")
-	_server.connect("data_received", self, "_data_received")
+	_server.connect("client_connected", Callable(self, "_connected"))
+	_server.connect("client_disconnected", Callable(self, "_disconnected"))
+	_server.connect("client_close_request", Callable(self, "_close_request"))
+	_server.connect("data_received", Callable(self, "_data_received"))
 
 	if not Engine.editor_hint:
 		start_server()
@@ -220,23 +220,32 @@ func _message(msg, peer):
 func _data_received(id):
 	var data = peers[id].get_packet().get_string_from_utf8() as String
 	if data.left(1) in ["[", "{"]:
-		var json = JSON.parse(data.strip_edges().strip_escapes()) as JSONParseResult
-		if typeof(json.result) == TYPE_DICTIONARY \
-			and "payload" in json.result \
-			and json.result.payload is String:
-				if json.result.payload.left(1) in ["[", "{"]:
-					var payload = JSON.parse(json.result.payload.strip_edges().strip_escapes()) as JSONParseResult
-					json.result.payload = payload.result
+		var parser = JSON.new()
+		var err = parser.parse(data.strip_edges().strip_escapes())
+		if err != OK:
+			print("error parsing json data: ", data)
+			return
+		var json = parser.get_data()
+		if typeof(json) == TYPE_DICTIONARY \
+			and "payload" in json \
+			and json.payload is String:
+				if json.payload.left(1) in ["[", "{"]:
+					err = parser.parse(json.payload.strip_edges().strip_escapes())
+					if err != OK:
+						print("error parsing json data: ", json.payload)
+					var payload = parser.get_data()
+					json.payload = payload
+					
 				else:
-					if not json.result.payload in parcel_scenes:
+					if not json.payload in parcel_scenes:
 						var payload = []
-						for line in json.result.payload.split("\n"):
+						for line in json.payload.split("\n"):
 							if !line.empty():
 								payload.push_back(Marshalls.base64_to_raw(line))
 
-						json.result.payload = payload
+						json.payload = payload
 
-		_message(json.result, peers[id])
+		_message(json, peers[id])
 	else:
 		print("unsupported data: ", data)
 

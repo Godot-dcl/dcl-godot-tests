@@ -13,8 +13,8 @@ signal secondary_up(entity)
 signal entity_hover_changed(entity)
 
 var last_entity_hovered : Node
-var last_entity_collider_hovered : PhysicsBody
-var raycast : RayCast
+var last_entity_collider_hovered : PhysicsBody3D
+var raycast : RayCast3D
 
 # Called when the node enters the scene tree for the first time.
 func _init():

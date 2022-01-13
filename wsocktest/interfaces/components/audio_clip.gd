@@ -8,12 +8,20 @@ var audio_clip: AudioStreamMP3
 var volume := 1.0
 
 
-func _init(_name, _scene, _id).(_name, _scene, _id):
+func _init(_name, _scene, _id):
+	super(_name, _scene, _id)
 	audio_clip = AudioStreamMP3.new()
 
 
 func update(data):
-	var json = JSON.parse(data).result
+	
+	var parser = JSON.new()
+	var err = parser.parse(data)
+	if err != OK:
+		return
+
+	var json = parser.get_data()
+
 	if json.has("url"):
 		audio_clip = ContentManager.get_instance(json.url)
 	if json.has("volume"):

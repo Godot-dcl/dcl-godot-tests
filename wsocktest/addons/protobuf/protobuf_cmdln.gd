@@ -36,10 +36,11 @@ var Util = preload("res://addons/protobuf/protobuf_util.gd")
 
 func error(msg : String):
 	push_error(msg)
-	OS.exit_code = 1
+	#OS.exit_code = 1
 	quit()
 
 func _init():
+	printt("************************************************* protobuf_cmdln *****************************************")
 	var arguments = {}
 	for argument in OS.get_cmdline_args():
 		if argument.find("=") > -1:

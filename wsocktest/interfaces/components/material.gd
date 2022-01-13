@@ -3,15 +3,23 @@ class_name DCL_Material
 
 const _classid = 65
 
-var material : SpatialMaterial
+var material : StandardMaterial3D
 
 
-func _init(_name, _scene, _id).(_name, _scene, _id):
-	material = SpatialMaterial.new()
+func _init(_name, _scene, _id):
+	super(_name, _scene, _id)
+	material = StandardMaterial3D.new()
 
 
 func update(data):
-	var json = JSON.parse(data).result
+	
+	var parser = JSON.new()
+	var err = parser.parse(data)
+	if err != OK:
+		return
+
+	var json = parser.get_data()
+
 	if json.has("albedoColor"):
 		material.albedo_color = Color(
 			json.albedoColor.r,
@@ -46,7 +54,7 @@ func update(data):
 
 	if json.has("alphaTest"):
 		material.flags_transparent = true
-		material.params_depth_draw_mode = SpatialMaterial.DEPTH_DRAW_ALPHA_OPAQUE_PREPASS
+		material.params_depth_draw_mode = StandardMaterial3D.DEPTH_DRAW_ALPHA_OPAQUE_PREPASS
 		material.params_use_alpha_scissor = true
 		material.params_alpha_scissor_threshold = json.alphaTest
 

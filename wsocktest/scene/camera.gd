@@ -1,10 +1,10 @@
-extends Spatial
+extends Node3D
 
 const parcel_size = preload("res://scene/scene.gd").parcel_size
 
-export var god_mode = false
-export var mouse_sensitivity : float
-export var speed : float
+@export var god_mode = false
+@export var mouse_sensitivity : float
+@export var speed : float
 
 
 func current_scene_id():
@@ -45,7 +45,7 @@ func _process(delta):
 	global_translate(dir.normalized() * speed * delta)
 
 	if dir != Vector3.ZERO:
-		var rot = transform.basis.get_rotation_quat()
+		var rot = transform.basis.get_rotation_quaternion()
 		var response = {
 			"position": {
 				"x": transform.origin.x,

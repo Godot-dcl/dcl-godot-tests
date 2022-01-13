@@ -1,4 +1,4 @@
-tool
+@tool
 extends Node
 
 
@@ -37,8 +37,7 @@ func load_contents(payload):
 
 func load_external_contents(url):
 	var file_name = url.right(url.rfind("/") + 1).to_lower() + ".png"
-	if not contents.has(file_name.to_lower()) and \
-	  file_name.get_extension() in available_extensions:
+	if not contents.has(file_name.to_lower()) and file_name.get_extension() in available_extensions:
 			contents[file_name] = {
 				"file": file_name,
 				"thread" : Thread.new(),
@@ -62,7 +61,7 @@ func download_external_file(info):
 		printerr("*** error creating the download request for ", info.file)
 		return null
 
-	var result = yield(http, "request_completed")
+	var result = await http.request_completed
 	result.push_back(info)
 	callv("downloaded_" + info.file.get_extension(), result)
 	http.queue_free()
@@ -80,7 +79,7 @@ func download_file(info):
 		printerr("*** error creating the download request for ", info.file)
 		return null
 
-	var result = yield(http, "request_completed")
+	var result = await http.request_completed
 	result.push_back(info)
 	callv("downloaded_" + info.file.get_extension(), result)
 	http.queue_free()
@@ -139,8 +138,10 @@ func cache_file(content):
 		var ext = content.file.get_extension()
 		match ext:
 			"glb", "gltf":
-				var l = DynamicGLTFLoader.new()
-				contents[f].asset = l.import_scene("user://%s.%s" % [content.hash, ext], 1, 1)
+				var state = GLTFState.new()
+				var gltf := GLTFDocument.new()
+				gltf.append_from_file("user://%s.%s" % [content.hash, ext], state)
+				contents[f].asset = gltf.generate_scene(state)
 
 			"mp3":
 				var s := AudioStreamMP3.new()
@@ -156,7 +157,9 @@ func cache_file(content):
 				contents[f].asset = v
 
 			"webm":
-				var v := VideoStreamWebm.new()
+				#var v := VideoStreamWebm.new()
+				# did this because VideoStreamWebm doesn't seem to be there
+				var v := VideoStreamTheora.new()
 				v.set_file("user://%s.%s" % [content.hash, ext])
 				contents[f].asset = v
 			"png":

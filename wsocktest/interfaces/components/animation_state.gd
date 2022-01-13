@@ -5,7 +5,11 @@ const PROTO = preload("res://server/engineinterface.gd")
 const _classid = 33
 
 static func update_component_in_entity(data, entity, _scene):
-	var parsed = JSON.parse(data).result
+	var json = JSON.new()
+	var err = json.parse(data)
+	if err != OK:
+		return
+	var parsed = json.get_data()
 	if not parsed.has("states") or parsed.states.empty():
 		return
 

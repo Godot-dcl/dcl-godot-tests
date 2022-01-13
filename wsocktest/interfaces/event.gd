@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 class_name Event
 
 
@@ -47,15 +47,15 @@ func _init(_scene_id, _entity, data):
 				EventManager.connect("%s_%s" % [
 					a.to_lower(),
 					"down"
-				], self, "check")
+				], Callable(self, "check"))
 	else:
 		EventManager.connect("%s_%s" % [
 			data.button.to_lower(),
 			data.type.trim_prefix("pointer").to_lower()
-		], self, "check")
+		], Callable(self, "check"))
 
 		for c in entity.get_children():
-			if c is PhysicsBody:
+			if c is PhysicsBody3D:
 				c.collision_layer = int(pow(2, action + 9))
 
 
