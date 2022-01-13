@@ -10,7 +10,7 @@ signal peer_disconnected(id)
 signal scene_created(scene)
 
 const PROTO = preload("res://server/engineinterface.gd")
-const SCENE = preload("res://scene/scene.tscn")
+var SCENE = load("res://scene/scene.tscn")
 
 const PORT = 9080
 var _server = WebSocketServer.new()
@@ -35,7 +35,7 @@ func _ready():
 	_server.connect("client_close_request", Callable(self, "_close_request"))
 	_server.connect("data_received", Callable(self, "_data_received"))
 
-	if not Engine.editor_hint:
+	if not Engine.is_editor_hint():
 		start_server()
 
 

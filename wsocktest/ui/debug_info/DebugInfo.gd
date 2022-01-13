@@ -26,8 +26,8 @@ func _physics_process(_delta):
 		Performance.get_monitor(Performance.TIME_FPS),
 		Performance.get_monitor(Performance.TIME_PROCESS),
 		OS.get_static_memory_usage() / B_TO_MB,
-		OS.get_dynamic_memory_usage() / B_TO_MB,
-		Performance.get_monitor(Performance.RENDER_OBJECTS_IN_FRAME),
-		Performance.get_monitor(Performance.RENDER_VERTICES_IN_FRAME),
-		Performance.get_monitor(Performance.RENDER_DRAW_CALLS_IN_FRAME),
+		-1, #FIXME OS.get_dynamic_memory_usage() / B_TO_MB, # method no longer exists
+		Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME),
+		-1, #FIXME Performance.get_monitor(Performance.RENDER_VERTICES_IN_FRAME),
+		Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
 	]
