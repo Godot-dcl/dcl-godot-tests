@@ -44,8 +44,14 @@ func update(data):
 			return
 
 		var filename = nft_data.image_url.right(nft_data.image_url.rfind("/") + 1).to_lower()
-		ContentManager.load_external_contents(nft_data.image_url)
-		var new_image = ContentManager.get_instance(filename + ".png")
+		ContentManager.load_external_contents(nft_data.image_url) #FIX: This should yield and return success or failure
+		var new_image = null
+		for i in 100: # stop trying after 10 seconds in case the download failed
+			new_image = ContentManager.get_instance(filename + ".png")
+			if new_image is Image:
+				break
+			else:
+				yield(scene.get_tree().create_timer(0.1), "timeout")
 
 		# No need to recreate the texture if the image doesn't change
 		if image != new_image:
