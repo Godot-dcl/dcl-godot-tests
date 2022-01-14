@@ -4,12 +4,18 @@ class_name DCL_NFTShape
 const _classid = 22
 const OPENSEA_API_ENDPOINT = "https://api.opensea.io/api/v1/asset/"
 
+const PictureFrameStyle = NFTPictureFrame.PictureFrameStyle
+const PICTURE_FRAME_SCENE = preload("res://ui/nftshape/NFTPictureFrame.tscn")
+
+
 var src : String
-var color := Color(0.6404918, 0.611472, 0.8584906)
-var style := 0
+var color := {"r": 0.6404918, "g": 0.611472, "b": 0.8584906 }
+var style : int = PictureFrameStyle.Classic
 
 var nft_data : Dictionary
 var image := Image.new()
+
+var frame : NFTPictureFrame
 
 func _init(_name, _scene, _id).(_name, _scene, _id):
 	var plane = QuadMesh.new()
@@ -18,15 +24,28 @@ func _init(_name, _scene, _id).(_name, _scene, _id):
 	mesh_instance.set_surface_material(0, material)
 
 	material.params_cull_mode = SpatialMaterial.CULL_DISABLED
+	material.flags_unshaded = true
 	material.flags_transparent = true
-
-	#material.albedo_color = color  # Do not use for now or it'll tint the texture
+	
+	frame = PICTURE_FRAME_SCENE.instance()
+	mesh_instance.add_child(frame)
+	_update_picture_frame()
+	
 	name = "NFT Shape"
-	pass
+
 
 func update(data):
 	.update(data)
 	var json = JSON.parse(data).result
+	
+	if json.has("color"):
+		self.color = json.color
+		_update_picture_frame()
+		
+	if json.has("style"):
+		style = int(json.style)
+		_update_picture_frame()
+	
 	if json.has("src"):
 		src = json.src
 
@@ -84,23 +103,9 @@ func _get_ntf_data(url: String) -> int:
 	else:
 		return ERR_INVALID_DATA
 
+func attach_to(entity):
+	entity.add_child(mesh_instance.duplicate())
 
-func _get_external_image(url: String, filename: String) -> int:
-	var content = {"file": filename, "hash" : url.sha1_text() }
-	if ContentManager.contents.has(filename):
-		ContentManager.cache_file(content)
-		return OK
-
-	var http = HTTPRequest.new()
-	scene.add_child(http)
-	var res = http.request(url)
-	var response = yield(http, "request_completed")
-	if res != OK:
-		printerr("****** error creating the request: ", res)
-		return res
-
-	response.append(content)
-	ContentManager.callv("downloaded_png", response)
-	ContentManager.cache_file(content)
-	http.queue_free()
-	return OK
+func _update_picture_frame():
+	frame.color = Color(color.r, color.g, color.b)
+	frame.style = style
