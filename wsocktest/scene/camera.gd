@@ -6,6 +6,7 @@ const parcel_size = preload("res://scene/scene.gd").parcel_size
 @export var mouse_sensitivity : float
 @export var speed : float
 
+@onready var json = JSON.new()
 
 func current_scene_id():
 	for parcel in Server.parcel_scenes.values():
@@ -23,13 +24,13 @@ func _process(delta):
 	var cam_xform = $Camera.get_global_transform()
 	var input_movement_vector = Vector2()
 
-	if Input.is_action_pressed("ui_up"):
+	if Input.is_action_pressed("walk_up"):
 		input_movement_vector.y += 1
-	if Input.is_action_pressed("ui_down"):
+	if Input.is_action_pressed("walk_down"):
 		input_movement_vector.y -= 1
-	if Input.is_action_pressed("ui_left"):
+	if Input.is_action_pressed("walk_left"):
 		input_movement_vector.x -= 1
-	if Input.is_action_pressed("ui_right"):
+	if Input.is_action_pressed("walk_right"):
 		input_movement_vector.x += 1
 
 	input_movement_vector = input_movement_vector.normalized()
@@ -61,7 +62,7 @@ func _process(delta):
 			"playerHeight": $Camera.transform.origin.y - transform.origin.y
 
 		}
-		Server.send({"type": "ReportPosition", "payload": JSON.print(response)})
+		Server.send({"type": "ReportPosition", "payload": json.stringify(response)})
 
 
 func _input(event):
@@ -75,6 +76,6 @@ func _input(event):
 		$Camera.rotate_x(deg2rad(event.relative.y * mouse_sensitivity * -1))
 		rotate_y(deg2rad(event.relative.x * mouse_sensitivity * -1))
 
-		var camera_rot = $Camera.rotation_degrees
-		camera_rot.x = clamp(camera_rot.x, -70, 70)
-		$Camera.rotation_degrees = camera_rot
+		var camera_rot = $Camera.rotation
+		camera_rot.x = clamp(camera_rot.x, deg2rad(-70), deg2rad(70))
+		$Camera.rotation = camera_rot

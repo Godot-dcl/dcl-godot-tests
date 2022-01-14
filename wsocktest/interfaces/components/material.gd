@@ -54,7 +54,7 @@ func update(data):
 
 	if json.has("alphaTest"):
 		material.flags_transparent = true
-		material.params_depth_draw_mode = StandardMaterial3D.DEPTH_DRAW_ALPHA_OPAQUE_PREPASS
+		material.params_depth_draw_mode = StandardMaterial3D.DEPTH_DRAW_OPAQUE_ONLY
 		material.params_use_alpha_scissor = true
 		material.params_alpha_scissor_threshold = json.alphaTest
 

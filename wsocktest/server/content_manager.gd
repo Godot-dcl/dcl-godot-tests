@@ -30,9 +30,9 @@ func load_contents(payload):
 
 			var f = File.new()
 			if f.file_exists(file_name):
-				content.thread.start(self, "cache_file", content)
+				content.thread.start(Callable(self, "cache_file"), content)
 			else:
-				content.thread.start(self, "download_file", content)
+				content.thread.start(Callable(self, "download_file"), content)
 
 
 func load_external_contents(url):
@@ -174,7 +174,7 @@ func cache_file(content):
 func get_instance(file_hash):
 	var f = file_hash.to_lower()
 	if contents.has(f):
-		if contents[f].thread.is_active():
+		if contents[f].thread.is_alive():
 			contents[f].thread.wait_to_finish()
 
 		if contents[f].has("asset"):

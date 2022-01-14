@@ -33,7 +33,7 @@ func update(data):
 
 				for child in content.get_children():
 					if child is MeshInstance3D:
-						if child.name.ends_with("_collider"):
+						if str(child.name).ends_with("_collider"):
 							child.create_trimesh_collision()
 							var collider = child.get_child(0)
 							collider.name = child.name
@@ -50,7 +50,7 @@ func update(data):
 							animations[anim_name] = child.get_animation(anim_name).duplicate()
 
 	if json.has("withCollisions"):
-		if colliders.empty():
+		if colliders.is_empty():
 			for m in meshes:
 				if m is MeshInstance3D:
 					m.create_trimesh_collision()

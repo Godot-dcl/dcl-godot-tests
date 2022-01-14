@@ -16,11 +16,10 @@ static func update_component_in_entity(data, entity, _scene):
 	var parsed = parser.get_data()
 
 	if parsed.has("outlineWidth"):
-		var w = WAYPOINT.instance()
+		var w = WAYPOINT.instantiate()
 		var label = w.get_node("Label") as Label
-		var font = label.get("custom_fonts/font") as Font
 		w.text = parsed.value
 		label.set("custom_colors/font_color", Color(parsed.color.r, parsed.color.g, parsed.color.b))
-		font.outline_color = Color(parsed.outlineColor.r, parsed.outlineColor.g, parsed.outlineColor.b)
-		font.outline_size = parsed.outlineWidth
+		label.add_theme_color_override("font_outline_color", Color(parsed.outlineColor.r, parsed.outlineColor.g, parsed.outlineColor.b))
+		label.add_theme_constant_override("outline_size", parsed.outlineWidth)
 		entity.add_child(w)

@@ -10,7 +10,7 @@ static func update_component_in_entity(data, entity, _scene):
 	if err != OK:
 		return
 	var parsed = json.get_data()
-	if not parsed.has("states") or parsed.states.empty():
+	if not parsed.has("states") or parsed.states.is_empty():
 		return
 
 	var anim_player = entity.get_node("AnimationPlayer")

@@ -16,6 +16,8 @@ var last_entity_hovered : Node
 var last_entity_collider_hovered : PhysicsBody3D
 var raycast : RayCast3D
 
+@onready var json = JSON.new()
+
 # Called when the node enters the scene tree for the first time.
 func _init():
 	pass # Replace with function body.
@@ -40,8 +42,9 @@ func _process(_delta):
 				emit_signal("entity_hover_changed", null, null)
 				return
 
+	check_input()
 
-func _input(_event):
+func check_input():
 	if Input.is_action_just_pressed("Pointer"):
 		send_request(Event.Action.POINTER, Event.Type.DOWN)
 		if last_entity_hovered != null:
@@ -79,7 +82,7 @@ func send_request(action, type):
 				"type": type,
 				"buttonId": action,
 				"origin": raycast.get_parent().get_parent().global_transform.origin,
-				"direction": raycast.to_global(raycast.cast_to).normalized(),
+				"direction": raycast.to_global(raycast.target_position).normalized(),
 				"hit": {
 					"origin": parse_vector(Vector3.ZERO),
 					"hitPoint": parse_vector(Vector3.ZERO),
@@ -92,7 +95,7 @@ func send_request(action, type):
 			}
 		}
 	}
-	Server.send({"type": "SceneEvent", "payload": JSON.print(response)})
+	Server.send({"type": "SceneEvent", "payload": json.stringify(response)})
 
 
 func parse_vector(_in : Vector3):

@@ -19,6 +19,7 @@ var current_index = -1
 var entities = {"0": get_node(".")}
 var components: Dictionary
 
+@onready var json = JSON.new()
 
 func create(msg, p_peer, is_global):
 	id = msg.payload.id
@@ -36,10 +37,10 @@ func create(msg, p_peer, is_global):
 	# TODO: this should be called after all contents are loaded
 	await get_tree().create_timer(2).timeout
 	var response = {"eventType":"SceneReady", "payload": {"sceneId": id}}
-	Server.send({"type": "ControlEvent", "payload": JSON.print(response)}, peer)
+	Server.send({"type": "ControlEvent", "payload": json.stringify(response)}, peer)
 
 
-func message(scene_msg: PROTO.PB_SendSceneMessage):
+func message(scene_msg):
 	#print(scene_msg.to_string())
 
 	if scene_msg.has_createEntity():

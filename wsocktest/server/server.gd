@@ -26,8 +26,10 @@ var loading_screen : Control
 
 var player : Node3D
 
+var json
 
 func _ready():
+	json = JSON.new()
 	set_process(false)
 
 	_server.connect("client_connected", Callable(self, "_connected"))
@@ -44,8 +46,8 @@ func _process(_delta):
 		_server.poll()
 
 
-func _connected(id, _protocol):
-#	print("Client connected!")
+func _connected(id, _protocol, resource_name):
+	print("Client connected!")
 
 	var peer = _server.get_peer(id)
 	peer.set_write_mode(WebSocketPeer.WRITE_MODE_TEXT)
@@ -128,10 +130,10 @@ func is_listening():
 
 
 func create_scene(msg, peer, p_global):
-	var scene = SCENE.instance()
+	var scene = SCENE.instantiate()
 	scene.set_name(msg.payload.id)
 
-	if not Engine.editor_hint:
+	if not Engine.is_editor_hint():
 		get_tree().root.add_child(scene)
 	scene.create(msg, peer, true)
 
@@ -179,7 +181,7 @@ func _message(msg, peer):
 		"Reset":
 			send({
 				"type": "SystemInfoReport",
-				"payload": JSON.print({
+				"payload": json.stringify({
 					"graphicsDeviceName":"Mocked",
 					"graphicsDeviceVersion":"Mocked",
 					"graphicsMemorySize":512,
@@ -196,11 +198,11 @@ func _message(msg, peer):
 			pass
 
 		"ActivateRendering", "ForceActivateRendering":
-			send({"type": "ControlEvent", "payload": JSON.print({"eventType":"ActivateRenderingACK"})})
+			send({"type": "ControlEvent", "payload": json.stringify({"eventType":"ActivateRenderingACK"})})
 
 		"Teleport":
 			if is_instance_valid(player):
-				player.translation = Vector3(msg.payload.x, 0.0, msg.payload.z)
+				player.position = Vector3(msg.payload.x, 0.0, msg.payload.z)
 
 		"UnloadScene":
 			parcel_scenes[msg.payload][0].queue_free()
@@ -208,9 +210,9 @@ func _message(msg, peer):
 
 		"SetRenderProfile":
 			get_tree().root.add_child(
-				preload("res://3d/environments/day.tscn").instance()
+				preload("res://3d/environments/day.tscn").instantiate()
 				if msg.payload.id == 0 else
-				preload("res://3d/environments/night.tscn").instance()
+				preload("res://3d/environments/night.tscn").instantiate()
 			)
 
 		_:
@@ -240,7 +242,7 @@ func _data_received(id):
 					if not json.payload in parcel_scenes:
 						var payload = []
 						for line in json.payload.split("\n"):
-							if !line.empty():
+							if !line.is_empty():
 								payload.push_back(Marshalls.base64_to_raw(line))
 
 						json.payload = payload
@@ -257,8 +259,8 @@ func send(msg, peer = null):
 	if peer == null:
 		peer = peers[peers.keys()[0]]
 
-	var txt = JSON.print(msg)
-	peer.put_packet(txt.to_utf8())
+	var txt = json.stringify(msg)
+	peer.put_packet(txt.to_utf8_buffer())
 
 
 func deposit_httprequest_node(http):

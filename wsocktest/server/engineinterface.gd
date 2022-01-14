@@ -468,7 +468,7 @@ class PBPacker:
 						if inner_size + offset > bytes.size():
 							return PB_ERR.LENGTHDEL_SIZE_MISMATCH
 						if message_func_ref != null:
-							var message = message_func_ref.call_func()
+							var message = message_func_ref.call()
 							if inner_size > 0:
 								var sub_offset = message.from_bytes(bytes, offset, inner_size + offset)
 								if sub_offset > 0:

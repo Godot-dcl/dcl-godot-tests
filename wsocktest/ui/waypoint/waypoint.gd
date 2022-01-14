@@ -3,7 +3,7 @@ extends Control
 # Some margin to keep the marker away from the screen's corners.
 const MARGIN = 8
 
-@onready var camera = get_viewport().get_camera()
+@onready var camera = get_viewport().get_camera_3d()
 @onready var parent = get_parent()
 @onready var label = $Label
 @onready var marker = $Marker
@@ -42,8 +42,9 @@ func _process(_delta):
 	# `get_size_override()` will return a valid size only if the stretch mode is `2d`.
 	# Otherwise, the viewport size is used directly.
 	var viewport_base_size = (
-			get_viewport().get_size_override() if get_viewport().get_size_override() > Vector2(0, 0)
-			else get_viewport().size
+			#get_viewport().get_size_override() if get_viewport().get_size_override() > Vector2(0, 0)
+			#else 
+				get_viewport().size
 	)
 
 	if not sticky:
