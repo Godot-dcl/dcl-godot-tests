@@ -47,7 +47,7 @@ func update(data):
 			for m in meshes:
 				if m is MeshInstance:
 					m.create_trimesh_collision()
-					var c = m.get_child(0)
+					var c = m.get_child(m.get_child_count() - 1)
 					if is_instance_valid(c):
 						c.name = m.name
 						colliders.push_back(c)
