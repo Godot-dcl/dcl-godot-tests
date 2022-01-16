@@ -145,9 +145,12 @@ func downloaded_binary_file_with_hash(_result, response_code, _headers, body, co
 func downloaded_png(_result, response_code, _headers, body, content):
 	if response_code >= 200 and response_code < 300:
 		var image = Image.new()
-		if image.load_png_from_buffer(body) == OK:
-			var file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
-			image.save_png(file_name)
+		# Accept image files with the wrong extention but always save as png
+		for ext in ["png", "jpg", "webp"]:
+			if image.call("load_" + ext + "_from_buffer",body) == OK:
+				var file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
+				image.save_png(file_name)
+				break
 
 
 func downloaded_bin(_result, response_code, _headers, body, content):
