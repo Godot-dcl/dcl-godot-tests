@@ -27,23 +27,25 @@ enum PictureFrameStyle {
     None
  }
 
-var style : int = PictureFrameStyle.Classic setget _set_style
+var _style : int = PictureFrameStyle.Classic
 var material : SpatialMaterial
 var color : Color
 
-func _set_style(s):
-	style = s
-	match s:
+func _init():
+	mesh = CubeMesh.new()
+	translate_object_local( Vector3(0,0,0.051) )
+
+func set_style(style : int, size : Vector2):
+	_style = style
+	match style:
 		#Implement all the different styles
 		_:
-			mesh = CubeMesh.new()
-			mesh.size = Vector3( 1.0,1.0,0.1 )
-			translate_object_local( Vector3(0,0,0.02) )
+			mesh.size = Vector3( size.x,size.y,0.1 )
 			material = SpatialMaterial.new()
 			mesh.surface_set_material(0, material)
 			material.flags_unshaded = true
 			update_color(color)
-			
+
 func update_color(c : Color):
 	material.albedo_color = c
 	material.emission = c

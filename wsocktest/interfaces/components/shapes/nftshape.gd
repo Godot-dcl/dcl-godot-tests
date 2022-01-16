@@ -14,11 +14,12 @@ var style : int = PictureFrameStyle.Classic
 
 var nft_data : Dictionary
 var image := Image.new()
+var aspect_ratio := 1.0
 
 var frame : NFTPictureFrame
 
 func _init(_name, _scene, _id).(_name, _scene, _id):
-	var plane = QuadMesh.new()
+	var plane := QuadMesh.new()
 	plane.size = Vector2(1,1)
 	mesh_instance.mesh = plane
 	mesh_instance.set_surface_material(0, material)
@@ -76,11 +77,15 @@ func update(data):
 		var new_image = load_result.value
 
 		# No need to recreate the texture if the image doesn't change
-		if image != new_image:
+		if new_image != null and image != new_image:
 			image = new_image
+			var image_size = new_image.get_size()
+			if image_size.y != 0:
+				aspect_ratio = image_size.x / float(image_size.y)
 			var tex = ImageTexture.new()
 			tex.create_from_image(image)
 			material.albedo_texture = tex
+			_update_picture_frame()
 
 
 func _get_ntf_data(url: String) -> int:
@@ -91,7 +96,7 @@ func _get_ntf_data(url: String) -> int:
 	var http = HTTPRequest.new()
 	scene.add_child(http)
 
-	var res = http.request(OPENSEA_API_ENDPOINT + url.trim_prefix("ethereum://"))
+	var res = http.request(OPENSEA_API_ENDPOINT + url.trim_prefix("ethereum://"), ["user-agent: Mozilla/5.0 (platform; rv:geckoversion) Gecko/geckotrail Firefox/firefoxversion"])
 	var response = yield(http,"request_completed")
 	if res != OK:
 		printerr("****** error creating the request: ", res)
@@ -99,10 +104,12 @@ func _get_ntf_data(url: String) -> int:
 	var body : PoolByteArray = response[3] #body
 	var data = body.get_string_from_utf8()
 	http.queue_free()
-	var data_dict = JSON.parse(data).result
-	if typeof(data_dict) == TYPE_DICTIONARY:
-		nft_data = data_dict
-		return OK
+	var json : JSONParseResult = JSON.parse(data)
+	if json.error != OK:
+		return json.error
+	if typeof(json.result) == TYPE_DICTIONARY:
+		nft_data = json.result
+		return json.error
 	else:
 		return ERR_INVALID_DATA
 
@@ -110,5 +117,12 @@ func attach_to(entity):
 	entity.add_child(mesh_instance.duplicate())
 
 func _update_picture_frame():
+	var new_size : Vector2
+	if aspect_ratio >= 1:
+		new_size = Vector2(aspect_ratio, 1)
+	else:
+		new_size = Vector2(1, 1.0 / aspect_ratio)
+	mesh_instance.mesh.size = new_size
 	frame.color = Color(color.r, color.g, color.b)
-	frame.style = style
+	frame.set_style(style, new_size)
+	
