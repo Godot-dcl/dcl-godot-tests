@@ -184,6 +184,10 @@ func reparent(src, dest):
 #			e.check(event)
 
 
-func _get_configuration_warning():
-	return "" if peer == null else "Scene is currently connected to a peer." +\
-			"\nRemoving the DebuggerDump off the tree will completely detach this scene from it."
+func _get_configuration_warnings():
+	var warn = PackedStringArray()
+	if peer != null:
+		warn.append("Scene is currently connected to a peer." +\
+				"\nRemoving the DebuggerDump off the tree will completely detach this scene from it.")
+	
+	return warn

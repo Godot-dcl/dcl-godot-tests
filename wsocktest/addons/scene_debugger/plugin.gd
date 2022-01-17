@@ -1,9 +1,9 @@
-tool
+@tool
 extends EditorPlugin
 
 
 var _scene_debugger =\
-		preload("res://addons/scene_debugger/scene_debugger.tscn").instance()
+		preload("res://addons/scene_debugger/scene_debugger.tscn").instantiate()
 
 
 func _enter_tree():

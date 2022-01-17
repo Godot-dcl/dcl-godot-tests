@@ -1,4 +1,4 @@
-tool
+@tool
 extends Control
 
 
@@ -8,26 +8,26 @@ var _editor_undoredo
 var peer_current = -1
 var scene_current = null
 
-onready var peers = $VBoxContainer/TabContainer/Peers/Tree
-onready var scenes = $VBoxContainer/TabContainer/Scenes/Tree
-onready var events = $VBoxContainer/TabContainer/Events/Tree
+@onready var peers = $VBoxContainer/TabContainer/Peers/Tree
+@onready var scenes = $VBoxContainer/TabContainer/Scenes/Tree
+@onready var events = $VBoxContainer/TabContainer/Events/Tree
 
 
 func _ready():
 	$VBoxContainer/TabContainer/Scenes/HBoxContainer/Back.icon =\
-			get_icon("Back", "EditorIcons")
+			get_theme_icon("Back", "EditorIcons")
 	$VBoxContainer/TabContainer/Scenes/HBoxContainer/Filter.icon =\
-			get_icon("AnimationFilter", "EditorIcons")
+			get_theme_icon("AnimationFilter", "EditorIcons")
 	$VBoxContainer/TabContainer/Scenes/HBoxContainer/Filter.get_popup().\
-			connect("index_pressed", self, "_on_filter_selected")
+			connect("index_pressed", Callable(self, "_on_filter_selected"))
 
 	$VBoxContainer/TabContainer/Events/HBoxContainer/Back.icon =\
-			get_icon("Back", "EditorIcons")
+			get_theme_icon("Back", "EditorIcons")
 
-	Server.connect("server_state_changed", self, "_on_server_state_changed")
-	Server.connect("peer_connected", self, "_on_peer_connected")
-	Server.connect("peer_disconnected", self, "_on_peer_disconnected")
-	Server.connect("scene_created", self, "_on_scene_created")
+	Server.connect("server_state_changed", Callable(self, "_on_server_state_changed"))
+	Server.connect("peer_connected", Callable(self, "_on_peer_connected"))
+	Server.connect("peer_disconnected", Callable(self, "_on_peer_disconnected"))
+	Server.connect("scene_created", Callable(self, "_on_scene_created"))
 
 
 func _on_server_state_changed(is_listening):
@@ -100,7 +100,7 @@ func _on_scene_created(scene):
 		item.set_text(0, scene.name)
 		item.set_metadata(0, scene)
 
-		scene.connect("received_event", self, "_on_scene_received_event")
+		scene.connect("received_event", Callable(self, "_on_scene_received_event"))
 
 
 func _on_scene_received_event(scene):
@@ -139,8 +139,10 @@ func _update_scenes_list():
 		item.set_text(0, scene.name)
 		item.set_metadata(0, scene)
 
-		if not scene.is_connected("received_event", self, "_on_scene_received_event"):
-			scene.connect("received_event", self, "_on_scene_received_event")
+		if not scene.is_connected(
+				"received_event", Callable(self, "_on_scene_received_event")):
+			scene.connect("received_event",
+					Callable(self, "_on_scene_received_event"))
 
 
 func _update_events_list():
@@ -178,7 +180,7 @@ func _on_DumpSelIntoScene_pressed():
 	while item != null:
 		var scene = item.get_metadata(0)
 		if scene.is_inside_tree():
-			printerr("\"" + scene.name + "\" has already been dumped. " +
+			printerr("\"" + str(scene.name) + "\" has already been dumped. " +
 					"Remove from the scene to dump it again")
 
 			item = item.get_next()
@@ -200,20 +202,16 @@ func _on_DumpAllIntoScene_pressed():
 		return
 
 	var dump_node = _generate_dump_node(scene_root)
-	var item = scenes.get_root().get_children()
-	while item != null:
-		var scene = item.get_metadata(0)
+	for i in scenes.get_root().get_children():
+		var scene = i.get_metadata(0)
 		if scene.is_inside_tree():
-			printerr("\"" + scene.name + "\" has already been dumped. " +
+			printerr("\"" + str(scene.name) + "\" has already been dumped. " +
 					"Remove from the scene to dump it again")
 
-			item = item.get_next()
 			continue
 
 		dump_node.add_child(scene)
 		_completely_own_node(scene, scene_root)
-
-		item = item.get_next()
 
 	if $VBoxContainer/TabContainer/Scenes/ForceOrigin.pressed:
 		_calculate_dump_origin(dump_node)
@@ -225,7 +223,7 @@ func _on_Send_pressed():
 
 
 func _generate_dump_node(parent):
-	var dump_node = Spatial.new()
+	var dump_node = Node3D.new()
 	dump_node.set_script(
 			preload("res://addons/scene_debugger/debugger_dump.gd"))
 
@@ -251,38 +249,38 @@ func _calculate_dump_origin(dump_node):
 	# Get the furthest opposite values.
 	for scene in dump_node.get_children():
 		if pos_min == null:
-			pos_min = scene.translation
-			pos_max = scene.translation
+			pos_min = scene.position
+			pos_max = scene.position
 
 			continue
 
-		pos_min.x = min(scene.translation.x, pos_min.x)
-		pos_min.y = min(scene.translation.y, pos_min.y)
-		pos_min.z = min(scene.translation.z, pos_min.z)
+		pos_min.x = min(scene.position.x, pos_min.x)
+		pos_min.y = min(scene.position.y, pos_min.y)
+		pos_min.z = min(scene.position.z, pos_min.z)
 
-		pos_max.x = max(scene.translation.x, pos_max.x)
-		pos_max.y = max(scene.translation.y, pos_max.y)
-		pos_max.z = max(scene.translation.z, pos_max.z)
+		pos_max.x = max(scene.position.x, pos_max.x)
+		pos_max.y = max(scene.position.y, pos_max.y)
+		pos_max.z = max(scene.position.z, pos_max.z)
 
 	# Calculate the center point of each Vector3 element (x, y, z).
 	for i in 3:
 		if pos_min[i] >= 0:
-			dump_node.translation[i] -= pos_min[i]
+			dump_node.position[i] -= pos_min[i]
 
 			var size = pos_max[i] - pos_min[i]
 			if size > 0:
-				dump_node.translation[i] -= size / 2
+				dump_node.position[i] -= size / 2
 
 		elif pos_max[i] < 0:
-			dump_node.translation[i] += abs(pos_max[i])
+			dump_node.position[i] += abs(pos_max[i])
 
 			var size = abs(pos_min[i] + abs(pos_max[i]))
 			if size > 0:
-				dump_node.translation[i] += size / 2
+				dump_node.position[i] += size / 2
 
 		else:
-			dump_node.translation[i] += pos_min[i]
+			dump_node.position[i] += pos_min[i]
 
 			var size = pos_max[i] + abs(pos_min[i])
 			if size > 0:
-				dump_node.translation[i] -= size / 2
+				dump_node.position[i] -= size / 2

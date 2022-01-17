@@ -1,13 +1,13 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://iqkadjdf6pdn"]
 
-[ext_resource path="res://addons/scene_debugger/scene_debugger.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://addons/scene_debugger/scene_debugger.gd" id="1"]
 
-[sub_resource type="StyleBoxEmpty" id=1]
+[sub_resource type="StyleBoxEmpty" id="1"]
 
 [node name="SceneDebugger" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 1 )
+script = ExtResource( "1" )
 __meta__ = {
 "_edit_lock_": true,
 "_edit_use_anchors_": false
@@ -21,16 +21,16 @@ __meta__ = {
 }
 
 [node name="StartServer" type="Button" parent="VBoxContainer"]
-margin_right = 1024.0
-margin_bottom = 20.0
+offset_right = 1024.0
+offset_bottom = 29.0
 text = "Start Server"
 
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
-margin_top = 24.0
-margin_right = 1024.0
-margin_bottom = 600.0
+offset_top = 33.0
+offset_right = 1024.0
+offset_bottom = 600.0
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 1 )
+theme_override_styles/panel = SubResource( "1" )
 tabs_visible = false
 
 [node name="Peers" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
@@ -38,15 +38,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/Peers"]
-margin_right = 1024.0
-margin_bottom = 14.0
+offset_right = 1024.0
+offset_bottom = 26.0
 text = "Peers:"
-align = 1
+horizontal_alignment = 1
 
 [node name="Tree" type="Tree" parent="VBoxContainer/TabContainer/Peers"]
-margin_top = 18.0
-margin_right = 1024.0
-margin_bottom = 576.0
+offset_top = 30.0
+offset_right = 1024.0
+offset_bottom = 567.0
 size_flags_vertical = 3
 hide_root = true
 
@@ -56,33 +56,22 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Scenes"]
-margin_right = 1024.0
-margin_bottom = 22.0
 
 [node name="Back" type="Button" parent="VBoxContainer/TabContainer/Scenes/HBoxContainer"]
-margin_right = 28.0
-margin_bottom = 22.0
 flat = true
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/Scenes/HBoxContainer"]
-margin_left = 32.0
-margin_top = 4.0
-margin_right = 992.0
-margin_bottom = 18.0
 size_flags_horizontal = 3
 text = "Scenes:"
-align = 1
+horizontal_alignment = 1
 
 [node name="Filter" type="MenuButton" parent="VBoxContainer/TabContainer/Scenes/HBoxContainer"]
-margin_left = 996.0
-margin_right = 1024.0
-margin_bottom = 22.0
-items = [ "Has Events", null, 1, false, false, 0, 0, null, "", false ]
+item_count = 1
+popup/item_0/text = "Has Events"
+popup/item_0/checkable = 1
+popup/item_0/id = 0
 
 [node name="Tree" type="Tree" parent="VBoxContainer/TabContainer/Scenes"]
-margin_top = 26.0
-margin_right = 1024.0
-margin_bottom = 500.0
 size_flags_vertical = 3
 hide_root = true
 select_mode = 2
@@ -91,23 +80,14 @@ __meta__ = {
 }
 
 [node name="DumpSelIntoScene" type="Button" parent="VBoxContainer/TabContainer/Scenes"]
-margin_top = 504.0
-margin_right = 1024.0
-margin_bottom = 524.0
 disabled = true
 text = "Dump SELECTED Nodes Into Active Scene"
 
 [node name="DumpAllIntoScene" type="Button" parent="VBoxContainer/TabContainer/Scenes"]
-margin_top = 528.0
-margin_right = 1024.0
-margin_bottom = 548.0
 disabled = true
 text = "Dump ALL Nodes Into Active Scene"
 
 [node name="ForceOrigin" type="CheckBox" parent="VBoxContainer/TabContainer/Scenes"]
-margin_top = 552.0
-margin_right = 1024.0
-margin_bottom = 576.0
 pressed = true
 text = "Make Scenes Be at Origin"
 
@@ -117,65 +97,39 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Events"]
-margin_right = 1024.0
-margin_bottom = 22.0
 
 [node name="Back" type="Button" parent="VBoxContainer/TabContainer/Events/HBoxContainer"]
-margin_right = 28.0
-margin_bottom = 22.0
 flat = true
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/Events/HBoxContainer"]
-margin_left = 32.0
-margin_top = 4.0
-margin_right = 1024.0
-margin_bottom = 18.0
 size_flags_horizontal = 3
 text = "Events:"
-align = 1
+horizontal_alignment = 1
 
 [node name="Tree" type="Tree" parent="VBoxContainer/TabContainer/Events"]
-margin_top = 26.0
-margin_right = 1024.0
-margin_bottom = 524.0
 size_flags_vertical = 3
 hide_root = true
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/TabContainer/Events"]
-margin_top = 528.0
-margin_right = 1024.0
-margin_bottom = 552.0
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/Events/HBoxContainer2"]
-margin_top = 5.0
-margin_right = 510.0
-margin_bottom = 19.0
 size_flags_horizontal = 3
 text = "Mesh Name:"
-align = 2
-valign = 1
 
 [node name="MeshName" type="LineEdit" parent="VBoxContainer/TabContainer/Events/HBoxContainer2"]
-margin_left = 514.0
-margin_right = 1024.0
-margin_bottom = 24.0
 size_flags_horizontal = 3
-align = 1
 
 [node name="Send" type="Button" parent="VBoxContainer/TabContainer/Events"]
-margin_top = 556.0
-margin_right = 1024.0
-margin_bottom = 576.0
 disabled = true
 text = "Send"
 
 [connection signal="pressed" from="VBoxContainer/StartServer" to="." method="_on_StartServer_pressed"]
 [connection signal="item_activated" from="VBoxContainer/TabContainer/Peers/Tree" to="." method="_on_peer_activated"]
-[connection signal="pressed" from="VBoxContainer/TabContainer/Scenes/HBoxContainer/Back" to="VBoxContainer/TabContainer" method="set_current_tab" binds= [ 0 ]]
+[connection signal="pressed" from="VBoxContainer/TabContainer/Scenes/HBoxContainer/Back" to="VBoxContainer/TabContainer" method="set_current_tab" binds= [0]]
 [connection signal="item_activated" from="VBoxContainer/TabContainer/Scenes/Tree" to="." method="_on_scene_activated"]
 [connection signal="multi_selected" from="VBoxContainer/TabContainer/Scenes/Tree" to="." method="_on_Scenes_multi_selected"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Scenes/DumpSelIntoScene" to="." method="_on_DumpSelIntoScene_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Scenes/DumpAllIntoScene" to="." method="_on_DumpAllIntoScene_pressed"]
-[connection signal="pressed" from="VBoxContainer/TabContainer/Events/HBoxContainer/Back" to="VBoxContainer/TabContainer" method="set_current_tab" binds= [ 1 ]]
-[connection signal="item_selected" from="VBoxContainer/TabContainer/Events/Tree" to="VBoxContainer/TabContainer/Events/Send" method="set_disabled" binds= [ false ]]
+[connection signal="pressed" from="VBoxContainer/TabContainer/Events/HBoxContainer/Back" to="VBoxContainer/TabContainer" method="set_current_tab" binds= [1]]
+[connection signal="item_selected" from="VBoxContainer/TabContainer/Events/Tree" to="VBoxContainer/TabContainer/Events/Send" method="set_disabled" binds= [false]]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Events/Send" to="." method="_on_Send_pressed"]

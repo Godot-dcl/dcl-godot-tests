@@ -82,5 +82,6 @@ func check(_entity, _collider=""):
 			}
 		}
 
-		var message = {"type": "SceneEvent", "payload": JSON.print(response)}
+		var json = JSON.new()
+		var message = {"type": "SceneEvent", "payload": json.stringify(response)}
 		Server.send(message)

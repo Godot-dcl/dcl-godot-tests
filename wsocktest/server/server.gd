@@ -98,19 +98,19 @@ func stop_server():
 	for i in global_scenes.values() + parcel_scenes.values():
 		var scene = i[0]
 		# Don't free scenes that have been dumped.
-		if not Engine.editor_hint or not scene.is_inside_tree():
+		if not Engine.is_editor_hint() or not scene.is_inside_tree():
 			scene.queue_free()
 			continue
 
-		if Engine.editor_hint:
+		if Engine.is_editor_hint():
 			scene.peer = null
-			scene.update_configuration_warning()
+			scene.update_configuration_warnings()
 
 			if scene.is_inside_tree():
 				# Disconect connections for events, since the scene is not tied
 				# with the server anymore.
 				for j in scene.get_signal_connection_list("received_event"):
-					scene.disconnect("received_event", j["target"], j["method"])
+					scene.disconnect("received_event", j["callable"])
 
 	global_scenes.clear()
 	parcel_scenes.clear()
