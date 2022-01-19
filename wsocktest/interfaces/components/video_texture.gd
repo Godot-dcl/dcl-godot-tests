@@ -46,7 +46,7 @@ func update(data):
 			emit_signal("texture_changed", texture)
 
 		while clip.status == DCL_VideoClip.STATUS_PREPARING:
-			await scene.get_tree().idle_frame
+			await scene.get_tree().process_frame
 
 		if clip.status == DCL_VideoClip.STATUS_ERRORED:
 			texture = _create_error_texture("Could not load: \n" + clip.url, scene, viewports)
@@ -92,11 +92,11 @@ static func _create_error_texture(text: String, scene, viewports: Array ) -> Tex
 	else:
 		var font = load("res://fonts/inter/default_text.tres")
 
-		var vport = Viewport.new()
+		var vport = SubViewport.new()
 		vport.name = vport_name
 		vport.size = Vector2(640, 480)
-		vport.render_target_update_mode = Viewport.UPDATE_ONCE
-		vport.render_target_v_flip = true
+		vport.render_target_update_mode = SubViewport.UPDATE_ONCE
+		#vport.render_target_v_flip = true
 
 		scene.add_child(vport)
 		viewports.append(vport)
@@ -104,11 +104,11 @@ static func _create_error_texture(text: String, scene, viewports: Array ) -> Tex
 		var label = Label.new()
 		vport.add_child(label)
 
-		label.add_font_override("font", font)
+		label.add_theme_font_override("font", font)
 		label.rect_min_size = vport.size
-		label.autowrap = true
-		label.align = Label.ALIGN_CENTER
-		label.valign = Label.VALIGN_CENTER
+		label.autowrap_mode = Label.AUTOWRAP_WORD_SMART
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.text = text
 		ret = vport.get_texture()
 
