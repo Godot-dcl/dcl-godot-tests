@@ -39,47 +39,45 @@ func update(data):
 				return
 
 			status = STATUS_PREPARING
-			var download = _get_external_video(url)
+			var download = _load_external_video(url)
 			if download is GDScriptFunctionState:
 				yield(download,"completed")
-			if url != json.url: #If it doesn't match a new url was set and we no longer want the file
-				return
-
-		video_clip = ContentManager.get_instance(url)
+			
+		else:
+			video_clip = ContentManager.get_instance(url)
 		status = STATUS_READY
 
 
-func _get_external_video(_url: String):
-	# Get ETag and Last-Modified headers
+func _load_external_video(_url: String)-> void:
+	var ret : VideoStream
+	var file_name : String
+	var ext = _url.get_extension()
+	if ext in ["ogv", "ogg"]:
+		ret = VideoStreamTheora.new()
+		ext = "ogv"
+	elif ext == "webm":
+		ret = VideoStreamWebm.new()
+	else:
+		push_error("wrong format for external video")
+		return
+	
+	file_name = "user://" + url.sha1_text() + "." + ext
+	
 	var http = HTTPRequest.new()
 	http.use_threads = false
+		
+	
+	http.download_file = file_name
 	scene.add_child(http)
-	var check_res = http.request(_url, [], true,HTTPClient.METHOD_HEAD)
-	var check_response = yield(http,"request_completed")
-	if check_res != OK:
-		printerr("****** error creating the request: ", check_res)
-		return
-
-	var e_tag = ""
-	var last_modified = ""
-	for header in check_response[2]:
-		if header.begins_with("ETag:"):
-			e_tag = header
-		if header.begins_with("Last-Modified:"):
-			last_modified = header
-
-	var content = { "file": _url, "hash" : (_url + e_tag + last_modified).sha1_text() }
-	if ContentManager.file_downloaded(content):
-		ContentManager.cache_file(content)
-		return
-
+	
 	# Fetch the file
 	var fetch_res = http.request(_url)
 	var fetch_response = yield(http,"request_completed")
 	if fetch_res != OK:
 		printerr("****** error creating the request: ", fetch_res)
-		return
-
-	fetch_response.append(content)
-	ContentManager.callv("download_binary_file_with_hash", fetch_response)
+	else:
+		ret.set_file(http.download_file)
+	
 	http.queue_free()
+	if url == _url: #If it doesn't match a new url was set and we no longer want the file
+		video_clip = ret
