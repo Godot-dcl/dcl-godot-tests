@@ -19,7 +19,7 @@ var current_index = -1
 var entities = {"0": get_node(".")}
 var components: Dictionary
 
-@onready var json = JSON.new()
+var json = JSON.new()
 
 func create(msg, p_peer, is_global):
 	id = msg.payload.id
@@ -35,7 +35,7 @@ func create(msg, p_peer, is_global):
 		transform.origin = Vector3(msg.payload.basePosition.x, 0, msg.payload.basePosition.y) * parcel_size
 
 	# TODO: this should be called after all contents are loaded
-	await get_tree().create_timer(2).timeout
+	#await get_tree().create_timer(2).timeout
 	var response = {"eventType":"SceneReady", "payload": {"sceneId": id}}
 	Server.send({"type": "ControlEvent", "payload": json.stringify(response)}, peer)
 
