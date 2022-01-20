@@ -1,43 +1,33 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://nb58yy7utqxm"]
 
-[ext_resource path="res://3d/environments/night.png" type="Texture" id=1]
+[ext_resource type="Texture2D" uid="uid://c11a1mt5wjq33" path="res://3d/environments/night.png" id="1"]
 
-[sub_resource type="PanoramaSky" id=1]
-panorama = ExtResource( 1 )
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_p7y4f"]
+panorama = ExtResource( "1" )
 
-[sub_resource type="Environment" id=2]
+[sub_resource type="Sky" id="1"]
+sky_material = SubResource( "PanoramaSkyMaterial_p7y4f" )
+
+[sub_resource type="Environment" id="2"]
 background_mode = 2
-background_sky = SubResource( 1 )
+sky = SubResource( "1" )
 ambient_light_energy = 1.11
-fog_enabled = true
-fog_color = Color( 0.12549, 0.266667, 0.458824, 1 )
-fog_sun_color = Color( 0.847059, 0.823529, 0.796078, 1 )
-fog_sun_amount = 0.56
-fog_depth_end = 80.0
-fog_depth_curve = 2.0
-fog_height_min = 197.6
-fog_height_max = -171.5
 ssao_radius = 8.1
 ssao_intensity = 4.3
-ssao_radius2 = 40.7
-ssao_intensity2 = 14.6
-ssao_bias = 0.059
-ssao_color = Color( 0.180392, 0.207843, 0.25098, 1 )
 glow_enabled = true
 glow_intensity = 1.86
 glow_strength = 0.87
 glow_bloom = 0.02
 glow_hdr_threshold = 0.44
-glow_bicubic_upscale = true
+fog_enabled = true
 
-[node name="Night" type="Spatial"]
+[node name="Night" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource( 2 )
+environment = SubResource( "2" )
 
-[node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.849579, 0.527461, 0, -0.527461, 0.849579, 0, 26.5368, 0 )
-light_color = Color( 0.531797, 0.51, 0.6, 1 )
+[node name="DirectionalLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.849579, 0.527461, 0, -0.527461, 0.849579, 0, 26.5368, 0)
+light_color = Color(0.531797, 0.51, 0.6, 1)
 light_energy = 0.4
-light_specular = 1.0
 shadow_enabled = true
