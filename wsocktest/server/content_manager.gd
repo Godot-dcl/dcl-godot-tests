@@ -141,7 +141,20 @@ func cache_file(content):
 				var state = GLTFState.new()
 				var gltf := GLTFDocument.new()
 				gltf.append_from_file("user://%s.%s" % [content.hash, ext], state)
-				contents[f].asset = gltf.generate_scene(state)
+
+				var asset = gltf.generate_scene(state)
+				for i in asset.get_children():
+					if i is ImporterMeshInstance3D:
+						var converted_node = MeshInstance3D.new()
+						converted_node.mesh = i.mesh.get_mesh()
+						converted_node.skeleton = i.skeleton_path
+						converted_node.skin = i.skin
+						converted_node.transform = i.transform
+
+						i.queue_free()
+						asset.add_child(converted_node)
+
+				contents[f].asset = asset
 
 			"mp3":
 				var s := AudioStreamMP3.new()
