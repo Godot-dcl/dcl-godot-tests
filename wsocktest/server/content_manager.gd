@@ -146,12 +146,13 @@ func cache_file(content):
 				for i in asset.get_children():
 					if i is ImporterMeshInstance3D:
 						var converted_node = MeshInstance3D.new()
+						converted_node.name = i.name
 						converted_node.mesh = i.mesh.get_mesh()
 						converted_node.skeleton = i.skeleton_path
 						converted_node.skin = i.skin
 						converted_node.transform = i.transform
 
-						i.queue_free()
+						i.free()
 						asset.add_child(converted_node)
 
 				contents[f].asset = asset
