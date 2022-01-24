@@ -67,7 +67,8 @@ func update(data):
 
 	if json.has("seek"):
 		seek = json.seek
-		video_player.stream_position = seek
+		# giving error in Godot 3.3
+		# video_player.stream_position = seek
 
 	loop = json.get("loop", loop)
 

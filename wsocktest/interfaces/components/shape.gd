@@ -14,16 +14,24 @@ func _init(_name, _scene, _id).(_name, _scene, _id):
 
 func update(data):
 	var json = JSON.parse(data).result
+	if json.has("visible"):
+		mesh_instance.visible = json.visible
+
 	if json.has("withCollisions"):
-		mesh_instance.create_trimesh_collision()
-		var collider = mesh_instance.get_child(0)
-		collider.name = name
-		if json.has("isPointerBlocker"):
-			collider.collision_layer = int(pow(2, 10) + pow(2, 11) + pow(2, 12))
+		if json.withCollisions and json.visible:
+			mesh_instance.create_trimesh_collision()
+			var collider = mesh_instance.get_child(0)
+			collider.name = name
+			if json.has("isPointerBlocker"):
+				collider.collision_layer = int(pow(2, 10) + pow(2, 11) + pow(2, 12))
+		else:
+			for c in mesh_instance.get_children():
+				if c is PhysicsBody:
+					c.queue_free()
 
 
 func attach_to(entity):
-	entity.add_child(mesh_instance.duplicate())
+	entity.add_child(mesh_instance)
 
 	.attach_to(entity)
 
