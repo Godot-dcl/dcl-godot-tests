@@ -228,7 +228,7 @@ func _fail_if_not_watching(object):
 	var did_fail = false
 	if(!_signal_watcher.is_watching_object(object)):
 		_fail(str('Cannot make signal assertions because the object ', object, \
-				  ' is not being watched.  Call watch_signals(some_object) to be able to make assertions about signals.'))
+				' is not being watched.  Call watch_signals(some_object) to be able to make assertions about signals.'))
 		did_fail = true
 	return did_fail
 
@@ -254,7 +254,7 @@ func _fail_if_parameters_not_array(parameters):
 func _create_obj_from_type(type):
 	var obj = null
 	if type.is_class("PackedScene"):
-		obj = type.instance()
+		obj = type.instantiate()
 		add_child(obj)
 	else:
 		obj = type.new()
@@ -263,8 +263,8 @@ func _create_obj_from_type(type):
 
 func _get_type_from_obj(obj):
 	var type = null
-	if obj.has_method(get_filename()):
-			type = load(obj.get_filename())
+	if obj.has_method(scene_file_path):
+			type = load(obj.scene_file_path)
 	else:
 			type = obj.get_script()
 	return type
@@ -1373,7 +1373,7 @@ func ignore_method_when_doubling(thing, method_name):
 	var path = double_info.path
 
 	if(double_info.is_scene()):
-		var inst = thing.instance()
+		var inst = thing.instantiate()
 		if(inst.get_script()):
 			path = inst.get_script().get_path()
 
@@ -1495,7 +1495,7 @@ func add_child_autofree(node, legible_unique_name = false):
 	gut.get_autofree().add_free(node)
 	# Explicitly calling super here b/c add_child MIGHT change and I don't want
 	# a bug sneaking its way in here.
-	.add_child(node, legible_unique_name)
+	super.add_child(node, legible_unique_name)
 	return node
 
 # ------------------------------------------------------------------------------
@@ -1505,7 +1505,7 @@ func add_child_autoqfree(node, legible_unique_name=false):
 	gut.get_autofree().add_queue_free(node)
 	# Explicitly calling super here b/c add_child MIGHT change and I don't want
 	# a bug sneaking its way in here.
-	.add_child(node, legible_unique_name)
+	super.add_child(node, legible_unique_name)
 	return node
 
 # ------------------------------------------------------------------------------

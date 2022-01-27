@@ -54,9 +54,9 @@ var Gut = load('res://addons/gut/gut.gd')
 # will punch through null values of higher precedented hashes.
 # ------------------------------------------------------------------------------
 class OptionResolver:
-	var base_opts = null
-	var cmd_opts = null
-	var config_opts = null
+	var base_opts = {}
+	var cmd_opts = {}
+	var config_opts = {}
 
 
 	func get_value(key):
@@ -87,9 +87,9 @@ class OptionResolver:
 
 	func to_s():
 		return str("base:\n", _string_it(base_opts), "\n", \
-				   "config:\n", _string_it(config_opts), "\n", \
-				   "cmd:\n", _string_it(cmd_opts), "\n", \
-				   "resolved:\n", _string_it(get_resolved_values()))
+				"config:\n", _string_it(config_opts), "\n", \
+				"cmd:\n", _string_it(cmd_opts), "\n", \
+				"resolved:\n", _string_it(get_resolved_values()))
 
 	func get_resolved_values():
 		var to_return = {}
@@ -214,13 +214,13 @@ option (option priority:  command-line, .gutconfig, default)."""
 	resolved.erase("show_help")
 
 	print("Here's a config with all the properties set based off of your current command and config.")
-	print(JSON.print(resolved, '  '))
+	print(JSON.new().stringify(resolved, '  '))
 
 	for key in resolved:
 		resolved[key] = null
 
 	print("\n\nAnd here's an empty config for you fill in what you want.")
-	print(JSON.print(resolved, ' '))
+	print(JSON.new().stringify(resolved, ' '))
 
 
 # parse options and run Gut
@@ -262,8 +262,8 @@ func _run_gut():
 
 			_tester = Gut.new()
 			get_root().add_child(_tester)
-			_tester.connect('tests_finished', self, '_on_tests_finished',
-				[_final_opts.should_exit, _final_opts.should_exit_on_success])
+			_tester.connect('tests_finished', Callable(self, '_on_tests_finished'),
+					[_final_opts.should_exit, _final_opts.should_exit_on_success])
 			_gut_config.apply_options(_tester)
 
 			var run_others = _final_opts.selected == null

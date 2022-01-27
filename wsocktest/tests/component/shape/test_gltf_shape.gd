@@ -7,7 +7,7 @@ var utils = TestUtils.new()
 func test_gltf_creation():
 	# Create a scene with a entity
 
-	var scene = autoqfree(Server.SCENE.instance())
+	var scene = autoqfree(Server.SCENE.instantiate())
 	add_child(scene)
 
 	var entity_id = "1"
@@ -41,7 +41,7 @@ func test_gltf_creation():
 
 	var index = 0
 	for i in entity.get_children():
-		assert_is(i, MeshInstance)
+		assert_is(i, MeshInstance3D)
 		assert_eq(i.mesh, content_inst.get_child(index).mesh)
 		assert_not_null(i.mesh)
 
@@ -53,7 +53,7 @@ func test_gltf_creation():
 func test_glb_creation():
 	# Create a scene with a entity
 
-	var scene = autoqfree(Server.SCENE.instance())
+	var scene = autoqfree(Server.SCENE.instantiate())
 	add_child(scene)
 
 	var entity_id = "1"
@@ -87,7 +87,7 @@ func test_glb_creation():
 
 	var index = 0
 	for i in entity.get_children():
-		assert_true(i is MeshInstance)
+		assert_true(i is MeshInstance3D)
 		assert_eq(i.mesh, content_inst.get_child(index).mesh)
 		assert_not_null(i.mesh)
 

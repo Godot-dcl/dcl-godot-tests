@@ -239,7 +239,7 @@ window/vsync/use_vsync=false
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/protobuf/plugin.cfg", "res://addons/scene_debugger/plugin.cfg")
+enabled=PackedStringArray("res://addons/gut/plugin.cfg", "res://addons/protobuf/plugin.cfg", "res://addons/scene_debugger/plugin.cfg")
 
 [input]
 

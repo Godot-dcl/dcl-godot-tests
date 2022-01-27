@@ -7,7 +7,7 @@ var utils = TestUtils.new()
 func test_uuid_callback_component():
 	# Create a scene with a entity
 
-	var scene = autoqfree(Server.SCENE.instance())
+	var scene = autoqfree(Server.SCENE.instantiate())
 	add_child(scene)
 
 	var entity_id = "1"
@@ -29,8 +29,8 @@ func test_uuid_callback_component():
 		"showFeedback": true,
 	}
 
-	utils.update_entity_component(
-			scene, entity_id, DCL_UUIDCallback._classid, to_json(data))
+	utils.update_entity_component(scene, entity_id, DCL_UUIDCallback._classid,
+			JSON.new().stringify(data))
 
 	assert_true(scene.has_meta("events"))
 

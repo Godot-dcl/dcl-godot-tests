@@ -326,7 +326,7 @@ func _end_yield_terminal():
 func _yield_text_gui(text):
 	var lbl = _gut.get_gui().get_waiting_label()
 	lbl.visible = true
-	lbl.set_bbcode('[color=yellow]' + text + '[/color]')
+	lbl.append_text('[color=yellow]' + text + '[/color]')
 
 func _end_yield_gui():
 	var lbl = _gut.get_gui().get_waiting_label()

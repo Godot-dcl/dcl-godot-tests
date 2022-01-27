@@ -74,6 +74,9 @@ func check_input():
 
 
 func send_request(action, type):
+	if Server.player == null:
+		return
+
 	var response = {
 		"eventType": "actionButtonEvent",
 		"sceneId": Server.player.current_scene_id(),

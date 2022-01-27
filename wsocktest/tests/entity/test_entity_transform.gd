@@ -7,7 +7,7 @@ var utils = TestUtils.new()
 func test_entity_transformation():
 	# Create a scene with a entity
 
-	var scene = autoqfree(Server.SCENE.instance())
+	var scene = autoqfree(Server.SCENE.instantiate())
 	add_child(scene)
 
 	var entity_id = "1"
@@ -17,7 +17,7 @@ func test_entity_transformation():
 
 	var trans_comp = Server.PROTO.PB_Transform.new()
 
-	var rotation = Quat(12, -9, 5, -2)
+	var rotation = Quaternion(12, -9, 5, -2)
 	trans_comp.new_rotation().set_x(rotation.x)
 	trans_comp.get_rotation().set_y(rotation.y)
 	trans_comp.get_rotation().set_z(rotation.z)
@@ -36,7 +36,7 @@ func test_entity_transformation():
 	utils.update_entity_component(scene, entity_id, DCL_Transform._classid,
 			Marshalls.raw_to_base64(trans_comp.to_bytes()))
 
-	var trans = Transform(rotation).scaled(scale)
+	var trans = Transform3D(rotation).scaled(scale)
 	trans.origin = position
 
 	assert_eq(entity.transform, trans, "Transform values modified")

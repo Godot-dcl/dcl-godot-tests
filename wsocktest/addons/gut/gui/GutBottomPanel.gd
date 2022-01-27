@@ -1,4 +1,4 @@
-tool
+@tool
 extends Control
 
 const RUNNER_JSON_PATH = 'res://.gut_editor_config.json'
@@ -20,7 +20,7 @@ var _open_editors = null
 var _last_selected_path = null
 
 
-onready var _ctrls = {
+@onready var _ctrls = {
 	output = $layout/RSplit/CResults/Output,
 	run_button = $layout/ControlBar/RunAll,
 	settings = $layout/RSplit/sc/Settings,
@@ -80,9 +80,9 @@ func _set_font(rtl, font_name, custom_name):
 	if(font_name == null):
 		rtl.set('custom_fonts/' + custom_name, null)
 	else:
-		var dyn_font = DynamicFont.new()
-		var font_data = DynamicFontData.new()
-		font_data.font_path = 'res://addons/gut/fonts/' + font_name + '.ttf'
+		var dyn_font = Font.new()
+		var font_data = FontData.new()
+		font_data.load_dynamic_font('res://addons/gut/fonts/' + font_name + '.ttf')
 		font_data.antialiased = true
 		dyn_font.font_data = font_data
 		rtl.set('custom_fonts/' + custom_name, dyn_font)
@@ -139,7 +139,7 @@ func _show_errors(errs):
 	for e in errs:
 		text += str('*  ', e, "\n")
 	text += "[right]Check your settings here ----->[/right]"
-	_ctrls.output.bbcode_text = text
+	_ctrls.output.text = text
 
 
 func _run_tests():
@@ -286,15 +286,15 @@ func _on_txtTest_focus_exited():
 # ---------------
 
 func load_result_output():
-	_ctrls.output.bbcode_text = get_file_as_text(RESULT_FILE)
+	_ctrls.output.text = get_file_as_text(RESULT_FILE)
 	_ctrls.output.grab_focus()
 	_ctrls.output.scroll_to_line(_ctrls.output.get_line_count() -1)
 
 	var summary = get_file_as_text(RESULT_JSON)
-	var results = JSON.parse(summary)
-	if(results.error != OK):
+	var results = JSON.new()
+	if(results.parse(summary) != OK):
 		return
-	var summary_json = results.result['test_scripts']['props']
+	var summary_json = results.get_data()['test_scripts']['props']
 	_ctrls.results.passing.text = str(summary_json.passing)
 	_ctrls.results.failing.text = str(summary_json.failures)
 	_ctrls.results.pending.text = str(summary_json.pending)
@@ -322,7 +322,7 @@ func set_current_script(script):
 
 func set_interface(value):
 	_interface = value
-	_interface.get_script_editor().connect("editor_script_changed", self, '_on_editor_script_changed')
+	_interface.get_script_editor().connect("editor_script_changed", Callable(self, '_on_editor_script_changed'))
 	set_current_script(_interface.get_script_editor().get_current_script())
 	# TODO start using the open editors to do some sweet sweet run-at-cursor
 	# action in the editor.  If I didn't stop before implementing this then

@@ -10,7 +10,7 @@ var utils = TestUtils.new()
 func test_box_creation():
 	# Create a scene with a entity
 
-	var scene = autoqfree(Server.SCENE.instance())
+	var scene = autoqfree(Server.SCENE.instantiate())
 	add_child(scene)
 
 	var entity_id = "1"
@@ -24,7 +24,7 @@ func test_box_creation():
 			DCL_BoxShape._classid, component_id).mesh_instance
 
 	assert_not_null(comp_mesh_inst.mesh)
-	assert_true(comp_mesh_inst.mesh is CubeMesh, "Cube mesh generated")
+	assert_true(comp_mesh_inst.mesh is BoxMesh, "Box mesh generated")
 
 	# Attach the component to the entity
 
@@ -33,7 +33,7 @@ func test_box_creation():
 	assert_eq(entity.get_child_count(), 1)
 
 	var entity_mesh_inst = entity.get_child(0)
-	assert_true(entity_mesh_inst is MeshInstance, "Mesh attached to the entity")
+	assert_true(entity_mesh_inst is MeshInstance3D, "Mesh attached to the entity")
 
 	assert_not_null(entity_mesh_inst.mesh)
 	assert_eq(entity_mesh_inst.mesh, comp_mesh_inst.mesh,
@@ -43,7 +43,7 @@ func test_box_creation():
 func test_plane_creation():
 	# Create a scene with a entity
 
-	var scene = autoqfree(Server.SCENE.instance())
+	var scene = autoqfree(Server.SCENE.instantiate())
 	add_child(scene)
 
 	var entity_id = "1"
@@ -60,7 +60,7 @@ func test_plane_creation():
 	assert_true(comp_mesh_inst.mesh is QuadMesh, "Plane mesh generated")
 
 	var plane_dimensions = {"width": 7.3, "height": 1.56}
-	utils.update_component(scene, component_id, to_json(plane_dimensions))
+	utils.update_component(scene, component_id, JSON.new().stringify(plane_dimensions))
 
 	assert_eq(comp_mesh_inst.mesh.size,
 			Vector2(plane_dimensions["width"], plane_dimensions["height"]),
@@ -73,7 +73,7 @@ func test_plane_creation():
 	assert_eq(entity.get_child_count(), 1)
 
 	var entity_mesh_inst = entity.get_child(0)
-	assert_true(entity_mesh_inst is MeshInstance, "Mesh attached to the entity")
+	assert_true(entity_mesh_inst is MeshInstance3D, "Mesh attached to the entity")
 
 	assert_not_null(entity_mesh_inst.mesh)
 	assert_eq(entity_mesh_inst.mesh, comp_mesh_inst.mesh,
@@ -83,7 +83,7 @@ func test_plane_creation():
 func test_sphere_creation():
 	# Create a scene with a entity
 
-	var scene = autoqfree(Server.SCENE.instance())
+	var scene = autoqfree(Server.SCENE.instantiate())
 	add_child(scene)
 
 	var entity_id = "1"
@@ -106,7 +106,7 @@ func test_sphere_creation():
 	assert_eq(entity.get_child_count(), 1)
 
 	var entity_mesh_inst = entity.get_child(0)
-	assert_true(entity_mesh_inst is MeshInstance, "Mesh attached to the entity")
+	assert_true(entity_mesh_inst is MeshInstance3D, "Mesh attached to the entity")
 
 	assert_not_null(entity_mesh_inst.mesh)
 	assert_eq(entity_mesh_inst.mesh, comp_mesh_inst.mesh,
@@ -119,7 +119,7 @@ func test_sphere_creation():
 func test_single_entity_multi_shape_collision():
 	# Create a scene with the entity
 
-	var scene = autoqfree(Server.SCENE.instance())
+	var scene = autoqfree(Server.SCENE.instantiate())
 	add_child(scene)
 
 	var entity_id = "1"

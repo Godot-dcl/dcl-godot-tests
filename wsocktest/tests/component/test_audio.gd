@@ -7,7 +7,7 @@ var utils = TestUtils.new()
 func test_audio_source_creation():
 	# Create a scene with a entity
 
-	var scene = autoqfree(Server.SCENE.instance())
+	var scene = autoqfree(Server.SCENE.instantiate())
 	add_child(scene)
 
 	var entity_id = "1"
@@ -49,7 +49,7 @@ func test_audio_source_creation():
 		"pitch": 0.75,
 	}
 	utils.update_entity_component(
-			scene, entity_id, DCL_AudioSource._classid, to_json(data))
+			scene, entity_id, DCL_AudioSource._classid, JSON.new().stringify(data))
 	assert_eq(entity.get_child_count(), 1)
 
 	var entity_audio_src = entity.get_node("AudioSource")
@@ -69,7 +69,7 @@ func test_audio_source_creation():
 func test_audio_clip_mp3_creation():
 	# Create a scene with a entity
 
-	var scene = autoqfree(Server.SCENE.instance())
+	var scene = autoqfree(Server.SCENE.instantiate())
 	add_child(scene)
 
 	var entity_id = "1"
@@ -101,7 +101,7 @@ func test_audio_clip_mp3_creation():
 		"volume": 0.5,
 		"loop": true,
 	}
-	utils.update_component(scene, component_id, to_json(data))
+	utils.update_component(scene, component_id, JSON.new().stringify(data))
 	assert_eq(content_inst, component.audio_clip)
 	assert_eq(component.volume, data.volume)
 	assert_eq(component.audio_clip.loop, data.loop)

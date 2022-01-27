@@ -4,7 +4,7 @@ extends "res://addons/gut/test.gd"
 func test_entity_creation():
 	# Create a scene with the first entity
 
-	var scene = autoqfree(Server.SCENE.instance())
+	var scene = autoqfree(Server.SCENE.instantiate())
 	add_child(scene)
 
 	var msg = Server.PROTO.PB_SendSceneMessage.new()
@@ -34,7 +34,7 @@ func test_entity_parenting():
 	var entity_id = "2"
 	var parent_entity_id = "3"
 
-	var scene = autoqfree(Server.SCENE.instance())
+	var scene = autoqfree(Server.SCENE.instantiate())
 	add_child(scene)
 
 	var msg = Server.PROTO.PB_SendSceneMessage.new()
@@ -70,7 +70,7 @@ func test_entity_parenting():
 func test_entity_removal():
 	# Create a scene with a entity
 
-	var scene = autoqfree(Server.SCENE.instance())
+	var scene = autoqfree(Server.SCENE.instantiate())
 	add_child(scene)
 
 	assert_not_null(scene)
@@ -89,7 +89,7 @@ func test_entity_removal():
 	msg = Server.PROTO.PB_SendSceneMessage.new()
 	msg.new_removeEntity().set_id(entity_id)
 
-	yield(get_tree(), "idle_frame")
+	await get_tree().process_frame
 
 	assert_false(scene.entities.has(entity_id),
 			"Entity was removed from the list of entities")

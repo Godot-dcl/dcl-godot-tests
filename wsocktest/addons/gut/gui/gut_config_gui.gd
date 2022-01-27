@@ -15,6 +15,7 @@ func _init(cont):
 	_base_control.mouse_filter = _base_control.MOUSE_FILTER_PASS
 	
 	var lbl = Label.new()
+	lbl.name = "Label"
 	lbl.size_flags_horizontal = lbl.SIZE_EXPAND_FILL
 	lbl.mouse_filter = lbl.MOUSE_FILTER_STOP
 	_base_control.add_child(lbl)
@@ -41,10 +42,10 @@ func _add_title(text):
 	var lbl = row.get_node('Label')
 	
 	lbl.text = text
-	lbl.align = Label.ALIGN_CENTER
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_base_container.add_child(row)
 	
-	row.connect('draw', self, '_on_title_cell_draw', [row])
+	row.connect('draw', Callable(self, '_on_title_cell_draw'), [row])
 
 
 func _add_number(key, value, disp_text, v_min, v_max, hint=''):
@@ -78,7 +79,7 @@ func _add_value(key, value, disp_text, hint=''):
 
 func _add_boolean(key, value, disp_text, hint=''):
 	var value_ctrl = CheckBox.new()
-	value_ctrl.pressed = value
+	value_ctrl.button_pressed = value
 	
 	var ctrl = _new_row(key, disp_text, value_ctrl, hint)
 
@@ -165,20 +166,20 @@ func get_options(base_opts):
 	var to_return = base_opts.duplicate()
 
 	to_return.log_level = _cfg_ctrls.log_level.value
-	to_return.ignore_pause = _cfg_ctrls.ignore_pause.pressed
-	to_return.should_exit = _cfg_ctrls.should_exit.pressed
-	to_return.should_exit_on_success = _cfg_ctrls.should_exit_on_success.pressed
-	to_return.should_maximize = _cfg_ctrls.should_maximize.pressed
+	to_return.ignore_pause = _cfg_ctrls.ignore_pause.button_pressed
+	to_return.should_exit = _cfg_ctrls.should_exit.button_pressed
+	to_return.should_exit_on_success = _cfg_ctrls.should_exit_on_success.button_pressed
+	to_return.should_maximize = _cfg_ctrls.should_maximize.button_pressed
 	to_return.opacity = _cfg_ctrls.opacity.value
 
 	to_return.junit_xml_file = _cfg_ctrls.junit_xml_file.text
-	to_return.junit_xml_timestamp = _cfg_ctrls.junit_xml_timestamp.pressed
+	to_return.junit_xml_timestamp = _cfg_ctrls.junit_xml_timestamp.button_pressed
 
 	to_return.font_name = _cfg_ctrls.font_name.get_item_text(
 		_cfg_ctrls.font_name.selected)
 	to_return.font_size = _cfg_ctrls.font_size.value
 
-	to_return.include_subdirs = _cfg_ctrls.include_subdirs.pressed
+	to_return.include_subdirs = _cfg_ctrls.include_subdirs.button_pressed
 	var dirs = []
 	for i in range(DIRS_TO_LIST):
 		var key = str('directory_', i)

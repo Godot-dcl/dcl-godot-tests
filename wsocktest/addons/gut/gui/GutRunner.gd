@@ -22,7 +22,7 @@ func _setup_gut():
 
 	_gut_config.load_options(RUNNER_JSON_PATH)
 
-	_gut.connect('tests_finished', self, '_on_tests_finished',
+	_gut.connect('tests_finished', Callable(self, '_on_tests_finished'),
 		[_gut_config.options.should_exit, _gut_config.options.should_exit_on_success])
 
 	_gut_config.config_gut(_gut)
@@ -34,7 +34,7 @@ func _setup_gut():
 func _write_results():
 	# bbcode_text appears to be empty.  I'm not 100% sure why.  Until that is
 	# figured out we have to just get the text which stinks.
-	var content = _gut.get_gui().get_text_box().text
+	var content = _gut.get_gui().get_text_box().get_parsed_text()
 
 	var f = File.new()
 	var result = f.open(RESULT_FILE, f.WRITE)

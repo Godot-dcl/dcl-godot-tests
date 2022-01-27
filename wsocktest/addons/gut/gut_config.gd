@@ -68,26 +68,27 @@ func _load_options_from_config_file(file_path, into):
 	var json = f.get_as_text()
 	f.close()
 
-	var results = JSON.parse(json)
 	# SHORTCIRCUIT
-	if(results.error != OK):
+	var results = JSON.new()
+	if(results.parse(json) != OK):
 		print("\n\n",'!! ERROR parsing file:  ', file_path)
-		print('    at line ', results.error_line, ':')
-		print('    ', results.error_string)
+		print('    at line ', results.get_error_line(), ':')
+		print('    ', results.get_error_message())
 		return -1
 
 	# Get all the options out of the config file using the option name.  The
 	# options hash is now the default source of truth for the name of an option.
+	var data = results.get_data()
 	for key in into:
-		if(results.result.has(key)):
-			if(results.result[key] != null):
-				into[key] = results.result[key]
+		if(data.has(key)):
+			if(data[key] != null):
+				into[key] = data[key]
 
 	return 1
 
 
 func write_options(path):
-	var content = JSON.print(options, ' ')
+	var content = JSON.new().stringify(options, ' ')
 
 	var f = File.new()
 	var result = f.open(path, f.WRITE)

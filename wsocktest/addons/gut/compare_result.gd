@@ -1,7 +1,11 @@
-var are_equal = null setget set_are_equal, get_are_equal
-var summary = null setget set_summary, get_summary
-var max_differences = 30 setget set_max_differences, get_max_differences
-var differences = {} setget set_differences, get_differences
+var are_equal = null:
+	set = set_are_equal, get = get_are_equal
+var summary = null:
+	set = set_summary, get = get_summary
+var max_differences = 30:
+	set = set_max_differences, get = get_max_differences
+var differences = {}:
+	set = set_differences, get = get_differences
 
 func _block_set(which, val):
 	push_error(str('cannot set ', which, ', value [', val, '] ignored.'))
