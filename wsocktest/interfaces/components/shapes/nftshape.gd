@@ -114,7 +114,7 @@ func _get_ntf_data(url: String) -> int:
 		return ERR_INVALID_DATA
 
 func attach_to(entity):
-	entity.add_child(mesh_instance.duplicate())
+	entity.add_child(mesh_instance)
 
 func _update_picture_frame():
 	var new_size : Vector2
