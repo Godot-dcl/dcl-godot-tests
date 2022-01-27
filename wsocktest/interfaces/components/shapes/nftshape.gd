@@ -119,9 +119,10 @@ func attach_to(entity):
 func _update_picture_frame():
 	var new_size : Vector2
 	if aspect_ratio >= 1:
-		new_size = Vector2(aspect_ratio, 1)
+		new_size = Vector2(aspect_ratio, 1.0)
 	else:
-		new_size = Vector2(1, 1.0 / aspect_ratio)
+		new_size = Vector2(1.0, 1.0 / aspect_ratio)
+	new_size *= 0.5 #I think the base size for the nft image is 0.5x0.5
 	mesh_instance.mesh.size = new_size
 	frame.color = Color(color.r, color.g, color.b)
 	frame.set_style(style, new_size)
