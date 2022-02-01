@@ -35,7 +35,7 @@ func create(msg, p_peer, is_global):
 		transform.origin = Vector3(msg.payload.basePosition.x, 0, msg.payload.basePosition.y) * parcel_size
 
 	# TODO: this should be called after all contents are loaded
-	#await get_tree().create_timer(2).timeout
+	await Server.get_tree().create_timer(2).timeout
 	var response = {"eventType":"SceneReady", "payload": {"sceneId": id}}
 	Server.send({"type": "ControlEvent", "payload": json.stringify(response)}, peer)
 
