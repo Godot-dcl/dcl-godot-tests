@@ -70,7 +70,7 @@ func _get_ntf_data(url: String) -> int:
 	var http = HTTPRequest.new()
 	scene.add_child(http)
 
-	var res = http.request(OPENSEA_API_ENDPOINT + url.trim_prefix("ethereum://"))
+	var res = http.request(OPENSEA_API_ENDPOINT + url.trim_prefix("ethereum://"), ["user-agent: Mozilla/5.0 (platform; rv:geckoversion) Gecko/geckotrail Firefox/firefoxversion"])
 	var response = await http.request_completed
 
 	if res != OK:
