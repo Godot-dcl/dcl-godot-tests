@@ -33,8 +33,14 @@ __meta__ = {
 }
 
 [node name="EntityHovered" type="MarginContainer" parent="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -133.5
+offset_top = 52.0
+offset_right = 133.5
+offset_bottom = 105.0
 grow_horizontal = 2
 theme_override_constants/margin_bottom = 20
 __meta__ = {
@@ -42,9 +48,10 @@ __meta__ = {
 }
 
 [node name="Action" type="Label" parent="Control/EntityHovered"]
-offset_right = 1024.0
-offset_bottom = 580.0
+offset_right = 267.0
+offset_bottom = 33.0
 size_flags_vertical = 5
+horizontal_alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
