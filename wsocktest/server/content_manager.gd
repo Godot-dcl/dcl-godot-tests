@@ -24,7 +24,7 @@ func load_contents(payload):
 				"glb", "gltf", "mp3", "ogv", "ogg", "webm":
 					file_name = "user://%s.%s" % [content.hash, ext]
 				"png", "bin":
-					file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
+					file_name = "user://%s" % content.file.get_file()
 				_:
 					push_warning("*** undefined extension")
 
@@ -119,14 +119,14 @@ func downloaded_png(_result, response_code, _headers, body, content):
 	if response_code >= 200 and response_code < 300:
 		var image = Image.new()
 		if image.load_png_from_buffer(body) == OK:
-			var file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
+			var file_name = "user://%s" % content.file.get_file()
 			image.save_png(file_name)
 
 
 func downloaded_bin(_result, response_code, _headers, body, content):
 	if response_code >= 200 and response_code < 300:
 		var f = File.new()
-		var file_name = "user://%s" % content.file.right(content.file.rfind("/") + 1)
+		var file_name = "user://%s" % content.file.get_file()
 		if f.open(file_name, File.WRITE) == OK:
 			f.store_buffer(body)
 			f.close()
@@ -178,7 +178,7 @@ func cache_file(content):
 				contents[f].asset = v
 			"png":
 				var i = Image.new()
-				i.load("user://%s" % content.file.right(content.file.rfind("/") + 1))
+				i.load("user://%s" % content.file.get_file())
 				contents[f].asset = i
 
 			_:
