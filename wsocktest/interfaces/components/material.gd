@@ -63,7 +63,7 @@ func update(data):
 
 func attach_to(entity):
 	if entity.has_node("shape"):
-		entity.get_node("shape").set("material/0", material)
+		entity.get_node("shape").mesh.surface_set_material(0, material)
 
 func _on_albedo_texture_changed(value):
 	material.albedo_texture = value

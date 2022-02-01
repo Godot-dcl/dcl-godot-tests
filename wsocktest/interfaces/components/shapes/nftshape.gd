@@ -17,7 +17,7 @@ func _init(_name, _scene, _id):
 	var plane = QuadMesh.new()
 	plane.size = Vector2(1,1)
 	mesh_instance.mesh = plane
-	mesh_instance.set_surface_override_material(0, material)
+	mesh_instance.mesh.surface_set_material(0, material)
 
 	material.params_cull_mode = StandardMaterial3D.CULL_DISABLED
 	material.flags_transparent = true

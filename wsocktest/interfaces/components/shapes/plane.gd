@@ -17,7 +17,7 @@ func _init(_name, _scene, _id):
 	var plane = QuadMesh.new()
 	plane.size = Vector2(width,height)
 	mesh_instance.mesh = plane
-	mesh_instance.set("material/0", material)
+	mesh_instance.mesh.surface_set_material(0, material)
 	
 
 

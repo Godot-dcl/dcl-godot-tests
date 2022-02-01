@@ -11,4 +11,4 @@ func _init(_name, _scene, _id):
 	cone.top_radius = 0.0
 	cone.bottom_radius = 1.0
 	mesh_instance.mesh = cone
-	mesh_instance.set_surface_override_material(0, material)
+	mesh_instance.mesh.surface_set_material(0, material)
