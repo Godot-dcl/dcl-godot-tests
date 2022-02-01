@@ -161,7 +161,7 @@ func cache_file(content):
 				var s := AudioStreamMP3.new()
 				var file = File.new()
 				file.open("user://%s.%s" % [content.hash, ext], File.READ)
-				s.data = file.get_buffer(file.get_len())
+				s.data = file.get_buffer(file.get_length())
 				file.close()
 				contents[f].asset = s
 
