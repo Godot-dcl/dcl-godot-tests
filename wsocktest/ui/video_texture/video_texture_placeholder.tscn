@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3 uid="uid://b4oj5ytoba4ns"]
+
+[ext_resource type="Font" path="res://fonts/inter/default_text.tres" id="1_lti13"]
+
+[node name="VideoTexturePlaceholder" type="SubViewport"]
+size = Vector2i(1024, 600)
+render_target_update_mode = 4
+
+[node name="bg" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.184314, 0.188235, 0.282353, 1)
+
+[node name="text" type="Label" parent="bg"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2(1024, 600)
+theme_override_fonts/font = ExtResource( "1_lti13" )
+theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3

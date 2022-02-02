@@ -13,7 +13,8 @@ var videoClipId: String
 
 var video_player: VideoStreamPlayer
 
-var viewports = [] # to queue free when deleting the component
+const VIEWPORT_SCENE = preload("res://ui/video_texture/video_texture_placeholder.tscn")
+var viewport: SubViewport
 
 var texture: Texture
 signal texture_changed(new_texture)
@@ -25,8 +26,10 @@ func _init(_name, _scene, _id):
 	video_player.connect("finished", Callable(self, "_on_finished"))
 	video_player.hide()
 	video_player.name = name + str(get_instance_id())
-
+	viewport = VIEWPORT_SCENE.instantiate()
+	scene.add_child(viewport)
 	scene.add_child(video_player)
+	
 
 
 func update(data):
@@ -36,33 +39,39 @@ func update(data):
 		return
 
 	var json = parser.get_data()
-
+	
+	var clip: DCL_VideoClip
 	if json.has("videoClipId"):
 		videoClipId = json.videoClipId
-		var clip: DCL_VideoClip = scene.components[videoClipId]
+		clip = scene.components[videoClipId]
 
 		if clip.status == DCL_VideoClip.STATUS_PREPARING:
-			texture = _create_error_texture("Buffering...", scene, viewports)
+			texture = _update_viewport("Buffering...")
 			emit_signal("texture_changed", texture)
 
 		while clip.status == DCL_VideoClip.STATUS_PREPARING:
 			await scene.get_tree().process_frame
 
 		if clip.status == DCL_VideoClip.STATUS_ERRORED:
-			texture = _create_error_texture("Could not load: \n" + clip.url, scene, viewports)
+			texture = _update_viewport("Could not load: \n" + clip.url)
 			emit_signal("texture_changed", texture)
 
 		elif clip.status == DCL_VideoClip.STATUS_READY and videoClipId == json.videoClipId:
-			video_player.stream = clip.video_clip
-			texture = video_player.get_video_texture()
+			texture = _update_viewport("")
 			emit_signal("texture_changed", texture)
+			pass
 
 
 	if json.has("playing"):
 		playing = json.playing
 		if playing:
+			video_player.stream = clip.video_clip
+			texture = video_player.get_video_texture()
+			emit_signal("texture_changed", texture)
 			video_player.play()
 		else:
+			texture = _update_viewport("")
+			emit_signal("texture_changed", texture)
 			video_player.stop()
 
 	if json.has("volume"):
@@ -82,34 +91,11 @@ func update(data):
 func _on_finished():
 	if loop:
 		video_player.play()
-
-
-static func _create_error_texture(text: String, scene, viewports: Array ) -> Texture:
-	var ret: Texture
-	var vport_name = "error_texture" + str(text.hash())
-	if scene.has_node(vport_name):
-		ret = scene.get_node(vport_name).get_texture()
 	else:
-		var font = load("res://fonts/inter/default_text.tres")
+		texture = _update_viewport("")
+		emit_signal("texture_changed", texture)
 
-		var vport = SubViewport.new()
-		vport.name = vport_name
-		vport.size = Vector2(640, 480)
-		vport.render_target_update_mode = SubViewport.UPDATE_ONCE
-		#vport.render_target_v_flip = true
+func _update_viewport(text : String) -> ViewportTexture:
+	viewport.get_node("bg/text").set_text(text)
+	return viewport.get_texture()
 
-		scene.add_child(vport)
-		viewports.append(vport)
-
-		var label = Label.new()
-		vport.add_child(label)
-
-		label.add_theme_font_override("font", font)
-		label.rect_min_size = vport.size
-		label.autowrap_mode = Label.AUTOWRAP_WORD_SMART
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		label.text = text
-		ret = vport.get_texture()
-
-	return ret

@@ -29,7 +29,9 @@ func update(data):
 	if json.has("albedoTexture"):
 		var tex_component = scene.components[json.albedoTexture]
 		# the texture reference in the component can change after it was assigned. Keep it up to date
-		if tex_component.has_user_signal("texture_changed"):
+		if tex_component is DCL_VideoTexture:
+			material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		if tex_component.has_signal("texture_changed"):
 			tex_component.texture_changed.connect(_on_albedo_texture_changed)
 		material.albedo_texture = tex_component.texture
 
@@ -37,8 +39,11 @@ func update(data):
 		material.emission_enabled = true
 		var tex_component = scene.components[json.emissiveTexture]
 		# the texture reference in the component can change after it was assigned. Keep it up to date
-		if tex_component.has_user_signal("texture_changed"):
+		if tex_component.has_signal("texture_changed"):
 			tex_component.texture_changed.connect(_on_emissive_texture_changed)
+		if tex_component is DCL_VideoTexture:
+			material.cull_mode = BaseMaterial3D.CULL_DISABLED
+			material.emission_operator = BaseMaterial3D.EMISSION_OP_MULTIPLY
 		material.emission_texture = tex_component.texture
 
 	if json.has("emissiveIntensity"):
