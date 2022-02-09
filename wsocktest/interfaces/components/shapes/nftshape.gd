@@ -4,12 +4,18 @@ class_name DCL_NFTShape
 const _classid = 22
 const OPENSEA_API_ENDPOINT = "https://api.opensea.io/api/v1/asset/"
 
+var PictureFrameStyle = NFTPictureFrame.PictureFrameStyle
+const PICTURE_FRAME_SCENE = preload("res://ui/nftshape/NFTPictureFrame.tscn")
+
 var src : String
-var color := Color(0.6404918, 0.611472, 0.8584906)
-var style := 0
+var color := {"r": 0.6404918, "g": 0.611472, "b": 0.8584906 }
+var style : int = PictureFrameStyle.Classic
 
 var nft_data : Dictionary
 var image := Image.new()
+var aspect_ratio := 1.0
+
+var frame : NFTPictureFrame
 
 func _init(_name, _scene, _id):
 	super(_name, _scene, _id)
@@ -17,14 +23,18 @@ func _init(_name, _scene, _id):
 	var plane = QuadMesh.new()
 	plane.size = Vector2(1,1)
 	mesh_instance.mesh = plane
-	mesh_instance.mesh.surface_set_material(0, material)
+	mesh_instance.set_surface_override_material(0, material)
 
 	material.params_cull_mode = StandardMaterial3D.CULL_DISABLED
+	material.flags_unshaded = true
 	material.flags_transparent = true
 
-	#material.albedo_color = color  # Do not use for now or it'll tint the texture
+	frame = PICTURE_FRAME_SCENE.instantiate()
+	mesh_instance.add_child(frame)
+	_update_picture_frame()
+
+
 	name = "NFT Shape"
-	pass
 
 func update(data):
 	super.update(data)
@@ -34,6 +44,15 @@ func update(data):
 		# handle error
 		return
 	var json = parser.get_data()
+	
+	if json.has("color"):
+		self.color = json.color
+		_update_picture_frame()
+		
+	if json.has("style"):
+		style = int(json.style)
+		_update_picture_frame()
+	
 	if json.has("src"):
 		src = json.src
 
@@ -55,11 +74,15 @@ func update(data):
 		var new_image = ContentManager.get_instance(filename + ".png")
 
 		# No need to recreate the texture if the image doesn't change
-		if image != new_image:
+		if new_image != null and image != new_image:
 			image = new_image
+			var image_size = new_image.get_size()
+			if image_size.y != 0:
+				aspect_ratio = image_size.x / float(image_size.y)
 			var tex = ImageTexture.new()
 			tex.create_from_image(image)
 			material.albedo_texture = tex
+			_update_picture_frame()
 
 
 func _get_ntf_data(url: String) -> int:
@@ -91,6 +114,20 @@ func _get_ntf_data(url: String) -> int:
 		return OK
 	else:
 		return ERR_INVALID_DATA
+
+func attach_to(entity):
+	entity.add_child(mesh_instance)
+
+func _update_picture_frame():
+	var new_size : Vector2
+	if aspect_ratio >= 1:
+		new_size = Vector2(aspect_ratio, 1.0)
+	else:
+		new_size = Vector2(1.0, 1.0 / aspect_ratio)
+	new_size *= 0.5 #I think the base size for the nft image is 0.5x0.5
+	mesh_instance.mesh.size = new_size
+	frame.color = Color(color.r, color.g, color.b)
+	frame.set_style(style, new_size)
 
 
 func _get_external_image(url: String, filename: String) -> int:
