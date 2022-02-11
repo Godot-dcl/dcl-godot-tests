@@ -27,26 +27,26 @@ func _init(_name, _scene, _id).(_name, _scene, _id):
 	material.params_cull_mode = SpatialMaterial.CULL_DISABLED
 	material.flags_unshaded = true
 	material.flags_transparent = true
-	
+
 	frame = PICTURE_FRAME_SCENE.instance()
 	mesh_instance.add_child(frame)
 	_update_picture_frame()
-	
+
 	name = "NFT Shape"
 
 
 func update(data):
 	.update(data)
 	var json = JSON.parse(data).result
-	
+
 	if json.has("color"):
 		self.color = json.color
 		_update_picture_frame()
-		
+
 	if json.has("style"):
 		style = int(json.style)
 		_update_picture_frame()
-	
+
 	if json.has("src"):
 		src = json.src
 
@@ -66,14 +66,14 @@ func update(data):
 		var load_result = ContentManager.load_external_contents(nft_data.image_url)
 		while load_result is GDScriptFunctionState:
 			load_result = yield(load_result, "completed")
-		
+
 		if not load_result is ContentManager.Result:
 			return
-		
+
 		if load_result.error != OK:
 			push_error("Error %s loading external content: %s" % [load_result.error, load_result.error_text])
 			return
-		
+
 		var new_image = load_result.value
 
 		# No need to recreate the texture if the image doesn't change
@@ -126,4 +126,4 @@ func _update_picture_frame():
 	mesh_instance.mesh.size = new_size
 	frame.color = Color(color.r, color.g, color.b)
 	frame.set_style(style, new_size)
-	
+

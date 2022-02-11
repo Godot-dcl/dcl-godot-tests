@@ -43,13 +43,13 @@ func load_contents(payload):
 func load_external_contents(url):
 	var ret = Result.new()
 	var file_name = url.right(url.rfind("/") + 1).to_lower() + ".png"
-	
+
 	if contents.has(file_name.to_lower()):
 		ret.value = get_instance(file_name)
 		ret.error = OK
 		ret.error_text = "Sucess"
 		return ret
-	
+
 	if file_name.get_extension() in available_extensions:
 		contents[file_name] = {
 			"file": file_name,
@@ -62,12 +62,12 @@ func load_external_contents(url):
 			contents[file_name].thread.start(self, "cache_file", contents[file_name])
 		else:
 			contents[file_name].thread.start(self, "download_external_file", contents[file_name])
-			
+
 		# Avoid blocking the main thread
 		while contents[file_name].thread.is_alive():
 			yield(get_tree(),"idle_frame")
 		return contents[file_name].thread.wait_to_finish()
-		
+
 	return ret
 
 
@@ -110,7 +110,7 @@ func download_file(info) -> Result:
 	result.push_back(info)
 	callv("downloaded_" + info.file.get_extension(), result)
 	http.queue_free()
-	
+
 	return cache_file(info)
 
 
@@ -178,7 +178,7 @@ func cache_file(content) -> Result:
 				ret.value = contents[f].asset
 				ret.error = OK
 				ret.error_text = "Sucess"
-				
+
 			"mp3":
 				var s := AudioStreamMP3.new()
 				var file = File.new()
@@ -223,7 +223,7 @@ func cache_file(content) -> Result:
 				ret.error_text = "Content Manager: Unknown file type for caching " + ext + " - " + str(content)
 				ret.error = ERR_FILE_UNRECOGNIZED
 				printerr(ret.error_text)
-	
+
 	return ret
 
 

@@ -42,7 +42,7 @@ func update(data):
 			var download = _load_external_video(url)
 			if download is GDScriptFunctionState:
 				yield(download,"completed")
-			
+
 		else:
 			video_clip = ContentManager.get_instance(url)
 		status = STATUS_READY
@@ -60,24 +60,24 @@ func _load_external_video(_url: String)-> void:
 	else:
 		push_error("wrong format for external video")
 		return
-	
+
 	file_name = "user://" + url.sha1_text() + "." + ext
-	
+
 	var http = HTTPRequest.new()
 	http.use_threads = false
-		
-	
+
+
 	http.download_file = file_name
 	scene.add_child(http)
-	
+
 	# Fetch the file
 	var fetch_res = http.request(_url)
-	var fetch_response = yield(http,"request_completed")
+	yield(http,"request_completed")
 	if fetch_res != OK:
 		printerr("****** error creating the request: ", fetch_res)
 	else:
 		ret.set_file(http.download_file)
-	
+
 	http.queue_free()
 	if url == _url: #If it doesn't match a new url was set and we no longer want the file
 		video_clip = ret
