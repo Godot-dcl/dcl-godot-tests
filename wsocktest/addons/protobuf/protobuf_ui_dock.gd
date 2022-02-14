@@ -39,7 +39,7 @@ var input_file_name = null
 var output_file_name = null
 
 func _ready():
-	var screen_size = OS.get_screen_size()
+	var screen_size = DisplayServer.screen_get_size()
 	pass
 
 func _on_InputFileButton_pressed():
