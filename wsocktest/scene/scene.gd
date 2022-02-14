@@ -80,6 +80,9 @@ func message(scene_msg):
 			DCL_ConeShape._classid:
 				components[c_id] = DCL_ConeShape.new(c_name, self, c_id)
 
+			DCL_CylinderShape._classid:
+				components[c_id] = DCL_CylinderShape.new(c_name, self, c_id)
+
 			DCL_Material._classid:
 				components[c_id] = DCL_Material.new(c_name, self, c_id)
 
