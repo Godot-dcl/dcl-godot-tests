@@ -50,7 +50,11 @@ func update(data):
 		_update_picture_frame()
 		
 	if json.has("style"):
-		style = int(json.style)
+		var _style = json.style
+		if _style is String:
+			style = PictureFrameStyle.keys().find(_style)
+		else:
+			style = int(_style)
 		_update_picture_frame()
 	
 	if json.has("src"):
