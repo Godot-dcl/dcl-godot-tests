@@ -22,6 +22,9 @@ func update(data):
 		return
 
 	var json = parser.get_data()
+	if json.has("visible"):
+		mesh_instance.visible = json.visible
+		
 	if json.has("withCollisions"):
 		mesh_instance.create_trimesh_collision()
 		var collider = mesh_instance.get_child(mesh_instance.get_child_count() -1 )
@@ -31,4 +34,4 @@ func update(data):
 
 
 func attach_to(entity):
-	entity.add_child(mesh_instance.duplicate())
+	entity.add_child(mesh_instance)
