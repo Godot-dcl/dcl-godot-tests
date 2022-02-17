@@ -34,7 +34,7 @@ Why do we need this? Godot can't load GLTF models at runtime. For that, we need 
 
 ## Getting started
 
-### Install the CLI <a href="install-the-cli" id="install-the-cli"></a>
+### Install the CLI <a href="#install-the-cli" id="install-the-cli"></a>
 
 #### To get started, install the Command Line Interface (CLI).
 
@@ -110,7 +110,7 @@ To connect the browser and Godot, you need to add a websocket server address to 
 
 Check this test scenes. Just download and `dcl start` them!
 
-[https://github.com/decentraland/kernel/blob/main/public/test-scenes/](https://github.com/decentraland/kernel/blob/main/public/test-scenes/)
+[https://github.com/decentraland-scenes/Awesome-Repository](https://github.com/decentraland-scenes/Awesome-Repository)
 
 ## Other documents of interest
 
@@ -123,3 +123,5 @@ Check this test scenes. Just download and `dcl start` them!
 [https://github.com/decentraland/kernel/blob/main/packages/shared/proto/engineinterface.proto](https://github.com/decentraland/kernel/blob/main/packages/shared/proto/engineinterface.proto)
 
 [https://github.com/decentraland/kernel/blob/fbe6def4caea5c883ec2cbbec246e02aced16145/packages/unity-interface/protobufMessagesBridge.ts#L72](https://github.com/decentraland/kernel/blob/fbe6def4caea5c883ec2cbbec246e02aced16145/packages/unity-interface/protobufMessagesBridge.ts#L72)
+
+[https://github.com/decentraland/ecs-reference/blob/master/docs-latest/decentraland-ecs.md](https://github.com/decentraland/ecs-reference/blob/master/docs-latest/decentraland-ecs.md)
