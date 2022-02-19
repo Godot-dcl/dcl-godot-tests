@@ -9,7 +9,6 @@ var animations = {} #Animation
 
 func _init(_name, _scene, _id):
 	super(_name, _scene, _id)
-	pass
 
 
 func update(data):
@@ -19,7 +18,6 @@ func update(data):
 		return
 
 	var json = parser.get_data()
-
 	if json.has("src"):
 		for m in meshes:
 			m.queue_free()
@@ -83,3 +81,17 @@ func attach_to(entity):
 		anim_tree.anim_player = anim_tree.get_path_to(anim_player)
 		anim_tree.tree_root = AnimationRootNode.new() # set a default root node
 		anim_tree.set_active(true)
+
+	super.attach_to(entity)
+
+
+func detach_from(entity):
+	for m in meshes:
+		if entity.has_child(m.name):
+			entity.get_node(m.name).queue_free()
+
+	if animations.size() > 0:
+		entity.get_node("AnimationPlayer").queue_free()
+		entity.get_node("AnimationTree").queue_free()
+
+	super.detach_from(entity)

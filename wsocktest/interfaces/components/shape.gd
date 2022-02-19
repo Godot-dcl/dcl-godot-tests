@@ -35,3 +35,11 @@ func update(data):
 
 func attach_to(entity):
 	entity.add_child(mesh_instance)
+
+	super.attach_to(entity)
+
+
+func detach_from(entity):
+	entity.remove_child(mesh_instance)
+
+	super.detach_from(entity)

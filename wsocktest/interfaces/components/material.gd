@@ -12,7 +12,6 @@ func _init(_name, _scene, _id):
 
 
 func update(data):
-
 	var parser = JSON.new()
 	var err = parser.parse(data)
 	if err != OK:
@@ -81,8 +80,19 @@ func attach_to(entity):
 	if entity.has_node("shape"):
 		entity.get_node("shape").mesh.surface_set_material(0, material)
 
+	super.attach_to(entity)
+
+
+func detach_from(entity):
+	if entity.has_node("shape"):
+		entity.get_node("shape").set("material/0", StandardMaterial3D.new())
+
+	super.detach_from(entity)
+
+
 func _on_albedo_texture_changed(value):
 	material.albedo_texture = value
+
 
 func _on_emissive_texture_changed(value):
 	material.emission_texture = value

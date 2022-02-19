@@ -33,8 +33,8 @@ func _init(_name, _scene, _id):
 	mesh_instance.add_child(frame)
 	_update_picture_frame()
 
-
 	name = "NFT Shape"
+
 
 func update(data):
 	super.update(data)
@@ -44,11 +44,11 @@ func update(data):
 		# handle error
 		return
 	var json = parser.get_data()
-	
+
 	if json.has("color"):
 		self.color = json.color
 		_update_picture_frame()
-		
+
 	if json.has("style"):
 		var _style = json.style
 		if _style is String:
@@ -56,7 +56,7 @@ func update(data):
 		else:
 			style = int(_style)
 		_update_picture_frame()
-	
+
 	if json.has("src"):
 		src = json.src
 
@@ -106,7 +106,7 @@ func _get_ntf_data(url: String) -> int:
 	var body : PackedByteArray = response[3] #body
 	var data = body.get_string_from_utf8()
 	http.queue_free()
-	
+
 	var parser = JSON.new()
 	var err = parser.parse(data)
 	if err != OK:
@@ -119,8 +119,18 @@ func _get_ntf_data(url: String) -> int:
 	else:
 		return ERR_INVALID_DATA
 
+
 func attach_to(entity):
 	entity.add_child(mesh_instance)
+
+	super.attach_to(entity)
+
+
+func detach_from(entity):
+	entity.remove_child(mesh_instance)
+
+	super.detach_from(entity)
+
 
 func _update_picture_frame():
 	var new_size : Vector2

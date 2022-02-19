@@ -27,11 +27,6 @@ func update(data):
 	print("Audio source data: ", json)
 
 
-# Unused in test scene
-func attach_to(entity):
-	entity.add_child(audio_player.duplicate())
-
-
 static func update_component_in_entity(data, entity, scene):
 	var player: AudioStreamPlayer3D
 	var parser = JSON.new()
@@ -40,7 +35,7 @@ static func update_component_in_entity(data, entity, scene):
 		return
 
 	var json = parser.get_data()
-	
+
 	if json.has("playing"):
 		player = entity.get_node_or_null("AudioSource")
 		if not player:

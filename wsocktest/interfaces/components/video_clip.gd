@@ -16,11 +16,9 @@ var status = STATUS_ERRORED
 
 func _init(_name, _scene, _id):
 	super(_name, _scene, _id)
-	pass
 
 
 func update(data):
-
 	var parser = JSON.new()
 	var err = parser.parse(data)
 	if err != OK:

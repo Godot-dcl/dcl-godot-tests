@@ -14,7 +14,6 @@ func _init(_name, _scene, _id):
 
 
 func update(data):
-	
 	var parser = JSON.new()
 	var err = parser.parse(data)
 	if err != OK:
@@ -28,9 +27,3 @@ func update(data):
 		volume = json.volume
 	if json.has("loop"):
 		audio_clip.loop = json.loop
-
-
-# Unused in test scene
-func attach_to(entity):
-	if entity.has_node("AudioSource"):
-		entity.get_node("AudioSource").stream = audio_clip
