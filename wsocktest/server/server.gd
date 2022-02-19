@@ -237,7 +237,7 @@ func _data_received(id):
 						print("error parsing json data: ", json.payload)
 					var payload = parser.get_data()
 					json.payload = payload
-					
+
 				else:
 					if not json.payload in parcel_scenes:
 						var payload = []

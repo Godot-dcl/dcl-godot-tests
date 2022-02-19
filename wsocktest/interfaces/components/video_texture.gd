@@ -29,7 +29,7 @@ func _init(_name, _scene, _id):
 	viewport = VIEWPORT_SCENE.instantiate()
 	scene.add_child(viewport)
 	scene.add_child(video_player)
-	
+
 
 
 func update(data):
@@ -39,7 +39,7 @@ func update(data):
 		return
 
 	var json = parser.get_data()
-	
+
 	var clip: DCL_VideoClip
 	if json.has("videoClipId"):
 		videoClipId = json.videoClipId

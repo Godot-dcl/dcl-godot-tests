@@ -76,7 +76,7 @@ func message(scene_msg):
 
 			DCL_PlaneShape._classid:
 				components[c_id] = DCL_PlaneShape.new(c_name, self, c_id)
-				
+
 			DCL_ConeShape._classid:
 				components[c_id] = DCL_ConeShape.new(c_name, self, c_id)
 
@@ -195,5 +195,5 @@ func _get_configuration_warnings():
 	if peer != null:
 		warn.append("Scene is currently connected to a peer." +\
 				"\nRemoving the DebuggerDump off the tree will completely detach this scene from it.")
-	
+
 	return warn
