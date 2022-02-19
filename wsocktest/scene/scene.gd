@@ -170,7 +170,20 @@ func message(scene_msg):
 #		])
 
 	if scene_msg.has_query():
-		pass#print("query ", scene_msg.get_query().get_payload())
+		# if another query is added, we chould componentize this
+		var query = PROTO.PB_RayQuery.new()
+		if query.from_bytes(Marshalls.base64_to_raw(scene_msg.get_query().get_payload())) == PROTO.PB_ERR.NO_ERRORS:
+			var ray = query.get_ray()
+			var ray_origin = ray.get_origin()
+			var ray_direction = ray.get_direction()
+			printt("**** rayQuery",
+				query.get_queryId(),
+				query.get_queryType(),
+				[ray_origin.get_x(), ray_origin.get_y(), ray_origin.get_z()],
+				[ray_direction.get_x(), ray_direction.get_y(), ray_direction.get_z()],
+				ray.get_distance())
+		else:
+			push_warning("**** queryError %s" % scene_msg.to_string())
 
 
 func reparent(src, dest):
