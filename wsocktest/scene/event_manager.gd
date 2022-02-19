@@ -25,22 +25,20 @@ func _init():
 
 func _process(_delta):
 	if is_instance_valid(raycast):
-		if raycast.is_colliding():
-			var collider = raycast.get_collider()
-			var entity = collider.get_parent().get_parent()
-			if entity != last_entity_hovered:
-				last_entity_hovered = entity
-			if collider != last_entity_collider_hovered:
-				last_entity_collider_hovered = collider
-
-				emit_signal("entity_hover_changed", entity, collider)
-		else:
+		if !raycast.is_colliding():
 			if last_entity_hovered != null:
 				last_entity_hovered = null
 				last_entity_collider_hovered = null
 
 				emit_signal("entity_hover_changed", null, null)
-				return
+			return
+
+		var collider = raycast.get_collider()
+		last_entity_hovered = collider.get_parent().get_parent()
+		if collider != last_entity_collider_hovered:
+			last_entity_collider_hovered = collider
+
+			emit_signal("entity_hover_changed", last_entity_hovered, collider)
 
 	check_input()
 
