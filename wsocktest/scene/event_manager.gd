@@ -75,6 +75,9 @@ func send_request(action, type):
 	if Server.player == null:
 		return
 
+	var colliding = raycast.is_colliding()
+	var collision_point = raycast.get_collision_point() if colliding else Vector3.ZERO
+	var collision_normal = parse_vector(raycast.get_collision_normal() if colliding else Vector3.ZERO)
 	var response = {
 		"eventType": "actionButtonEvent",
 		"sceneId": Server.player.current_scene_id(),
@@ -85,13 +88,13 @@ func send_request(action, type):
 				"origin": raycast.get_parent().get_parent().global_transform.origin,
 				"direction": raycast.to_global(raycast.target_position).normalized(),
 				"hit": {
-					"origin": parse_vector(Vector3.ZERO),
-					"hitPoint": parse_vector(Vector3.ZERO),
-					"length": 0.0,
-					"normal": parse_vector(Vector3.ZERO),
-					"worldNormal": parse_vector(Vector3.ZERO),
-					"meshName": "",
-					"entityId": "",
+					"origin": parse_vector(raycast.global_transform.origin if colliding else Vector3.ZERO),
+					"hitPoint": parse_vector(collision_point),
+					"length": raycast.global_transform.origin.distance_to(collision_point) if colliding else 0.0,
+					"normal": collision_normal,
+					"worldNormal": collision_normal,
+					"meshName": last_entity_collider_hovered.name if colliding else "",
+					"entityId": last_entity_hovered.name if colliding else "",
 				}
 			}
 		}
