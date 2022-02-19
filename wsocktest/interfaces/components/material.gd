@@ -12,7 +12,7 @@ func _init(_name, _scene, _id):
 
 
 func update(data):
-	
+
 	var parser = JSON.new()
 	var err = parser.parse(data)
 	if err != OK:
@@ -34,6 +34,17 @@ func update(data):
 		if tex_component.has_signal("texture_changed"):
 			tex_component.texture_changed.connect(_on_albedo_texture_changed)
 		material.albedo_texture = tex_component.texture
+
+	if json.has("alpha"):
+		var new_color = material.albedo_color
+		material.flags_transparent = true
+		new_color.a = json.alpha
+
+	if json.has("hasAlpha"):
+		material.flags_transparent = json.hasAlpha
+
+	if json.has("disableLighting"):
+		material.flags_unshaded = json.disableLighting
 
 	if json.has("emissiveTexture"):
 		material.emission_enabled = true
