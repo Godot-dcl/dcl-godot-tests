@@ -6,6 +6,7 @@ const _classid = 54
 var meshes = [] #MeshInstance
 var colliders = [] #PhysicsBody
 var animations = {} #Animation
+var src = ""
 
 func _init(_name, _scene, _id):
 	super(_name, _scene, _id)
@@ -18,11 +19,13 @@ func update(data):
 		return
 
 	var json = parser.get_data()
-	if json.has("src"):
+	if json.has("src") and src != json.src:
+		src = json.src
 		for m in meshes:
-			m.queue_free()
+			if is_instance_valid(m):
+				m.queue_free()
 
-		meshes.clear()
+		#meshes.clear()
 
 		var ext = json.src.get_extension()
 		if ext in ["glb", "gltf"]:
@@ -58,8 +61,13 @@ func update(data):
 						colliders.push_back(c)
 
 		if json.has("isPointerBlocker"):
-			for collider in colliders:
-				collider.collision_layer = int(pow(2, 10) + pow(2, 11) + pow(2, 12))
+			for c in colliders:
+				if is_instance_valid(c):
+					c.collision_layer = int(pow(2, 10) + pow(2, 11) + pow(2, 12))
+
+	if json.has("visible"):
+		for m in meshes:
+			m.visible = json.visible
 
 
 func attach_to(entity):
