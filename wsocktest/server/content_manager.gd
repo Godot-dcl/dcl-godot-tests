@@ -26,7 +26,7 @@ func load_contents(payload):
 				"png", "bin":
 					file_name = "user://%s" % content.file.get_file()
 				_:
-					push_warning("*** undefined extension")
+					push_warning("**** undefined extension")
 
 			var f = File.new()
 			if f.file_exists(file_name):
@@ -58,7 +58,7 @@ func download_external_file(info):
 
 	if http.request(info.url) != OK:
 		http.queue_free()
-		printerr("*** error creating the download request for ", info.file)
+		printerr("**** error creating the download request for ", info.file)
 		return null
 
 	var result = await http.request_completed
@@ -76,7 +76,7 @@ func download_file(info):
 
 	if http.request(info.base_url + info.hash) != OK:
 		http.queue_free()
-		printerr("*** error creating the download request for ", info.file)
+		printerr("**** error creating the download request for ", info.file)
 		return null
 
 	var result = await http.request_completed
@@ -179,10 +179,14 @@ func cache_file(content):
 				var v := VideoStreamTheora.new()
 				v.set_file("user://%s.%s" % [content.hash, ext])
 				contents[f].asset = v
+
 			"png":
 				var i = Image.new()
 				i.load("user://%s" % content.file.get_file())
 				contents[f].asset = i
+
+			"bin":
+				pass
 
 			_:
 				printerr("Content Manager: Unknown file type for caching " + ext + " - " + str(content))
@@ -191,7 +195,7 @@ func cache_file(content):
 func get_instance(file_hash):
 	var f = file_hash.to_lower()
 	if contents.has(f):
-		if contents[f].thread.is_alive():
+		if contents[f].thread.is_started():
 			contents[f].thread.wait_to_finish()
 
 		if contents[f].has("asset"):
