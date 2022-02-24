@@ -101,6 +101,30 @@ func send_request(action, type):
 	}
 	Server.send({"type": "SceneEvent", "payload": json.stringify(response)})
 
+func report_raycast_hitall_result(raycast, result):
+		var did_hit = !result.is_empty()
+		var entities = []
+		var hit_point = parse_vector(Vector3())
+		var hit_normal = parse_vector(Vector3())
+		if did_hit:
+			entities.append(result.collider.name)
+			hit_point = parse_vector(result.position)
+			hit_normal = parse_vector(result.normal)
+		
+		var response = {
+			"sceneId": raycast.scene.id,
+			"eventType":"raycastResponse",
+			"payload": {
+				"didHit":did_hit,
+				"ray":raycast.ray.get_origin(),
+				"direction":raycast.ray.get_direction(),
+				"distance":raycast.ray.get_distance(),
+				"hitPoint":hit_point,
+				"hitNormal":hit_normal,
+				"entities":entities
+			}
+		}
+		Server.send({"type": "SceneEvent", "payload": json.stringify(response)})
 
 func parse_vector(_in : Vector3):
 	return {

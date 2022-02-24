@@ -144,6 +144,7 @@ config/features=PackedStringArray("4.0")
 Server="*res://server/server.gd"
 ContentManager="*res://server/content_manager.gd"
 EventManager="*res://scene/event_manager.gd"
+PhysicsCast="*res://server/physics_cast.gd"
 
 [debug]
 

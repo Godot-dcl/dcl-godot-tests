@@ -173,6 +173,7 @@ func message(scene_msg):
 		# if another query is added, we chould componentize this
 		var query = PROTO.PB_RayQuery.new()
 		if query.from_bytes(Marshalls.base64_to_raw(scene_msg.get_query().get_payload())) == PROTO.PB_ERR.NO_ERRORS:
+			PhysicsCast.Query(query, self)
 			var ray = query.get_ray()
 			var ray_origin = ray.get_origin()
 			var ray_direction = ray.get_direction()
