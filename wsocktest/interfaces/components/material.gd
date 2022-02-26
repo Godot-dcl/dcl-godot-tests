@@ -59,9 +59,11 @@ func update(data):
 	if json.has("emissiveIntensity"):
 		material.emission_enabled = true
 		material.emission_energy = json.get("emissiveIntensity", material.emission_energy)
-		if json.has("emissiveColor"):
-			var color_dict = json.emissiveColor
-			material.emission = Color(color_dict.r, color_dict.g, color_dict.b)
+
+	if json.has("emissiveColor"):
+		material.emission_enabled = true
+		var color_dict = json.emissiveColor
+		material.emission = Color(color_dict.r, color_dict.g, color_dict.b)
 
 	if json.has("metallic"):
 		material.metallic = json.metallic

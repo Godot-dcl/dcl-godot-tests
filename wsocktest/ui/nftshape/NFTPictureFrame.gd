@@ -1,8 +1,8 @@
 extends MeshInstance3D
 class_name NFTPictureFrame
 
-enum PictureFrameStyle { 
-	Classic, 
+enum PictureFrameStyle {
+	Classic,
 	Baroque_Ornament,
 	Diamond_Ornament,
 	Minimal_Wide,
@@ -143,7 +143,7 @@ func set_style(style : int, size : Vector2):
 			mesh.surface_get_material(BORDER).emission_enabled = false
 			mesh.surface_get_material(BACKGROUND).albedo_color = color
 			mesh.surface_get_material(BACKGROUND).emission_enabled = false
-			
+
 		PictureFrameStyle.Pins:
 			mesh.surface_get_material(BORDER).emission_enabled = false
 			mesh.surface_get_material(BORDER).albedo_texture = preload("res://3d/NFTShape/Genesis_TX.png")
@@ -174,9 +174,9 @@ func set_style(style : int, size : Vector2):
 			printerr("Unimplemented PictureStyle %s" % PictureFrameStyle.keys()[style])
 
 	scale = Vector3(size.x, size.y, 1.0)
-	
+
 
 func update_color(c : Color):
 	material.albedo_color = c
 	material.emission = c
-	
+

@@ -11,14 +11,14 @@ func _init(_name, _scene, _id):
 	super(_name, _scene, _id)
 	# Planes are double-sided in the reference implementation
 	material.params_cull_mode = material.CULL_DISABLED
-	
+
 	# QuadMesh seems to be a better Godot equivalent
 	# than Plane. Appears with the correct orientation
 	var plane = QuadMesh.new()
 	plane.size = Vector2(width,height)
 	mesh_instance.mesh = plane
 	mesh_instance.mesh.surface_set_material(0, material)
-	
+
 
 
 func update(data):
