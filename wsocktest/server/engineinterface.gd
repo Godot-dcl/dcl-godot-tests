@@ -562,13 +562,13 @@ class PBPacker:
 		for kv in key_values:
 			result[kv.get_key()] = kv.get_value()
 		return result
-	
+
 	static func tabulate(text : String, nesting : int) -> String:
 		var tab : String = ""
 		for _i in range(nesting):
 			tab += DEBUG_TAB
 		return tab + text
-	
+
 	static func value_to_string(value, field : PBField, nesting : int) -> String:
 		var result : String = ""
 		var text : String
@@ -597,7 +597,7 @@ class PBPacker:
 		else:
 			result += String(value)
 		return result
-	
+
 	static func field_to_string(field : PBField, nesting : int) -> String:
 		var result : String = tabulate(field.name + ": ", nesting)
 		if field.type == int(PB_DATA_TYPE.MAP):
@@ -634,7 +634,7 @@ class PBPacker:
 			result += value_to_string(field.value, field, nesting)
 		result += ";\n"
 		return result
-		
+
 	static func message_to_string(data, nesting : int = 0) -> String:
 		var DEFAULT_VALUES
 		if PROTO_VERSION == 2:
@@ -663,15 +663,15 @@ class PBPacker:
 class PB_Empty:
 	func _init():
 		var service
-		
+
 	var data = {}
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -686,18 +686,18 @@ class PB_Empty:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_CreateEntity:
 	func _init():
 		var service
-		
+
 		_id = PBField.new("id", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _id
 		data[_id.tag] = service
-		
+
 	var data = {}
-	
+
 	var _id: PBField
 	func get_id() -> String:
 		return _id.value
@@ -706,13 +706,13 @@ class PB_CreateEntity:
 		_id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_id(value : String) -> void:
 		_id.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -727,18 +727,18 @@ class PB_CreateEntity:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_RemoveEntity:
 	func _init():
 		var service
-		
+
 		_id = PBField.new("id", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _id
 		data[_id.tag] = service
-		
+
 	var data = {}
-	
+
 	var _id: PBField
 	func get_id() -> String:
 		return _id.value
@@ -747,13 +747,13 @@ class PB_RemoveEntity:
 		_id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_id(value : String) -> void:
 		_id.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -768,23 +768,23 @@ class PB_RemoveEntity:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_SetEntityParent:
 	func _init():
 		var service
-		
+
 		_entityId = PBField.new("entityId", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _entityId
 		data[_entityId.tag] = service
-		
+
 		_parentId = PBField.new("parentId", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _parentId
 		data[_parentId.tag] = service
-		
+
 	var data = {}
-	
+
 	var _entityId: PBField
 	func get_entityId() -> String:
 		return _entityId.value
@@ -793,7 +793,7 @@ class PB_SetEntityParent:
 		_entityId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_entityId(value : String) -> void:
 		_entityId.value = value
-	
+
 	var _parentId: PBField
 	func get_parentId() -> String:
 		return _parentId.value
@@ -802,13 +802,13 @@ class PB_SetEntityParent:
 		_parentId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_parentId(value : String) -> void:
 		_parentId.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -823,23 +823,23 @@ class PB_SetEntityParent:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_ComponentRemoved:
 	func _init():
 		var service
-		
+
 		_entityId = PBField.new("entityId", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _entityId
 		data[_entityId.tag] = service
-		
+
 		_name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _name
 		data[_name.tag] = service
-		
+
 	var data = {}
-	
+
 	var _entityId: PBField
 	func get_entityId() -> String:
 		return _entityId.value
@@ -848,7 +848,7 @@ class PB_ComponentRemoved:
 		_entityId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_entityId(value : String) -> void:
 		_entityId.value = value
-	
+
 	var _name: PBField
 	func get_name() -> String:
 		return _name.value
@@ -857,13 +857,13 @@ class PB_ComponentRemoved:
 		_name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_name(value : String) -> void:
 		_name.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -878,151 +878,151 @@ class PB_ComponentRemoved:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Component:
 	func _init():
 		var service
-		
+
 		_transform = PBField.new("transform", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _transform
 		service.func_ref = Callable(self, "new_transform")
 		data[_transform.tag] = service
-		
+
 		_uuidCallback = PBField.new("uuidCallback", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _uuidCallback
 		service.func_ref = Callable(self, "new_uuidCallback")
 		data[_uuidCallback.tag] = service
-		
+
 		_box = PBField.new("box", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 16, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _box
 		service.func_ref = Callable(self, "new_box")
 		data[_box.tag] = service
-		
+
 		_sphere = PBField.new("sphere", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 17, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _sphere
 		service.func_ref = Callable(self, "new_sphere")
 		data[_sphere.tag] = service
-		
+
 		_plane = PBField.new("plane", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 18, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _plane
 		service.func_ref = Callable(self, "new_plane")
 		data[_plane.tag] = service
-		
+
 		_cone = PBField.new("cone", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 19, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _cone
 		service.func_ref = Callable(self, "new_cone")
 		data[_cone.tag] = service
-		
+
 		_cylinder = PBField.new("cylinder", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 20, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _cylinder
 		service.func_ref = Callable(self, "new_cylinder")
 		data[_cylinder.tag] = service
-		
+
 		_text = PBField.new("text", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 21, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _text
 		service.func_ref = Callable(self, "new_text")
 		data[_text.tag] = service
-		
+
 		_nft = PBField.new("nft", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 22, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _nft
 		service.func_ref = Callable(self, "new_nft")
 		data[_nft.tag] = service
-		
+
 		_containerRect = PBField.new("containerRect", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 25, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _containerRect
 		service.func_ref = Callable(self, "new_containerRect")
 		data[_containerRect.tag] = service
-		
+
 		_containerStack = PBField.new("containerStack", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 26, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _containerStack
 		service.func_ref = Callable(self, "new_containerStack")
 		data[_containerStack.tag] = service
-		
+
 		_uiTextShape = PBField.new("uiTextShape", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 27, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _uiTextShape
 		service.func_ref = Callable(self, "new_uiTextShape")
 		data[_uiTextShape.tag] = service
-		
+
 		_uiInputTextShape = PBField.new("uiInputTextShape", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 28, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _uiInputTextShape
 		service.func_ref = Callable(self, "new_uiInputTextShape")
 		data[_uiInputTextShape.tag] = service
-		
+
 		_uiImageShape = PBField.new("uiImageShape", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 29, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _uiImageShape
 		service.func_ref = Callable(self, "new_uiImageShape")
 		data[_uiImageShape.tag] = service
-		
+
 		_circle = PBField.new("circle", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 31, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _circle
 		service.func_ref = Callable(self, "new_circle")
 		data[_circle.tag] = service
-		
+
 		_billboard = PBField.new("billboard", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 32, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _billboard
 		service.func_ref = Callable(self, "new_billboard")
 		data[_billboard.tag] = service
-		
+
 		_gltf = PBField.new("gltf", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 54, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _gltf
 		service.func_ref = Callable(self, "new_gltf")
 		data[_gltf.tag] = service
-		
+
 		_obj = PBField.new("obj", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 55, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _obj
 		service.func_ref = Callable(self, "new_obj")
 		data[_obj.tag] = service
-		
+
 		_avatar = PBField.new("avatar", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 56, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _avatar
 		service.func_ref = Callable(self, "new_avatar")
 		data[_avatar.tag] = service
-		
+
 		_basicMaterial = PBField.new("basicMaterial", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 64, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _basicMaterial
 		service.func_ref = Callable(self, "new_basicMaterial")
 		data[_basicMaterial.tag] = service
-		
+
 		_texture = PBField.new("texture", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 68, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _texture
 		service.func_ref = Callable(self, "new_texture")
 		data[_texture.tag] = service
-		
+
 		_audioClip = PBField.new("audioClip", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 200, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _audioClip
 		service.func_ref = Callable(self, "new_audioClip")
 		data[_audioClip.tag] = service
-		
+
 		_audioSource = PBField.new("audioSource", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 201, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _audioSource
 		service.func_ref = Callable(self, "new_audioSource")
 		data[_audioSource.tag] = service
-		
+
 	var data = {}
-	
+
 	var _transform: PBField
 	func has_transform() -> bool:
 		return data[1].state == PB_SERVICE_STATE.FILLED
@@ -1079,7 +1079,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_transform.value = PB_Transform.new()
 		return _transform.value
-	
+
 	var _uuidCallback: PBField
 	func has_uuidCallback() -> bool:
 		return data[8].state == PB_SERVICE_STATE.FILLED
@@ -1136,7 +1136,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_uuidCallback.value = PB_UUIDCallback.new()
 		return _uuidCallback.value
-	
+
 	var _box: PBField
 	func has_box() -> bool:
 		return data[16].state == PB_SERVICE_STATE.FILLED
@@ -1193,7 +1193,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_box.value = PB_BoxShape.new()
 		return _box.value
-	
+
 	var _sphere: PBField
 	func has_sphere() -> bool:
 		return data[17].state == PB_SERVICE_STATE.FILLED
@@ -1250,7 +1250,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_sphere.value = PB_SphereShape.new()
 		return _sphere.value
-	
+
 	var _plane: PBField
 	func has_plane() -> bool:
 		return data[18].state == PB_SERVICE_STATE.FILLED
@@ -1307,7 +1307,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_plane.value = PB_PlaneShape.new()
 		return _plane.value
-	
+
 	var _cone: PBField
 	func has_cone() -> bool:
 		return data[19].state == PB_SERVICE_STATE.FILLED
@@ -1364,7 +1364,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_cone.value = PB_ConeShape.new()
 		return _cone.value
-	
+
 	var _cylinder: PBField
 	func has_cylinder() -> bool:
 		return data[20].state == PB_SERVICE_STATE.FILLED
@@ -1421,7 +1421,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_cylinder.value = PB_CylinderShape.new()
 		return _cylinder.value
-	
+
 	var _text: PBField
 	func has_text() -> bool:
 		return data[21].state == PB_SERVICE_STATE.FILLED
@@ -1478,7 +1478,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_text.value = PB_TextShape.new()
 		return _text.value
-	
+
 	var _nft: PBField
 	func has_nft() -> bool:
 		return data[22].state == PB_SERVICE_STATE.FILLED
@@ -1535,7 +1535,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_nft.value = PB_NFTShape.new()
 		return _nft.value
-	
+
 	var _containerRect: PBField
 	func has_containerRect() -> bool:
 		return data[25].state == PB_SERVICE_STATE.FILLED
@@ -1592,7 +1592,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_containerRect.value = PB_UIContainerRect.new()
 		return _containerRect.value
-	
+
 	var _containerStack: PBField
 	func has_containerStack() -> bool:
 		return data[26].state == PB_SERVICE_STATE.FILLED
@@ -1649,7 +1649,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_containerStack.value = PB_UIContainerStack.new()
 		return _containerStack.value
-	
+
 	var _uiTextShape: PBField
 	func has_uiTextShape() -> bool:
 		return data[27].state == PB_SERVICE_STATE.FILLED
@@ -1706,7 +1706,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_uiTextShape.value = PB_UITextShape.new()
 		return _uiTextShape.value
-	
+
 	var _uiInputTextShape: PBField
 	func has_uiInputTextShape() -> bool:
 		return data[28].state == PB_SERVICE_STATE.FILLED
@@ -1763,7 +1763,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_uiInputTextShape.value = PB_UIInputText.new()
 		return _uiInputTextShape.value
-	
+
 	var _uiImageShape: PBField
 	func has_uiImageShape() -> bool:
 		return data[29].state == PB_SERVICE_STATE.FILLED
@@ -1820,7 +1820,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_uiImageShape.value = PB_UIImage.new()
 		return _uiImageShape.value
-	
+
 	var _circle: PBField
 	func has_circle() -> bool:
 		return data[31].state == PB_SERVICE_STATE.FILLED
@@ -1877,7 +1877,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_circle.value = PB_CircleShape.new()
 		return _circle.value
-	
+
 	var _billboard: PBField
 	func has_billboard() -> bool:
 		return data[32].state == PB_SERVICE_STATE.FILLED
@@ -1934,7 +1934,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_billboard.value = PB_Billboard.new()
 		return _billboard.value
-	
+
 	var _gltf: PBField
 	func has_gltf() -> bool:
 		return data[54].state == PB_SERVICE_STATE.FILLED
@@ -1991,7 +1991,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_gltf.value = PB_GLTFShape.new()
 		return _gltf.value
-	
+
 	var _obj: PBField
 	func has_obj() -> bool:
 		return data[55].state == PB_SERVICE_STATE.FILLED
@@ -2048,7 +2048,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_obj.value = PB_OBJShape.new()
 		return _obj.value
-	
+
 	var _avatar: PBField
 	func has_avatar() -> bool:
 		return data[56].state == PB_SERVICE_STATE.FILLED
@@ -2105,7 +2105,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_avatar.value = PB_AvatarShape.new()
 		return _avatar.value
-	
+
 	var _basicMaterial: PBField
 	func has_basicMaterial() -> bool:
 		return data[64].state == PB_SERVICE_STATE.FILLED
@@ -2162,7 +2162,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_basicMaterial.value = PB_BasicMaterial.new()
 		return _basicMaterial.value
-	
+
 	var _texture: PBField
 	func has_texture() -> bool:
 		return data[68].state == PB_SERVICE_STATE.FILLED
@@ -2219,7 +2219,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_texture.value = PB_Texture.new()
 		return _texture.value
-	
+
 	var _audioClip: PBField
 	func has_audioClip() -> bool:
 		return data[200].state == PB_SERVICE_STATE.FILLED
@@ -2276,7 +2276,7 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.UNFILLED
 		_audioClip.value = PB_AudioClip.new()
 		return _audioClip.value
-	
+
 	var _audioSource: PBField
 	func has_audioSource() -> bool:
 		return data[201].state == PB_SERVICE_STATE.FILLED
@@ -2333,13 +2333,13 @@ class PB_Component:
 		data[201].state = PB_SERVICE_STATE.FILLED
 		_audioSource.value = PB_AudioSource.new()
 		return _audioSource.value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -2354,33 +2354,33 @@ class PB_Component:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Color4:
 	func _init():
 		var service
-		
+
 		_r = PBField.new("r", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _r
 		data[_r.tag] = service
-		
+
 		_g = PBField.new("g", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _g
 		data[_g.tag] = service
-		
+
 		_b = PBField.new("b", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _b
 		data[_b.tag] = service
-		
+
 		_a = PBField.new("a", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _a
 		data[_a.tag] = service
-		
+
 	var data = {}
-	
+
 	var _r: PBField
 	func get_r() -> float:
 		return _r.value
@@ -2389,7 +2389,7 @@ class PB_Color4:
 		_r.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_r(value : float) -> void:
 		_r.value = value
-	
+
 	var _g: PBField
 	func get_g() -> float:
 		return _g.value
@@ -2398,7 +2398,7 @@ class PB_Color4:
 		_g.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_g(value : float) -> void:
 		_g.value = value
-	
+
 	var _b: PBField
 	func get_b() -> float:
 		return _b.value
@@ -2407,7 +2407,7 @@ class PB_Color4:
 		_b.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_b(value : float) -> void:
 		_b.value = value
-	
+
 	var _a: PBField
 	func get_a() -> float:
 		return _a.value
@@ -2416,13 +2416,13 @@ class PB_Color4:
 		_a.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_a(value : float) -> void:
 		_a.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -2437,28 +2437,28 @@ class PB_Color4:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Color3:
 	func _init():
 		var service
-		
+
 		_r = PBField.new("r", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _r
 		data[_r.tag] = service
-		
+
 		_g = PBField.new("g", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _g
 		data[_g.tag] = service
-		
+
 		_b = PBField.new("b", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _b
 		data[_b.tag] = service
-		
+
 	var data = {}
-	
+
 	var _r: PBField
 	func get_r() -> float:
 		return _r.value
@@ -2467,7 +2467,7 @@ class PB_Color3:
 		_r.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_r(value : float) -> void:
 		_r.value = value
-	
+
 	var _g: PBField
 	func get_g() -> float:
 		return _g.value
@@ -2476,7 +2476,7 @@ class PB_Color3:
 		_g.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_g(value : float) -> void:
 		_g.value = value
-	
+
 	var _b: PBField
 	func get_b() -> float:
 		return _b.value
@@ -2485,13 +2485,13 @@ class PB_Color3:
 		_b.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_b(value : float) -> void:
 		_b.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -2506,146 +2506,146 @@ class PB_Color3:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_TextShapeModel:
 	func _init():
 		var service
-		
+
 		_billboard = PBField.new("billboard", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _billboard
 		data[_billboard.tag] = service
-		
+
 		_value = PBField.new("value", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _value
 		data[_value.tag] = service
-		
+
 		_color = PBField.new("color", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _color
 		service.func_ref = Callable(self, "new_color")
 		data[_color.tag] = service
-		
+
 		_opacity = PBField.new("opacity", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _opacity
 		data[_opacity.tag] = service
-		
+
 		_fontSize = PBField.new("fontSize", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _fontSize
 		data[_fontSize.tag] = service
-		
+
 		_fontAutoSize = PBField.new("fontAutoSize", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _fontAutoSize
 		data[_fontAutoSize.tag] = service
-		
+
 		_fontWeight = PBField.new("fontWeight", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _fontWeight
 		data[_fontWeight.tag] = service
-		
+
 		_hTextAlign = PBField.new("hTextAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _hTextAlign
 		data[_hTextAlign.tag] = service
-		
+
 		_vTextAlign = PBField.new("vTextAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _vTextAlign
 		data[_vTextAlign.tag] = service
-		
+
 		_width = PBField.new("width", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _width
 		data[_width.tag] = service
-		
+
 		_height = PBField.new("height", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _height
 		data[_height.tag] = service
-		
+
 		_adaptWidth = PBField.new("adaptWidth", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _adaptWidth
 		data[_adaptWidth.tag] = service
-		
+
 		_adaptHeight = PBField.new("adaptHeight", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _adaptHeight
 		data[_adaptHeight.tag] = service
-		
+
 		_paddingTop = PBField.new("paddingTop", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingTop
 		data[_paddingTop.tag] = service
-		
+
 		_paddingRight = PBField.new("paddingRight", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 15, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingRight
 		data[_paddingRight.tag] = service
-		
+
 		_paddingBottom = PBField.new("paddingBottom", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 16, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingBottom
 		data[_paddingBottom.tag] = service
-		
+
 		_paddingLeft = PBField.new("paddingLeft", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 17, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingLeft
 		data[_paddingLeft.tag] = service
-		
+
 		_lineSpacing = PBField.new("lineSpacing", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 18, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _lineSpacing
 		data[_lineSpacing.tag] = service
-		
+
 		_lineCount = PBField.new("lineCount", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 19, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
 		service.field = _lineCount
 		data[_lineCount.tag] = service
-		
+
 		_textWrapping = PBField.new("textWrapping", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 20, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _textWrapping
 		data[_textWrapping.tag] = service
-		
+
 		_shadowBlur = PBField.new("shadowBlur", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 21, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _shadowBlur
 		data[_shadowBlur.tag] = service
-		
+
 		_shadowOffsetX = PBField.new("shadowOffsetX", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 22, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _shadowOffsetX
 		data[_shadowOffsetX.tag] = service
-		
+
 		_shadowOffsetY = PBField.new("shadowOffsetY", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 23, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _shadowOffsetY
 		data[_shadowOffsetY.tag] = service
-		
+
 		_shadowColor = PBField.new("shadowColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 24, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _shadowColor
 		service.func_ref = Callable(self, "new_shadowColor")
 		data[_shadowColor.tag] = service
-		
+
 		_outlineWidth = PBField.new("outlineWidth", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 25, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _outlineWidth
 		data[_outlineWidth.tag] = service
-		
+
 		_outlineColor = PBField.new("outlineColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 26, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _outlineColor
 		service.func_ref = Callable(self, "new_outlineColor")
 		data[_outlineColor.tag] = service
-		
+
 	var data = {}
-	
+
 	var _billboard: PBField
 	func get_billboard() -> bool:
 		return _billboard.value
@@ -2654,7 +2654,7 @@ class PB_TextShapeModel:
 		_billboard.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_billboard(value : bool) -> void:
 		_billboard.value = value
-	
+
 	var _value: PBField
 	func get_value() -> String:
 		return _value.value
@@ -2663,7 +2663,7 @@ class PB_TextShapeModel:
 		_value.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_value(value : String) -> void:
 		_value.value = value
-	
+
 	var _color: PBField
 	func get_color() -> PB_Color3:
 		return _color.value
@@ -2673,7 +2673,7 @@ class PB_TextShapeModel:
 	func new_color() -> PB_Color3:
 		_color.value = PB_Color3.new()
 		return _color.value
-	
+
 	var _opacity: PBField
 	func get_opacity() -> float:
 		return _opacity.value
@@ -2682,7 +2682,7 @@ class PB_TextShapeModel:
 		_opacity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_opacity(value : float) -> void:
 		_opacity.value = value
-	
+
 	var _fontSize: PBField
 	func get_fontSize() -> float:
 		return _fontSize.value
@@ -2691,7 +2691,7 @@ class PB_TextShapeModel:
 		_fontSize.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_fontSize(value : float) -> void:
 		_fontSize.value = value
-	
+
 	var _fontAutoSize: PBField
 	func get_fontAutoSize() -> bool:
 		return _fontAutoSize.value
@@ -2700,7 +2700,7 @@ class PB_TextShapeModel:
 		_fontAutoSize.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_fontAutoSize(value : bool) -> void:
 		_fontAutoSize.value = value
-	
+
 	var _fontWeight: PBField
 	func get_fontWeight() -> String:
 		return _fontWeight.value
@@ -2709,7 +2709,7 @@ class PB_TextShapeModel:
 		_fontWeight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_fontWeight(value : String) -> void:
 		_fontWeight.value = value
-	
+
 	var _hTextAlign: PBField
 	func get_hTextAlign() -> String:
 		return _hTextAlign.value
@@ -2718,7 +2718,7 @@ class PB_TextShapeModel:
 		_hTextAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_hTextAlign(value : String) -> void:
 		_hTextAlign.value = value
-	
+
 	var _vTextAlign: PBField
 	func get_vTextAlign() -> String:
 		return _vTextAlign.value
@@ -2727,7 +2727,7 @@ class PB_TextShapeModel:
 		_vTextAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_vTextAlign(value : String) -> void:
 		_vTextAlign.value = value
-	
+
 	var _width: PBField
 	func get_width() -> float:
 		return _width.value
@@ -2736,7 +2736,7 @@ class PB_TextShapeModel:
 		_width.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_width(value : float) -> void:
 		_width.value = value
-	
+
 	var _height: PBField
 	func get_height() -> float:
 		return _height.value
@@ -2745,7 +2745,7 @@ class PB_TextShapeModel:
 		_height.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_height(value : float) -> void:
 		_height.value = value
-	
+
 	var _adaptWidth: PBField
 	func get_adaptWidth() -> bool:
 		return _adaptWidth.value
@@ -2754,7 +2754,7 @@ class PB_TextShapeModel:
 		_adaptWidth.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_adaptWidth(value : bool) -> void:
 		_adaptWidth.value = value
-	
+
 	var _adaptHeight: PBField
 	func get_adaptHeight() -> bool:
 		return _adaptHeight.value
@@ -2763,7 +2763,7 @@ class PB_TextShapeModel:
 		_adaptHeight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_adaptHeight(value : bool) -> void:
 		_adaptHeight.value = value
-	
+
 	var _paddingTop: PBField
 	func get_paddingTop() -> float:
 		return _paddingTop.value
@@ -2772,7 +2772,7 @@ class PB_TextShapeModel:
 		_paddingTop.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingTop(value : float) -> void:
 		_paddingTop.value = value
-	
+
 	var _paddingRight: PBField
 	func get_paddingRight() -> float:
 		return _paddingRight.value
@@ -2781,7 +2781,7 @@ class PB_TextShapeModel:
 		_paddingRight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingRight(value : float) -> void:
 		_paddingRight.value = value
-	
+
 	var _paddingBottom: PBField
 	func get_paddingBottom() -> float:
 		return _paddingBottom.value
@@ -2790,7 +2790,7 @@ class PB_TextShapeModel:
 		_paddingBottom.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingBottom(value : float) -> void:
 		_paddingBottom.value = value
-	
+
 	var _paddingLeft: PBField
 	func get_paddingLeft() -> float:
 		return _paddingLeft.value
@@ -2799,7 +2799,7 @@ class PB_TextShapeModel:
 		_paddingLeft.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingLeft(value : float) -> void:
 		_paddingLeft.value = value
-	
+
 	var _lineSpacing: PBField
 	func get_lineSpacing() -> float:
 		return _lineSpacing.value
@@ -2808,7 +2808,7 @@ class PB_TextShapeModel:
 		_lineSpacing.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_lineSpacing(value : float) -> void:
 		_lineSpacing.value = value
-	
+
 	var _lineCount: PBField
 	func get_lineCount() -> int:
 		return _lineCount.value
@@ -2817,7 +2817,7 @@ class PB_TextShapeModel:
 		_lineCount.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
 	func set_lineCount(value : int) -> void:
 		_lineCount.value = value
-	
+
 	var _textWrapping: PBField
 	func get_textWrapping() -> bool:
 		return _textWrapping.value
@@ -2826,7 +2826,7 @@ class PB_TextShapeModel:
 		_textWrapping.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_textWrapping(value : bool) -> void:
 		_textWrapping.value = value
-	
+
 	var _shadowBlur: PBField
 	func get_shadowBlur() -> float:
 		return _shadowBlur.value
@@ -2835,7 +2835,7 @@ class PB_TextShapeModel:
 		_shadowBlur.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_shadowBlur(value : float) -> void:
 		_shadowBlur.value = value
-	
+
 	var _shadowOffsetX: PBField
 	func get_shadowOffsetX() -> float:
 		return _shadowOffsetX.value
@@ -2844,7 +2844,7 @@ class PB_TextShapeModel:
 		_shadowOffsetX.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_shadowOffsetX(value : float) -> void:
 		_shadowOffsetX.value = value
-	
+
 	var _shadowOffsetY: PBField
 	func get_shadowOffsetY() -> float:
 		return _shadowOffsetY.value
@@ -2853,7 +2853,7 @@ class PB_TextShapeModel:
 		_shadowOffsetY.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_shadowOffsetY(value : float) -> void:
 		_shadowOffsetY.value = value
-	
+
 	var _shadowColor: PBField
 	func get_shadowColor() -> PB_Color3:
 		return _shadowColor.value
@@ -2863,7 +2863,7 @@ class PB_TextShapeModel:
 	func new_shadowColor() -> PB_Color3:
 		_shadowColor.value = PB_Color3.new()
 		return _shadowColor.value
-	
+
 	var _outlineWidth: PBField
 	func get_outlineWidth() -> float:
 		return _outlineWidth.value
@@ -2872,7 +2872,7 @@ class PB_TextShapeModel:
 		_outlineWidth.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_outlineWidth(value : float) -> void:
 		_outlineWidth.value = value
-	
+
 	var _outlineColor: PBField
 	func get_outlineColor() -> PB_Color3:
 		return _outlineColor.value
@@ -2882,13 +2882,13 @@ class PB_TextShapeModel:
 	func new_outlineColor() -> PB_Color3:
 		_outlineColor.value = PB_Color3.new()
 		return _outlineColor.value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -2903,28 +2903,28 @@ class PB_TextShapeModel:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Vector3:
 	func _init():
 		var service
-		
+
 		_x = PBField.new("x", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _x
 		data[_x.tag] = service
-		
+
 		_y = PBField.new("y", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _y
 		data[_y.tag] = service
-		
+
 		_z = PBField.new("z", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _z
 		data[_z.tag] = service
-		
+
 	var data = {}
-	
+
 	var _x: PBField
 	func get_x() -> float:
 		return _x.value
@@ -2933,7 +2933,7 @@ class PB_Vector3:
 		_x.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_x(value : float) -> void:
 		_x.value = value
-	
+
 	var _y: PBField
 	func get_y() -> float:
 		return _y.value
@@ -2942,7 +2942,7 @@ class PB_Vector3:
 		_y.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_y(value : float) -> void:
 		_y.value = value
-	
+
 	var _z: PBField
 	func get_z() -> float:
 		return _z.value
@@ -2951,13 +2951,13 @@ class PB_Vector3:
 		_z.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_z(value : float) -> void:
 		_z.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -2972,33 +2972,33 @@ class PB_Vector3:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Quaternion:
 	func _init():
 		var service
-		
+
 		_x = PBField.new("x", PB_DATA_TYPE.DOUBLE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.DOUBLE])
 		service = PBServiceField.new()
 		service.field = _x
 		data[_x.tag] = service
-		
+
 		_y = PBField.new("y", PB_DATA_TYPE.DOUBLE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.DOUBLE])
 		service = PBServiceField.new()
 		service.field = _y
 		data[_y.tag] = service
-		
+
 		_z = PBField.new("z", PB_DATA_TYPE.DOUBLE, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.DOUBLE])
 		service = PBServiceField.new()
 		service.field = _z
 		data[_z.tag] = service
-		
+
 		_w = PBField.new("w", PB_DATA_TYPE.DOUBLE, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.DOUBLE])
 		service = PBServiceField.new()
 		service.field = _w
 		data[_w.tag] = service
-		
+
 	var data = {}
-	
+
 	var _x: PBField
 	func get_x() -> float:
 		return _x.value
@@ -3007,7 +3007,7 @@ class PB_Quaternion:
 		_x.value = DEFAULT_VALUES_3[PB_DATA_TYPE.DOUBLE]
 	func set_x(value : float) -> void:
 		_x.value = value
-	
+
 	var _y: PBField
 	func get_y() -> float:
 		return _y.value
@@ -3016,7 +3016,7 @@ class PB_Quaternion:
 		_y.value = DEFAULT_VALUES_3[PB_DATA_TYPE.DOUBLE]
 	func set_y(value : float) -> void:
 		_y.value = value
-	
+
 	var _z: PBField
 	func get_z() -> float:
 		return _z.value
@@ -3025,7 +3025,7 @@ class PB_Quaternion:
 		_z.value = DEFAULT_VALUES_3[PB_DATA_TYPE.DOUBLE]
 	func set_z(value : float) -> void:
 		_z.value = value
-	
+
 	var _w: PBField
 	func get_w() -> float:
 		return _w.value
@@ -3034,13 +3034,13 @@ class PB_Quaternion:
 		_w.value = DEFAULT_VALUES_3[PB_DATA_TYPE.DOUBLE]
 	func set_w(value : float) -> void:
 		_w.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -3055,31 +3055,31 @@ class PB_Quaternion:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Transform:
 	func _init():
 		var service
-		
+
 		_position = PBField.new("position", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _position
 		service.func_ref = Callable(self, "new_position")
 		data[_position.tag] = service
-		
+
 		_rotation = PBField.new("rotation", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _rotation
 		service.func_ref = Callable(self, "new_rotation")
 		data[_rotation.tag] = service
-		
+
 		_scale = PBField.new("scale", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _scale
 		service.func_ref = Callable(self, "new_scale")
 		data[_scale.tag] = service
-		
+
 	var data = {}
-	
+
 	var _position: PBField
 	func get_position() -> PB_Vector3:
 		return _position.value
@@ -3089,7 +3089,7 @@ class PB_Transform:
 	func new_position() -> PB_Vector3:
 		_position.value = PB_Vector3.new()
 		return _position.value
-	
+
 	var _rotation: PBField
 	func get_rotation() -> PB_Quaternion:
 		return _rotation.value
@@ -3099,7 +3099,7 @@ class PB_Transform:
 	func new_rotation() -> PB_Quaternion:
 		_rotation.value = PB_Quaternion.new()
 		return _rotation.value
-	
+
 	var _scale: PBField
 	func get_scale() -> PB_Vector3:
 		return _scale.value
@@ -3109,13 +3109,13 @@ class PB_Transform:
 	func new_scale() -> PB_Vector3:
 		_scale.value = PB_Vector3.new()
 		return _scale.value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -3130,33 +3130,33 @@ class PB_Transform:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_UpdateEntityComponent:
 	func _init():
 		var service
-		
+
 		_entityId = PBField.new("entityId", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _entityId
 		data[_entityId.tag] = service
-		
+
 		_classId = PBField.new("classId", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
 		service.field = _classId
 		data[_classId.tag] = service
-		
+
 		_name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _name
 		data[_name.tag] = service
-		
+
 		_data = PBField.new("data", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _data
 		data[_data.tag] = service
-		
+
 	var data = {}
-	
+
 	var _entityId: PBField
 	func get_entityId() -> String:
 		return _entityId.value
@@ -3165,7 +3165,7 @@ class PB_UpdateEntityComponent:
 		_entityId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_entityId(value : String) -> void:
 		_entityId.value = value
-	
+
 	var _classId: PBField
 	func get_classId() -> int:
 		return _classId.value
@@ -3174,7 +3174,7 @@ class PB_UpdateEntityComponent:
 		_classId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
 	func set_classId(value : int) -> void:
 		_classId.value = value
-	
+
 	var _name: PBField
 	func get_name() -> String:
 		return _name.value
@@ -3183,7 +3183,7 @@ class PB_UpdateEntityComponent:
 		_name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_name(value : String) -> void:
 		_name.value = value
-	
+
 	var _data: PBField
 	func get_data() -> String:
 		return _data.value
@@ -3192,13 +3192,13 @@ class PB_UpdateEntityComponent:
 		_data.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_data(value : String) -> void:
 		_data.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -3213,28 +3213,28 @@ class PB_UpdateEntityComponent:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_ComponentCreated:
 	func _init():
 		var service
-		
+
 		_id = PBField.new("id", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _id
 		data[_id.tag] = service
-		
+
 		_classid = PBField.new("classid", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
 		service.field = _classid
 		data[_classid.tag] = service
-		
+
 		_name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _name
 		data[_name.tag] = service
-		
+
 	var data = {}
-	
+
 	var _id: PBField
 	func get_id() -> String:
 		return _id.value
@@ -3243,7 +3243,7 @@ class PB_ComponentCreated:
 		_id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_id(value : String) -> void:
 		_id.value = value
-	
+
 	var _classid: PBField
 	func get_classid() -> int:
 		return _classid.value
@@ -3252,7 +3252,7 @@ class PB_ComponentCreated:
 		_classid.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
 	func set_classid(value : int) -> void:
 		_classid.value = value
-	
+
 	var _name: PBField
 	func get_name() -> String:
 		return _name.value
@@ -3261,13 +3261,13 @@ class PB_ComponentCreated:
 		_name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_name(value : String) -> void:
 		_name.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -3282,28 +3282,28 @@ class PB_ComponentCreated:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_AttachEntityComponent:
 	func _init():
 		var service
-		
+
 		_entityId = PBField.new("entityId", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _entityId
 		data[_entityId.tag] = service
-		
+
 		_name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _name
 		data[_name.tag] = service
-		
+
 		_id = PBField.new("id", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _id
 		data[_id.tag] = service
-		
+
 	var data = {}
-	
+
 	var _entityId: PBField
 	func get_entityId() -> String:
 		return _entityId.value
@@ -3312,7 +3312,7 @@ class PB_AttachEntityComponent:
 		_entityId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_entityId(value : String) -> void:
 		_entityId.value = value
-	
+
 	var _name: PBField
 	func get_name() -> String:
 		return _name.value
@@ -3321,7 +3321,7 @@ class PB_AttachEntityComponent:
 		_name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_name(value : String) -> void:
 		_name.value = value
-	
+
 	var _id: PBField
 	func get_id() -> String:
 		return _id.value
@@ -3330,13 +3330,13 @@ class PB_AttachEntityComponent:
 		_id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_id(value : String) -> void:
 		_id.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -3351,18 +3351,18 @@ class PB_AttachEntityComponent:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_ComponentDisposed:
 	func _init():
 		var service
-		
+
 		_id = PBField.new("id", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _id
 		data[_id.tag] = service
-		
+
 	var data = {}
-	
+
 	var _id: PBField
 	func get_id() -> String:
 		return _id.value
@@ -3371,13 +3371,13 @@ class PB_ComponentDisposed:
 		_id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_id(value : String) -> void:
 		_id.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -3392,23 +3392,23 @@ class PB_ComponentDisposed:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_ComponentUpdated:
 	func _init():
 		var service
-		
+
 		_id = PBField.new("id", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _id
 		data[_id.tag] = service
-		
+
 		_json = PBField.new("json", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _json
 		data[_json.tag] = service
-		
+
 	var data = {}
-	
+
 	var _id: PBField
 	func get_id() -> String:
 		return _id.value
@@ -3417,7 +3417,7 @@ class PB_ComponentUpdated:
 		_id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_id(value : String) -> void:
 		_id.value = value
-	
+
 	var _json: PBField
 	func get_json() -> String:
 		return _json.value
@@ -3426,13 +3426,13 @@ class PB_ComponentUpdated:
 		_json.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_json(value : String) -> void:
 		_json.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -3447,30 +3447,30 @@ class PB_ComponentUpdated:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Ray:
 	func _init():
 		var service
-		
+
 		_origin = PBField.new("origin", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _origin
 		service.func_ref = Callable(self, "new_origin")
 		data[_origin.tag] = service
-		
+
 		_direction = PBField.new("direction", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _direction
 		service.func_ref = Callable(self, "new_direction")
 		data[_direction.tag] = service
-		
+
 		_distance = PBField.new("distance", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _distance
 		data[_distance.tag] = service
-		
+
 	var data = {}
-	
+
 	var _origin: PBField
 	func get_origin() -> PB_Vector3:
 		return _origin.value
@@ -3480,7 +3480,7 @@ class PB_Ray:
 	func new_origin() -> PB_Vector3:
 		_origin.value = PB_Vector3.new()
 		return _origin.value
-	
+
 	var _direction: PBField
 	func get_direction() -> PB_Vector3:
 		return _direction.value
@@ -3490,7 +3490,7 @@ class PB_Ray:
 	func new_direction() -> PB_Vector3:
 		_direction.value = PB_Vector3.new()
 		return _direction.value
-	
+
 	var _distance: PBField
 	func get_distance() -> float:
 		return _distance.value
@@ -3499,13 +3499,13 @@ class PB_Ray:
 		_distance.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_distance(value : float) -> void:
 		_distance.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -3520,29 +3520,29 @@ class PB_Ray:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_RayQuery:
 	func _init():
 		var service
-		
+
 		_queryId = PBField.new("queryId", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _queryId
 		data[_queryId.tag] = service
-		
+
 		_queryType = PBField.new("queryType", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _queryType
 		data[_queryType.tag] = service
-		
+
 		_ray = PBField.new("ray", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _ray
 		service.func_ref = Callable(self, "new_ray")
 		data[_ray.tag] = service
-		
+
 	var data = {}
-	
+
 	var _queryId: PBField
 	func get_queryId() -> String:
 		return _queryId.value
@@ -3551,7 +3551,7 @@ class PB_RayQuery:
 		_queryId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_queryId(value : String) -> void:
 		_queryId.value = value
-	
+
 	var _queryType: PBField
 	func get_queryType() -> String:
 		return _queryType.value
@@ -3560,7 +3560,7 @@ class PB_RayQuery:
 		_queryType.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_queryType(value : String) -> void:
 		_queryType.value = value
-	
+
 	var _ray: PBField
 	func get_ray() -> PB_Ray:
 		return _ray.value
@@ -3570,13 +3570,13 @@ class PB_RayQuery:
 	func new_ray() -> PB_Ray:
 		_ray.value = PB_Ray.new()
 		return _ray.value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -3591,23 +3591,23 @@ class PB_RayQuery:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Query:
 	func _init():
 		var service
-		
+
 		_queryId = PBField.new("queryId", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _queryId
 		data[_queryId.tag] = service
-		
+
 		_payload = PBField.new("payload", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _payload
 		data[_payload.tag] = service
-		
+
 	var data = {}
-	
+
 	var _queryId: PBField
 	func get_queryId() -> String:
 		return _queryId.value
@@ -3616,7 +3616,7 @@ class PB_Query:
 		_queryId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_queryId(value : String) -> void:
 		_queryId.value = value
-	
+
 	var _payload: PBField
 	func get_payload() -> String:
 		return _payload.value
@@ -3625,13 +3625,13 @@ class PB_Query:
 		_payload.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_payload(value : String) -> void:
 		_payload.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -3646,101 +3646,101 @@ class PB_Query:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_SendSceneMessage:
 	func _init():
 		var service
-		
+
 		_sceneId = PBField.new("sceneId", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _sceneId
 		data[_sceneId.tag] = service
-		
+
 		_tag = PBField.new("tag", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _tag
 		data[_tag.tag] = service
-		
+
 		_createEntity = PBField.new("createEntity", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _createEntity
 		service.func_ref = Callable(self, "new_createEntity")
 		data[_createEntity.tag] = service
-		
+
 		_removeEntity = PBField.new("removeEntity", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _removeEntity
 		service.func_ref = Callable(self, "new_removeEntity")
 		data[_removeEntity.tag] = service
-		
+
 		_setEntityParent = PBField.new("setEntityParent", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _setEntityParent
 		service.func_ref = Callable(self, "new_setEntityParent")
 		data[_setEntityParent.tag] = service
-		
+
 		_updateEntityComponent = PBField.new("updateEntityComponent", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _updateEntityComponent
 		service.func_ref = Callable(self, "new_updateEntityComponent")
 		data[_updateEntityComponent.tag] = service
-		
+
 		_attachEntityComponent = PBField.new("attachEntityComponent", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _attachEntityComponent
 		service.func_ref = Callable(self, "new_attachEntityComponent")
 		data[_attachEntityComponent.tag] = service
-		
+
 		_componentCreated = PBField.new("componentCreated", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _componentCreated
 		service.func_ref = Callable(self, "new_componentCreated")
 		data[_componentCreated.tag] = service
-		
+
 		_componentDisposed = PBField.new("componentDisposed", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _componentDisposed
 		service.func_ref = Callable(self, "new_componentDisposed")
 		data[_componentDisposed.tag] = service
-		
+
 		_componentRemoved = PBField.new("componentRemoved", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _componentRemoved
 		service.func_ref = Callable(self, "new_componentRemoved")
 		data[_componentRemoved.tag] = service
-		
+
 		_componentUpdated = PBField.new("componentUpdated", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _componentUpdated
 		service.func_ref = Callable(self, "new_componentUpdated")
 		data[_componentUpdated.tag] = service
-		
+
 		_query = PBField.new("query", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _query
 		service.func_ref = Callable(self, "new_query")
 		data[_query.tag] = service
-		
+
 		_sceneStarted = PBField.new("sceneStarted", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _sceneStarted
 		service.func_ref = Callable(self, "new_sceneStarted")
 		data[_sceneStarted.tag] = service
-		
+
 		_openExternalUrl = PBField.new("openExternalUrl", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _openExternalUrl
 		service.func_ref = Callable(self, "new_openExternalUrl")
 		data[_openExternalUrl.tag] = service
-		
+
 		_openNFTDialog = PBField.new("openNFTDialog", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 15, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _openNFTDialog
 		service.func_ref = Callable(self, "new_openNFTDialog")
 		data[_openNFTDialog.tag] = service
-		
+
 	var data = {}
-	
+
 	var _sceneId: PBField
 	func get_sceneId() -> String:
 		return _sceneId.value
@@ -3749,7 +3749,7 @@ class PB_SendSceneMessage:
 		_sceneId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_sceneId(value : String) -> void:
 		_sceneId.value = value
-	
+
 	var _tag: PBField
 	func get_tag() -> String:
 		return _tag.value
@@ -3758,7 +3758,7 @@ class PB_SendSceneMessage:
 		_tag.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_tag(value : String) -> void:
 		_tag.value = value
-	
+
 	var _createEntity: PBField
 	func has_createEntity() -> bool:
 		return data[3].state == PB_SERVICE_STATE.FILLED
@@ -3795,7 +3795,7 @@ class PB_SendSceneMessage:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		_createEntity.value = PB_CreateEntity.new()
 		return _createEntity.value
-	
+
 	var _removeEntity: PBField
 	func has_removeEntity() -> bool:
 		return data[4].state == PB_SERVICE_STATE.FILLED
@@ -3832,7 +3832,7 @@ class PB_SendSceneMessage:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		_removeEntity.value = PB_RemoveEntity.new()
 		return _removeEntity.value
-	
+
 	var _setEntityParent: PBField
 	func has_setEntityParent() -> bool:
 		return data[5].state == PB_SERVICE_STATE.FILLED
@@ -3869,7 +3869,7 @@ class PB_SendSceneMessage:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		_setEntityParent.value = PB_SetEntityParent.new()
 		return _setEntityParent.value
-	
+
 	var _updateEntityComponent: PBField
 	func has_updateEntityComponent() -> bool:
 		return data[6].state == PB_SERVICE_STATE.FILLED
@@ -3906,7 +3906,7 @@ class PB_SendSceneMessage:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		_updateEntityComponent.value = PB_UpdateEntityComponent.new()
 		return _updateEntityComponent.value
-	
+
 	var _attachEntityComponent: PBField
 	func has_attachEntityComponent() -> bool:
 		return data[7].state == PB_SERVICE_STATE.FILLED
@@ -3943,7 +3943,7 @@ class PB_SendSceneMessage:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		_attachEntityComponent.value = PB_AttachEntityComponent.new()
 		return _attachEntityComponent.value
-	
+
 	var _componentCreated: PBField
 	func has_componentCreated() -> bool:
 		return data[8].state == PB_SERVICE_STATE.FILLED
@@ -3980,7 +3980,7 @@ class PB_SendSceneMessage:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		_componentCreated.value = PB_ComponentCreated.new()
 		return _componentCreated.value
-	
+
 	var _componentDisposed: PBField
 	func has_componentDisposed() -> bool:
 		return data[9].state == PB_SERVICE_STATE.FILLED
@@ -4017,7 +4017,7 @@ class PB_SendSceneMessage:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		_componentDisposed.value = PB_ComponentDisposed.new()
 		return _componentDisposed.value
-	
+
 	var _componentRemoved: PBField
 	func has_componentRemoved() -> bool:
 		return data[10].state == PB_SERVICE_STATE.FILLED
@@ -4054,7 +4054,7 @@ class PB_SendSceneMessage:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		_componentRemoved.value = PB_ComponentRemoved.new()
 		return _componentRemoved.value
-	
+
 	var _componentUpdated: PBField
 	func has_componentUpdated() -> bool:
 		return data[11].state == PB_SERVICE_STATE.FILLED
@@ -4091,7 +4091,7 @@ class PB_SendSceneMessage:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		_componentUpdated.value = PB_ComponentUpdated.new()
 		return _componentUpdated.value
-	
+
 	var _query: PBField
 	func has_query() -> bool:
 		return data[12].state == PB_SERVICE_STATE.FILLED
@@ -4128,7 +4128,7 @@ class PB_SendSceneMessage:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		_query.value = PB_Query.new()
 		return _query.value
-	
+
 	var _sceneStarted: PBField
 	func has_sceneStarted() -> bool:
 		return data[13].state == PB_SERVICE_STATE.FILLED
@@ -4165,7 +4165,7 @@ class PB_SendSceneMessage:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		_sceneStarted.value = PB_Empty.new()
 		return _sceneStarted.value
-	
+
 	var _openExternalUrl: PBField
 	func has_openExternalUrl() -> bool:
 		return data[14].state == PB_SERVICE_STATE.FILLED
@@ -4202,7 +4202,7 @@ class PB_SendSceneMessage:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		_openExternalUrl.value = PB_OpenExternalUrl.new()
 		return _openExternalUrl.value
-	
+
 	var _openNFTDialog: PBField
 	func has_openNFTDialog() -> bool:
 		return data[15].state == PB_SERVICE_STATE.FILLED
@@ -4239,13 +4239,13 @@ class PB_SendSceneMessage:
 		data[15].state = PB_SERVICE_STATE.FILLED
 		_openNFTDialog.value = PB_OpenNFTDialog.new()
 		return _openNFTDialog.value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -4260,28 +4260,28 @@ class PB_SendSceneMessage:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_SetPosition:
 	func _init():
 		var service
-		
+
 		_x = PBField.new("x", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _x
 		data[_x.tag] = service
-		
+
 		_y = PBField.new("y", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _y
 		data[_y.tag] = service
-		
+
 		_z = PBField.new("z", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _z
 		data[_z.tag] = service
-		
+
 	var data = {}
-	
+
 	var _x: PBField
 	func get_x() -> float:
 		return _x.value
@@ -4290,7 +4290,7 @@ class PB_SetPosition:
 		_x.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_x(value : float) -> void:
 		_x.value = value
-	
+
 	var _y: PBField
 	func get_y() -> float:
 		return _y.value
@@ -4299,7 +4299,7 @@ class PB_SetPosition:
 		_y.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_y(value : float) -> void:
 		_y.value = value
-	
+
 	var _z: PBField
 	func get_z() -> float:
 		return _z.value
@@ -4308,13 +4308,13 @@ class PB_SetPosition:
 		_z.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_z(value : float) -> void:
 		_z.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -4329,23 +4329,23 @@ class PB_SetPosition:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_ContentMapping:
 	func _init():
 		var service
-		
+
 		_file = PBField.new("file", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _file
 		data[_file.tag] = service
-		
+
 		_hash = PBField.new("hash", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _hash
 		data[_hash.tag] = service
-		
+
 	var data = {}
-	
+
 	var _file: PBField
 	func get_file() -> String:
 		return _file.value
@@ -4354,7 +4354,7 @@ class PB_ContentMapping:
 		_file.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_file(value : String) -> void:
 		_file.value = value
-	
+
 	var _hash: PBField
 	func get_hash() -> String:
 		return _hash.value
@@ -4363,13 +4363,13 @@ class PB_ContentMapping:
 		_hash.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_hash(value : String) -> void:
 		_hash.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -4384,23 +4384,23 @@ class PB_ContentMapping:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Position:
 	func _init():
 		var service
-		
+
 		_x = PBField.new("x", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _x
 		data[_x.tag] = service
-		
+
 		_y = PBField.new("y", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _y
 		data[_y.tag] = service
-		
+
 	var data = {}
-	
+
 	var _x: PBField
 	func get_x() -> float:
 		return _x.value
@@ -4409,7 +4409,7 @@ class PB_Position:
 		_x.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_x(value : float) -> void:
 		_x.value = value
-	
+
 	var _y: PBField
 	func get_y() -> float:
 		return _y.value
@@ -4418,13 +4418,13 @@ class PB_Position:
 		_y.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_y(value : float) -> void:
 		_y.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -4439,41 +4439,41 @@ class PB_Position:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_LoadParcelScenes:
 	func _init():
 		var service
-		
+
 		_id = PBField.new("id", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _id
 		data[_id.tag] = service
-		
+
 		_basePosition = PBField.new("basePosition", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _basePosition
 		service.func_ref = Callable(self, "new_basePosition")
 		data[_basePosition.tag] = service
-		
+
 		_parcels = PBField.new("parcels", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 3, true, [])
 		service = PBServiceField.new()
 		service.field = _parcels
 		service.func_ref = Callable(self, "add_parcels")
 		data[_parcels.tag] = service
-		
+
 		_contents = PBField.new("contents", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 4, true, [])
 		service = PBServiceField.new()
 		service.field = _contents
 		service.func_ref = Callable(self, "add_contents")
 		data[_contents.tag] = service
-		
+
 		_baseUrl = PBField.new("baseUrl", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _baseUrl
 		data[_baseUrl.tag] = service
-		
+
 	var data = {}
-	
+
 	var _id: PBField
 	func get_id() -> String:
 		return _id.value
@@ -4482,7 +4482,7 @@ class PB_LoadParcelScenes:
 		_id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_id(value : String) -> void:
 		_id.value = value
-	
+
 	var _basePosition: PBField
 	func get_basePosition() -> PB_Position:
 		return _basePosition.value
@@ -4492,7 +4492,7 @@ class PB_LoadParcelScenes:
 	func new_basePosition() -> PB_Position:
 		_basePosition.value = PB_Position.new()
 		return _basePosition.value
-	
+
 	var _parcels: PBField
 	func get_parcels() -> Array:
 		return _parcels.value
@@ -4503,7 +4503,7 @@ class PB_LoadParcelScenes:
 		var element = PB_Position.new()
 		_parcels.value.append(element)
 		return element
-	
+
 	var _contents: PBField
 	func get_contents() -> Array:
 		return _contents.value
@@ -4514,7 +4514,7 @@ class PB_LoadParcelScenes:
 		var element = PB_ContentMapping.new()
 		_contents.value.append(element)
 		return element
-	
+
 	var _baseUrl: PBField
 	func get_baseUrl() -> String:
 		return _baseUrl.value
@@ -4523,13 +4523,13 @@ class PB_LoadParcelScenes:
 		_baseUrl.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_baseUrl(value : String) -> void:
 		_baseUrl.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -4544,23 +4544,23 @@ class PB_LoadParcelScenes:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_CreateUIScene:
 	func _init():
 		var service
-		
+
 		_id = PBField.new("id", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _id
 		data[_id.tag] = service
-		
+
 		_baseUrl = PBField.new("baseUrl", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _baseUrl
 		data[_baseUrl.tag] = service
-		
+
 	var data = {}
-	
+
 	var _id: PBField
 	func get_id() -> String:
 		return _id.value
@@ -4569,7 +4569,7 @@ class PB_CreateUIScene:
 		_id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_id(value : String) -> void:
 		_id.value = value
-	
+
 	var _baseUrl: PBField
 	func get_baseUrl() -> String:
 		return _baseUrl.value
@@ -4578,13 +4578,13 @@ class PB_CreateUIScene:
 		_baseUrl.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_baseUrl(value : String) -> void:
 		_baseUrl.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -4599,18 +4599,18 @@ class PB_CreateUIScene:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_UnloadScene:
 	func _init():
 		var service
-		
+
 		_sceneId = PBField.new("sceneId", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _sceneId
 		data[_sceneId.tag] = service
-		
+
 	var data = {}
-	
+
 	var _sceneId: PBField
 	func get_sceneId() -> String:
 		return _sceneId.value
@@ -4619,13 +4619,13 @@ class PB_UnloadScene:
 		_sceneId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_sceneId(value : String) -> void:
 		_sceneId.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -4640,67 +4640,67 @@ class PB_UnloadScene:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_DclMessage:
 	func _init():
 		var service
-		
+
 		_setDebug = PBField.new("setDebug", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _setDebug
 		service.func_ref = Callable(self, "new_setDebug")
 		data[_setDebug.tag] = service
-		
+
 		_setSceneDebugPanel = PBField.new("setSceneDebugPanel", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _setSceneDebugPanel
 		service.func_ref = Callable(self, "new_setSceneDebugPanel")
 		data[_setSceneDebugPanel.tag] = service
-		
+
 		_setEngineDebugPanel = PBField.new("setEngineDebugPanel", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _setEngineDebugPanel
 		service.func_ref = Callable(self, "new_setEngineDebugPanel")
 		data[_setEngineDebugPanel.tag] = service
-		
+
 		_sendSceneMessage = PBField.new("sendSceneMessage", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _sendSceneMessage
 		service.func_ref = Callable(self, "new_sendSceneMessage")
 		data[_sendSceneMessage.tag] = service
-		
+
 		_loadParcelScenes = PBField.new("loadParcelScenes", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _loadParcelScenes
 		service.func_ref = Callable(self, "new_loadParcelScenes")
 		data[_loadParcelScenes.tag] = service
-		
+
 		_unloadScene = PBField.new("unloadScene", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _unloadScene
 		service.func_ref = Callable(self, "new_unloadScene")
 		data[_unloadScene.tag] = service
-		
+
 		_setPosition = PBField.new("setPosition", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _setPosition
 		service.func_ref = Callable(self, "new_setPosition")
 		data[_setPosition.tag] = service
-		
+
 		_reset = PBField.new("reset", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _reset
 		service.func_ref = Callable(self, "new_reset")
 		data[_reset.tag] = service
-		
+
 		_createUIScene = PBField.new("createUIScene", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _createUIScene
 		service.func_ref = Callable(self, "new_createUIScene")
 		data[_createUIScene.tag] = service
-		
+
 	var data = {}
-	
+
 	var _setDebug: PBField
 	func has_setDebug() -> bool:
 		return data[1].state == PB_SERVICE_STATE.FILLED
@@ -4729,7 +4729,7 @@ class PB_DclMessage:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
 		_setDebug.value = PB_Empty.new()
 		return _setDebug.value
-	
+
 	var _setSceneDebugPanel: PBField
 	func has_setSceneDebugPanel() -> bool:
 		return data[2].state == PB_SERVICE_STATE.FILLED
@@ -4758,7 +4758,7 @@ class PB_DclMessage:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
 		_setSceneDebugPanel.value = PB_Empty.new()
 		return _setSceneDebugPanel.value
-	
+
 	var _setEngineDebugPanel: PBField
 	func has_setEngineDebugPanel() -> bool:
 		return data[3].state == PB_SERVICE_STATE.FILLED
@@ -4787,7 +4787,7 @@ class PB_DclMessage:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
 		_setEngineDebugPanel.value = PB_Empty.new()
 		return _setEngineDebugPanel.value
-	
+
 	var _sendSceneMessage: PBField
 	func has_sendSceneMessage() -> bool:
 		return data[4].state == PB_SERVICE_STATE.FILLED
@@ -4816,7 +4816,7 @@ class PB_DclMessage:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
 		_sendSceneMessage.value = PB_SendSceneMessage.new()
 		return _sendSceneMessage.value
-	
+
 	var _loadParcelScenes: PBField
 	func has_loadParcelScenes() -> bool:
 		return data[5].state == PB_SERVICE_STATE.FILLED
@@ -4845,7 +4845,7 @@ class PB_DclMessage:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
 		_loadParcelScenes.value = PB_LoadParcelScenes.new()
 		return _loadParcelScenes.value
-	
+
 	var _unloadScene: PBField
 	func has_unloadScene() -> bool:
 		return data[6].state == PB_SERVICE_STATE.FILLED
@@ -4874,7 +4874,7 @@ class PB_DclMessage:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
 		_unloadScene.value = PB_UnloadScene.new()
 		return _unloadScene.value
-	
+
 	var _setPosition: PBField
 	func has_setPosition() -> bool:
 		return data[7].state == PB_SERVICE_STATE.FILLED
@@ -4903,7 +4903,7 @@ class PB_DclMessage:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
 		_setPosition.value = PB_SetPosition.new()
 		return _setPosition.value
-	
+
 	var _reset: PBField
 	func has_reset() -> bool:
 		return data[8].state == PB_SERVICE_STATE.FILLED
@@ -4932,7 +4932,7 @@ class PB_DclMessage:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
 		_reset.value = PB_Empty.new()
 		return _reset.value
-	
+
 	var _createUIScene: PBField
 	func has_createUIScene() -> bool:
 		return data[9].state == PB_SERVICE_STATE.FILLED
@@ -4961,13 +4961,13 @@ class PB_DclMessage:
 		data[9].state = PB_SERVICE_STATE.FILLED
 		_createUIScene.value = PB_CreateUIScene.new()
 		return _createUIScene.value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -4982,43 +4982,43 @@ class PB_DclMessage:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_AnimationState:
 	func _init():
 		var service
-		
+
 		_clip = PBField.new("clip", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _clip
 		data[_clip.tag] = service
-		
+
 		_looping = PBField.new("looping", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _looping
 		data[_looping.tag] = service
-		
+
 		_weight = PBField.new("weight", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _weight
 		data[_weight.tag] = service
-		
+
 		_playing = PBField.new("playing", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _playing
 		data[_playing.tag] = service
-		
+
 		_shouldReset = PBField.new("shouldReset", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _shouldReset
 		data[_shouldReset.tag] = service
-		
+
 		_speed = PBField.new("speed", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _speed
 		data[_speed.tag] = service
-		
+
 	var data = {}
-	
+
 	var _clip: PBField
 	func get_clip() -> String:
 		return _clip.value
@@ -5027,7 +5027,7 @@ class PB_AnimationState:
 		_clip.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_clip(value : String) -> void:
 		_clip.value = value
-	
+
 	var _looping: PBField
 	func get_looping() -> bool:
 		return _looping.value
@@ -5036,7 +5036,7 @@ class PB_AnimationState:
 		_looping.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_looping(value : bool) -> void:
 		_looping.value = value
-	
+
 	var _weight: PBField
 	func get_weight() -> float:
 		return _weight.value
@@ -5045,7 +5045,7 @@ class PB_AnimationState:
 		_weight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_weight(value : float) -> void:
 		_weight.value = value
-	
+
 	var _playing: PBField
 	func get_playing() -> bool:
 		return _playing.value
@@ -5054,7 +5054,7 @@ class PB_AnimationState:
 		_playing.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_playing(value : bool) -> void:
 		_playing.value = value
-	
+
 	var _shouldReset: PBField
 	func get_shouldReset() -> bool:
 		return _shouldReset.value
@@ -5063,7 +5063,7 @@ class PB_AnimationState:
 		_shouldReset.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_shouldReset(value : bool) -> void:
 		_shouldReset.value = value
-	
+
 	var _speed: PBField
 	func get_speed() -> float:
 		return _speed.value
@@ -5072,13 +5072,13 @@ class PB_AnimationState:
 		_speed.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_speed(value : float) -> void:
 		_speed.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -5093,23 +5093,23 @@ class PB_AnimationState:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Animator:
 	func _init():
 		var service
-		
+
 		_withCollisions = PBField.new("withCollisions", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _withCollisions
 		data[_withCollisions.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 	var data = {}
-	
+
 	var _withCollisions: PBField
 	func get_withCollisions() -> bool:
 		return _withCollisions.value
@@ -5118,7 +5118,7 @@ class PB_Animator:
 		_withCollisions.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_withCollisions(value : bool) -> void:
 		_withCollisions.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -5127,13 +5127,13 @@ class PB_Animator:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -5148,28 +5148,28 @@ class PB_Animator:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_AudioClip:
 	func _init():
 		var service
-		
+
 		_url = PBField.new("url", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _url
 		data[_url.tag] = service
-		
+
 		_loop = PBField.new("loop", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _loop
 		data[_loop.tag] = service
-		
+
 		_volume = PBField.new("volume", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _volume
 		data[_volume.tag] = service
-		
+
 	var data = {}
-	
+
 	var _url: PBField
 	func get_url() -> String:
 		return _url.value
@@ -5178,7 +5178,7 @@ class PB_AudioClip:
 		_url.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_url(value : String) -> void:
 		_url.value = value
-	
+
 	var _loop: PBField
 	func get_loop() -> bool:
 		return _loop.value
@@ -5187,7 +5187,7 @@ class PB_AudioClip:
 		_loop.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_loop(value : bool) -> void:
 		_loop.value = value
-	
+
 	var _volume: PBField
 	func get_volume() -> float:
 		return _volume.value
@@ -5196,13 +5196,13 @@ class PB_AudioClip:
 		_volume.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_volume(value : float) -> void:
 		_volume.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -5217,44 +5217,44 @@ class PB_AudioClip:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_AudioSource:
 	func _init():
 		var service
-		
+
 		_audioClip = PBField.new("audioClip", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _audioClip
 		service.func_ref = Callable(self, "new_audioClip")
 		data[_audioClip.tag] = service
-		
+
 		_audioClipId = PBField.new("audioClipId", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _audioClipId
 		data[_audioClipId.tag] = service
-		
+
 		_loop = PBField.new("loop", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _loop
 		data[_loop.tag] = service
-		
+
 		_volume = PBField.new("volume", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _volume
 		data[_volume.tag] = service
-		
+
 		_playing = PBField.new("playing", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _playing
 		data[_playing.tag] = service
-		
+
 		_pitch = PBField.new("pitch", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _pitch
 		data[_pitch.tag] = service
-		
+
 	var data = {}
-	
+
 	var _audioClip: PBField
 	func get_audioClip() -> PB_AudioClip:
 		return _audioClip.value
@@ -5264,7 +5264,7 @@ class PB_AudioSource:
 	func new_audioClip() -> PB_AudioClip:
 		_audioClip.value = PB_AudioClip.new()
 		return _audioClip.value
-	
+
 	var _audioClipId: PBField
 	func get_audioClipId() -> String:
 		return _audioClipId.value
@@ -5273,7 +5273,7 @@ class PB_AudioSource:
 		_audioClipId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_audioClipId(value : String) -> void:
 		_audioClipId.value = value
-	
+
 	var _loop: PBField
 	func get_loop() -> bool:
 		return _loop.value
@@ -5282,7 +5282,7 @@ class PB_AudioSource:
 		_loop.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_loop(value : bool) -> void:
 		_loop.value = value
-	
+
 	var _volume: PBField
 	func get_volume() -> float:
 		return _volume.value
@@ -5291,7 +5291,7 @@ class PB_AudioSource:
 		_volume.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_volume(value : float) -> void:
 		_volume.value = value
-	
+
 	var _playing: PBField
 	func get_playing() -> bool:
 		return _playing.value
@@ -5300,7 +5300,7 @@ class PB_AudioSource:
 		_playing.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_playing(value : bool) -> void:
 		_playing.value = value
-	
+
 	var _pitch: PBField
 	func get_pitch() -> float:
 		return _pitch.value
@@ -5309,13 +5309,13 @@ class PB_AudioSource:
 		_pitch.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_pitch(value : float) -> void:
 		_pitch.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -5330,85 +5330,85 @@ class PB_AudioSource:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_AvatarShape:
 	func _init():
 		var service
-		
+
 		_id = PBField.new("id", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _id
 		data[_id.tag] = service
-		
+
 		_baseUrl = PBField.new("baseUrl", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _baseUrl
 		data[_baseUrl.tag] = service
-		
+
 		_name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _name
 		data[_name.tag] = service
-		
+
 		_bodyShape = PBField.new("bodyShape", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _bodyShape
 		service.func_ref = Callable(self, "new_bodyShape")
 		data[_bodyShape.tag] = service
-		
+
 		_wearables = PBField.new("wearables", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 5, true, [])
 		service = PBServiceField.new()
 		service.field = _wearables
 		service.func_ref = Callable(self, "add_wearables")
 		data[_wearables.tag] = service
-		
+
 		_skin = PBField.new("skin", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _skin
 		service.func_ref = Callable(self, "new_skin")
 		data[_skin.tag] = service
-		
+
 		_hair = PBField.new("hair", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _hair
 		service.func_ref = Callable(self, "new_hair")
 		data[_hair.tag] = service
-		
+
 		_eyes = PBField.new("eyes", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _eyes
 		service.func_ref = Callable(self, "new_eyes")
 		data[_eyes.tag] = service
-		
+
 		_eyebrows = PBField.new("eyebrows", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _eyebrows
 		service.func_ref = Callable(self, "new_eyebrows")
 		data[_eyebrows.tag] = service
-		
+
 		_mouth = PBField.new("mouth", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _mouth
 		service.func_ref = Callable(self, "new_mouth")
 		data[_mouth.tag] = service
-		
+
 		_useDummyModel = PBField.new("useDummyModel", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _useDummyModel
 		data[_useDummyModel.tag] = service
-		
+
 		_expressionTriggerId = PBField.new("expressionTriggerId", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _expressionTriggerId
 		data[_expressionTriggerId.tag] = service
-		
+
 		_expressionTriggerTimestamp = PBField.new("expressionTriggerTimestamp", PB_DATA_TYPE.UINT64, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.UINT64])
 		service = PBServiceField.new()
 		service.field = _expressionTriggerTimestamp
 		data[_expressionTriggerTimestamp.tag] = service
-		
+
 	var data = {}
-	
+
 	var _id: PBField
 	func get_id() -> String:
 		return _id.value
@@ -5417,7 +5417,7 @@ class PB_AvatarShape:
 		_id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_id(value : String) -> void:
 		_id.value = value
-	
+
 	var _baseUrl: PBField
 	func get_baseUrl() -> String:
 		return _baseUrl.value
@@ -5426,7 +5426,7 @@ class PB_AvatarShape:
 		_baseUrl.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_baseUrl(value : String) -> void:
 		_baseUrl.value = value
-	
+
 	var _name: PBField
 	func get_name() -> String:
 		return _name.value
@@ -5435,7 +5435,7 @@ class PB_AvatarShape:
 		_name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_name(value : String) -> void:
 		_name.value = value
-	
+
 	var _bodyShape: PBField
 	func get_bodyShape() -> PB_Wearable:
 		return _bodyShape.value
@@ -5445,7 +5445,7 @@ class PB_AvatarShape:
 	func new_bodyShape() -> PB_Wearable:
 		_bodyShape.value = PB_Wearable.new()
 		return _bodyShape.value
-	
+
 	var _wearables: PBField
 	func get_wearables() -> Array:
 		return _wearables.value
@@ -5456,7 +5456,7 @@ class PB_AvatarShape:
 		var element = PB_Wearable.new()
 		_wearables.value.append(element)
 		return element
-	
+
 	var _skin: PBField
 	func get_skin() -> PB_Skin:
 		return _skin.value
@@ -5466,7 +5466,7 @@ class PB_AvatarShape:
 	func new_skin() -> PB_Skin:
 		_skin.value = PB_Skin.new()
 		return _skin.value
-	
+
 	var _hair: PBField
 	func get_hair() -> PB_Hair:
 		return _hair.value
@@ -5476,7 +5476,7 @@ class PB_AvatarShape:
 	func new_hair() -> PB_Hair:
 		_hair.value = PB_Hair.new()
 		return _hair.value
-	
+
 	var _eyes: PBField
 	func get_eyes() -> PB_Eyes:
 		return _eyes.value
@@ -5486,7 +5486,7 @@ class PB_AvatarShape:
 	func new_eyes() -> PB_Eyes:
 		_eyes.value = PB_Eyes.new()
 		return _eyes.value
-	
+
 	var _eyebrows: PBField
 	func get_eyebrows() -> PB_Face:
 		return _eyebrows.value
@@ -5496,7 +5496,7 @@ class PB_AvatarShape:
 	func new_eyebrows() -> PB_Face:
 		_eyebrows.value = PB_Face.new()
 		return _eyebrows.value
-	
+
 	var _mouth: PBField
 	func get_mouth() -> PB_Face:
 		return _mouth.value
@@ -5506,7 +5506,7 @@ class PB_AvatarShape:
 	func new_mouth() -> PB_Face:
 		_mouth.value = PB_Face.new()
 		return _mouth.value
-	
+
 	var _useDummyModel: PBField
 	func get_useDummyModel() -> bool:
 		return _useDummyModel.value
@@ -5515,7 +5515,7 @@ class PB_AvatarShape:
 		_useDummyModel.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_useDummyModel(value : bool) -> void:
 		_useDummyModel.value = value
-	
+
 	var _expressionTriggerId: PBField
 	func get_expressionTriggerId() -> String:
 		return _expressionTriggerId.value
@@ -5524,7 +5524,7 @@ class PB_AvatarShape:
 		_expressionTriggerId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_expressionTriggerId(value : String) -> void:
 		_expressionTriggerId.value = value
-	
+
 	var _expressionTriggerTimestamp: PBField
 	func get_expressionTriggerTimestamp() -> int:
 		return _expressionTriggerTimestamp.value
@@ -5533,13 +5533,13 @@ class PB_AvatarShape:
 		_expressionTriggerTimestamp.value = DEFAULT_VALUES_3[PB_DATA_TYPE.UINT64]
 	func set_expressionTriggerTimestamp(value : int) -> void:
 		_expressionTriggerTimestamp.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -5554,29 +5554,29 @@ class PB_AvatarShape:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Wearable:
 	func _init():
 		var service
-		
+
 		_categody = PBField.new("categody", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _categody
 		data[_categody.tag] = service
-		
+
 		_contentName = PBField.new("contentName", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _contentName
 		data[_contentName.tag] = service
-		
+
 		_contents = PBField.new("contents", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 3, true, [])
 		service = PBServiceField.new()
 		service.field = _contents
 		service.func_ref = Callable(self, "add_contents")
 		data[_contents.tag] = service
-		
+
 	var data = {}
-	
+
 	var _categody: PBField
 	func get_categody() -> String:
 		return _categody.value
@@ -5585,7 +5585,7 @@ class PB_Wearable:
 		_categody.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_categody(value : String) -> void:
 		_categody.value = value
-	
+
 	var _contentName: PBField
 	func get_contentName() -> String:
 		return _contentName.value
@@ -5594,7 +5594,7 @@ class PB_Wearable:
 		_contentName.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_contentName(value : String) -> void:
 		_contentName.value = value
-	
+
 	var _contents: PBField
 	func get_contents() -> Array:
 		return _contents.value
@@ -5605,13 +5605,13 @@ class PB_Wearable:
 		var element = PB_ContentMapping.new()
 		_contents.value.append(element)
 		return element
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -5626,18 +5626,18 @@ class PB_Wearable:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Face:
 	func _init():
 		var service
-		
+
 		_texture = PBField.new("texture", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _texture
 		data[_texture.tag] = service
-		
+
 	var data = {}
-	
+
 	var _texture: PBField
 	func get_texture() -> String:
 		return _texture.value
@@ -5646,13 +5646,13 @@ class PB_Face:
 		_texture.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_texture(value : String) -> void:
 		_texture.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -5667,29 +5667,29 @@ class PB_Face:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Eyes:
 	func _init():
 		var service
-		
+
 		_texture = PBField.new("texture", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _texture
 		data[_texture.tag] = service
-		
+
 		_mask = PBField.new("mask", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _mask
 		data[_mask.tag] = service
-		
+
 		_color = PBField.new("color", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _color
 		service.func_ref = Callable(self, "new_color")
 		data[_color.tag] = service
-		
+
 	var data = {}
-	
+
 	var _texture: PBField
 	func get_texture() -> String:
 		return _texture.value
@@ -5698,7 +5698,7 @@ class PB_Eyes:
 		_texture.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_texture(value : String) -> void:
 		_texture.value = value
-	
+
 	var _mask: PBField
 	func get_mask() -> String:
 		return _mask.value
@@ -5707,7 +5707,7 @@ class PB_Eyes:
 		_mask.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_mask(value : String) -> void:
 		_mask.value = value
-	
+
 	var _color: PBField
 	func get_color() -> PB_Color4:
 		return _color.value
@@ -5717,13 +5717,13 @@ class PB_Eyes:
 	func new_color() -> PB_Color4:
 		_color.value = PB_Color4.new()
 		return _color.value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -5738,19 +5738,19 @@ class PB_Eyes:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Hair:
 	func _init():
 		var service
-		
+
 		_color = PBField.new("color", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _color
 		service.func_ref = Callable(self, "new_color")
 		data[_color.tag] = service
-		
+
 	var data = {}
-	
+
 	var _color: PBField
 	func get_color() -> PB_Color4:
 		return _color.value
@@ -5760,13 +5760,13 @@ class PB_Hair:
 	func new_color() -> PB_Color4:
 		_color.value = PB_Color4.new()
 		return _color.value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -5781,19 +5781,19 @@ class PB_Hair:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Skin:
 	func _init():
 		var service
-		
+
 		_color = PBField.new("color", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _color
 		service.func_ref = Callable(self, "new_color")
 		data[_color.tag] = service
-		
+
 	var data = {}
-	
+
 	var _color: PBField
 	func get_color() -> PB_Color4:
 		return _color.value
@@ -5803,13 +5803,13 @@ class PB_Skin:
 	func new_color() -> PB_Color4:
 		_color.value = PB_Color4.new()
 		return _color.value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -5824,24 +5824,24 @@ class PB_Skin:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_BasicMaterial:
 	func _init():
 		var service
-		
+
 		_texture = PBField.new("texture", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _texture
 		service.func_ref = Callable(self, "new_texture")
 		data[_texture.tag] = service
-		
+
 		_alphaTest = PBField.new("alphaTest", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _alphaTest
 		data[_alphaTest.tag] = service
-		
+
 	var data = {}
-	
+
 	var _texture: PBField
 	func get_texture() -> PB_Texture:
 		return _texture.value
@@ -5851,7 +5851,7 @@ class PB_BasicMaterial:
 	func new_texture() -> PB_Texture:
 		_texture.value = PB_Texture.new()
 		return _texture.value
-	
+
 	var _alphaTest: PBField
 	func get_alphaTest() -> float:
 		return _alphaTest.value
@@ -5860,13 +5860,13 @@ class PB_BasicMaterial:
 		_alphaTest.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_alphaTest(value : float) -> void:
 		_alphaTest.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -5881,28 +5881,28 @@ class PB_BasicMaterial:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Billboard:
 	func _init():
 		var service
-		
+
 		_x = PBField.new("x", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _x
 		data[_x.tag] = service
-		
+
 		_y = PBField.new("y", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _y
 		data[_y.tag] = service
-		
+
 		_z = PBField.new("z", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _z
 		data[_z.tag] = service
-		
+
 	var data = {}
-	
+
 	var _x: PBField
 	func get_x() -> bool:
 		return _x.value
@@ -5911,7 +5911,7 @@ class PB_Billboard:
 		_x.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_x(value : bool) -> void:
 		_x.value = value
-	
+
 	var _y: PBField
 	func get_y() -> bool:
 		return _y.value
@@ -5920,7 +5920,7 @@ class PB_Billboard:
 		_y.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_y(value : bool) -> void:
 		_y.value = value
-	
+
 	var _z: PBField
 	func get_z() -> bool:
 		return _z.value
@@ -5929,13 +5929,13 @@ class PB_Billboard:
 		_z.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_z(value : bool) -> void:
 		_z.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -5950,28 +5950,28 @@ class PB_Billboard:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_BoxShape:
 	func _init():
 		var service
-		
+
 		_withCollisions = PBField.new("withCollisions", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _withCollisions
 		data[_withCollisions.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_uvs = PBField.new("uvs", PB_DATA_TYPE.FLOAT, PB_RULE.REPEATED, 3, true, [])
 		service = PBServiceField.new()
 		service.field = _uvs
 		data[_uvs.tag] = service
-		
+
 	var data = {}
-	
+
 	var _withCollisions: PBField
 	func get_withCollisions() -> bool:
 		return _withCollisions.value
@@ -5980,7 +5980,7 @@ class PB_BoxShape:
 		_withCollisions.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_withCollisions(value : bool) -> void:
 		_withCollisions.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -5989,7 +5989,7 @@ class PB_BoxShape:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _uvs: PBField
 	func get_uvs() -> Array:
 		return _uvs.value
@@ -5998,13 +5998,13 @@ class PB_BoxShape:
 		_uvs.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func add_uvs(value : float) -> void:
 		_uvs.value.append(value)
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -6019,33 +6019,33 @@ class PB_BoxShape:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_CircleShape:
 	func _init():
 		var service
-		
+
 		_withCollisions = PBField.new("withCollisions", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _withCollisions
 		data[_withCollisions.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_segments = PBField.new("segments", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _segments
 		data[_segments.tag] = service
-		
+
 		_arc = PBField.new("arc", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _arc
 		data[_arc.tag] = service
-		
+
 	var data = {}
-	
+
 	var _withCollisions: PBField
 	func get_withCollisions() -> bool:
 		return _withCollisions.value
@@ -6054,7 +6054,7 @@ class PB_CircleShape:
 		_withCollisions.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_withCollisions(value : bool) -> void:
 		_withCollisions.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -6063,7 +6063,7 @@ class PB_CircleShape:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _segments: PBField
 	func get_segments() -> float:
 		return _segments.value
@@ -6072,7 +6072,7 @@ class PB_CircleShape:
 		_segments.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_segments(value : float) -> void:
 		_segments.value = value
-	
+
 	var _arc: PBField
 	func get_arc() -> float:
 		return _arc.value
@@ -6081,13 +6081,13 @@ class PB_CircleShape:
 		_arc.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_arc(value : float) -> void:
 		_arc.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -6102,58 +6102,58 @@ class PB_CircleShape:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_ConeShape:
 	func _init():
 		var service
-		
+
 		_withCollisions = PBField.new("withCollisions", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _withCollisions
 		data[_withCollisions.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_radiusTop = PBField.new("radiusTop", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _radiusTop
 		data[_radiusTop.tag] = service
-		
+
 		_radiusBottom = PBField.new("radiusBottom", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _radiusBottom
 		data[_radiusBottom.tag] = service
-		
+
 		_segmentsHeight = PBField.new("segmentsHeight", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _segmentsHeight
 		data[_segmentsHeight.tag] = service
-		
+
 		_segmentsRadial = PBField.new("segmentsRadial", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _segmentsRadial
 		data[_segmentsRadial.tag] = service
-		
+
 		_openEnded = PBField.new("openEnded", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _openEnded
 		data[_openEnded.tag] = service
-		
+
 		_radius = PBField.new("radius", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _radius
 		data[_radius.tag] = service
-		
+
 		_arc = PBField.new("arc", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _arc
 		data[_arc.tag] = service
-		
+
 	var data = {}
-	
+
 	var _withCollisions: PBField
 	func get_withCollisions() -> bool:
 		return _withCollisions.value
@@ -6162,7 +6162,7 @@ class PB_ConeShape:
 		_withCollisions.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_withCollisions(value : bool) -> void:
 		_withCollisions.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -6171,7 +6171,7 @@ class PB_ConeShape:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _radiusTop: PBField
 	func get_radiusTop() -> float:
 		return _radiusTop.value
@@ -6180,7 +6180,7 @@ class PB_ConeShape:
 		_radiusTop.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_radiusTop(value : float) -> void:
 		_radiusTop.value = value
-	
+
 	var _radiusBottom: PBField
 	func get_radiusBottom() -> float:
 		return _radiusBottom.value
@@ -6189,7 +6189,7 @@ class PB_ConeShape:
 		_radiusBottom.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_radiusBottom(value : float) -> void:
 		_radiusBottom.value = value
-	
+
 	var _segmentsHeight: PBField
 	func get_segmentsHeight() -> float:
 		return _segmentsHeight.value
@@ -6198,7 +6198,7 @@ class PB_ConeShape:
 		_segmentsHeight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_segmentsHeight(value : float) -> void:
 		_segmentsHeight.value = value
-	
+
 	var _segmentsRadial: PBField
 	func get_segmentsRadial() -> float:
 		return _segmentsRadial.value
@@ -6207,7 +6207,7 @@ class PB_ConeShape:
 		_segmentsRadial.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_segmentsRadial(value : float) -> void:
 		_segmentsRadial.value = value
-	
+
 	var _openEnded: PBField
 	func get_openEnded() -> bool:
 		return _openEnded.value
@@ -6216,7 +6216,7 @@ class PB_ConeShape:
 		_openEnded.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_openEnded(value : bool) -> void:
 		_openEnded.value = value
-	
+
 	var _radius: PBField
 	func get_radius() -> float:
 		return _radius.value
@@ -6225,7 +6225,7 @@ class PB_ConeShape:
 		_radius.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_radius(value : float) -> void:
 		_radius.value = value
-	
+
 	var _arc: PBField
 	func get_arc() -> float:
 		return _arc.value
@@ -6234,13 +6234,13 @@ class PB_ConeShape:
 		_arc.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_arc(value : float) -> void:
 		_arc.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -6255,58 +6255,58 @@ class PB_ConeShape:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_CylinderShape:
 	func _init():
 		var service
-		
+
 		_withCollisions = PBField.new("withCollisions", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _withCollisions
 		data[_withCollisions.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_radiusTop = PBField.new("radiusTop", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _radiusTop
 		data[_radiusTop.tag] = service
-		
+
 		_radiusBottom = PBField.new("radiusBottom", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _radiusBottom
 		data[_radiusBottom.tag] = service
-		
+
 		_segmentsHeight = PBField.new("segmentsHeight", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _segmentsHeight
 		data[_segmentsHeight.tag] = service
-		
+
 		_segmentsRadial = PBField.new("segmentsRadial", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _segmentsRadial
 		data[_segmentsRadial.tag] = service
-		
+
 		_openEnded = PBField.new("openEnded", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _openEnded
 		data[_openEnded.tag] = service
-		
+
 		_radius = PBField.new("radius", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _radius
 		data[_radius.tag] = service
-		
+
 		_arc = PBField.new("arc", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _arc
 		data[_arc.tag] = service
-		
+
 	var data = {}
-	
+
 	var _withCollisions: PBField
 	func get_withCollisions() -> bool:
 		return _withCollisions.value
@@ -6315,7 +6315,7 @@ class PB_CylinderShape:
 		_withCollisions.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_withCollisions(value : bool) -> void:
 		_withCollisions.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -6324,7 +6324,7 @@ class PB_CylinderShape:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _radiusTop: PBField
 	func get_radiusTop() -> float:
 		return _radiusTop.value
@@ -6333,7 +6333,7 @@ class PB_CylinderShape:
 		_radiusTop.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_radiusTop(value : float) -> void:
 		_radiusTop.value = value
-	
+
 	var _radiusBottom: PBField
 	func get_radiusBottom() -> float:
 		return _radiusBottom.value
@@ -6342,7 +6342,7 @@ class PB_CylinderShape:
 		_radiusBottom.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_radiusBottom(value : float) -> void:
 		_radiusBottom.value = value
-	
+
 	var _segmentsHeight: PBField
 	func get_segmentsHeight() -> float:
 		return _segmentsHeight.value
@@ -6351,7 +6351,7 @@ class PB_CylinderShape:
 		_segmentsHeight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_segmentsHeight(value : float) -> void:
 		_segmentsHeight.value = value
-	
+
 	var _segmentsRadial: PBField
 	func get_segmentsRadial() -> float:
 		return _segmentsRadial.value
@@ -6360,7 +6360,7 @@ class PB_CylinderShape:
 		_segmentsRadial.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_segmentsRadial(value : float) -> void:
 		_segmentsRadial.value = value
-	
+
 	var _openEnded: PBField
 	func get_openEnded() -> bool:
 		return _openEnded.value
@@ -6369,7 +6369,7 @@ class PB_CylinderShape:
 		_openEnded.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_openEnded(value : bool) -> void:
 		_openEnded.value = value
-	
+
 	var _radius: PBField
 	func get_radius() -> float:
 		return _radius.value
@@ -6378,7 +6378,7 @@ class PB_CylinderShape:
 		_radius.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_radius(value : float) -> void:
 		_radius.value = value
-	
+
 	var _arc: PBField
 	func get_arc() -> float:
 		return _arc.value
@@ -6387,13 +6387,13 @@ class PB_CylinderShape:
 		_arc.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_arc(value : float) -> void:
 		_arc.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -6408,19 +6408,19 @@ class PB_CylinderShape:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_GlobalPointerDown:
 	func _init():
 		var service
-		
+
 	var data = {}
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -6435,19 +6435,19 @@ class PB_GlobalPointerDown:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_GlobalPointerUp:
 	func _init():
 		var service
-		
+
 	var data = {}
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -6462,28 +6462,28 @@ class PB_GlobalPointerUp:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_GLTFShape:
 	func _init():
 		var service
-		
+
 		_withCollisions = PBField.new("withCollisions", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _withCollisions
 		data[_withCollisions.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_src = PBField.new("src", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _src
 		data[_src.tag] = service
-		
+
 	var data = {}
-	
+
 	var _withCollisions: PBField
 	func get_withCollisions() -> bool:
 		return _withCollisions.value
@@ -6492,7 +6492,7 @@ class PB_GLTFShape:
 		_withCollisions.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_withCollisions(value : bool) -> void:
 		_withCollisions.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -6501,7 +6501,7 @@ class PB_GLTFShape:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _src: PBField
 	func get_src() -> String:
 		return _src.value
@@ -6510,13 +6510,13 @@ class PB_GLTFShape:
 		_src.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_src(value : String) -> void:
 		_src.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -6531,128 +6531,128 @@ class PB_GLTFShape:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Material:
 	func _init():
 		var service
-		
+
 		_alpha = PBField.new("alpha", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _alpha
 		data[_alpha.tag] = service
-		
+
 		_albedoColor = PBField.new("albedoColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _albedoColor
 		service.func_ref = Callable(self, "new_albedoColor")
 		data[_albedoColor.tag] = service
-		
+
 		_emissiveColor = PBField.new("emissiveColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _emissiveColor
 		service.func_ref = Callable(self, "new_emissiveColor")
 		data[_emissiveColor.tag] = service
-		
+
 		_metallic = PBField.new("metallic", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _metallic
 		data[_metallic.tag] = service
-		
+
 		_roughness = PBField.new("roughness", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _roughness
 		data[_roughness.tag] = service
-		
+
 		_ambientColor = PBField.new("ambientColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _ambientColor
 		service.func_ref = Callable(self, "new_ambientColor")
 		data[_ambientColor.tag] = service
-		
+
 		_reflectionColor = PBField.new("reflectionColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _reflectionColor
 		service.func_ref = Callable(self, "new_reflectionColor")
 		data[_reflectionColor.tag] = service
-		
+
 		_reflectivityColor = PBField.new("reflectivityColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _reflectivityColor
 		service.func_ref = Callable(self, "new_reflectivityColor")
 		data[_reflectivityColor.tag] = service
-		
+
 		_directIntensity = PBField.new("directIntensity", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _directIntensity
 		data[_directIntensity.tag] = service
-		
+
 		_microSurface = PBField.new("microSurface", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _microSurface
 		data[_microSurface.tag] = service
-		
+
 		_emissiveIntensity = PBField.new("emissiveIntensity", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _emissiveIntensity
 		data[_emissiveIntensity.tag] = service
-		
+
 		_environmentIntensity = PBField.new("environmentIntensity", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _environmentIntensity
 		data[_environmentIntensity.tag] = service
-		
+
 		_specularIntensity = PBField.new("specularIntensity", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _specularIntensity
 		data[_specularIntensity.tag] = service
-		
+
 		_albedoTexture = PBField.new("albedoTexture", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _albedoTexture
 		service.func_ref = Callable(self, "new_albedoTexture")
 		data[_albedoTexture.tag] = service
-		
+
 		_alphaTexture = PBField.new("alphaTexture", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 15, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _alphaTexture
 		service.func_ref = Callable(self, "new_alphaTexture")
 		data[_alphaTexture.tag] = service
-		
+
 		_emissiveTexture = PBField.new("emissiveTexture", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 16, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _emissiveTexture
 		service.func_ref = Callable(self, "new_emissiveTexture")
 		data[_emissiveTexture.tag] = service
-		
+
 		_bumpTexture = PBField.new("bumpTexture", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 17, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _bumpTexture
 		service.func_ref = Callable(self, "new_bumpTexture")
 		data[_bumpTexture.tag] = service
-		
+
 		_refractionTexture = PBField.new("refractionTexture", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 18, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _refractionTexture
 		service.func_ref = Callable(self, "new_refractionTexture")
 		data[_refractionTexture.tag] = service
-		
+
 		_disableLighting = PBField.new("disableLighting", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 19, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _disableLighting
 		data[_disableLighting.tag] = service
-		
+
 		_transparencyMode = PBField.new("transparencyMode", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 20, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _transparencyMode
 		data[_transparencyMode.tag] = service
-		
+
 		_hasAlpha = PBField.new("hasAlpha", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 21, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _hasAlpha
 		data[_hasAlpha.tag] = service
-		
+
 	var data = {}
-	
+
 	var _alpha: PBField
 	func get_alpha() -> float:
 		return _alpha.value
@@ -6661,7 +6661,7 @@ class PB_Material:
 		_alpha.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_alpha(value : float) -> void:
 		_alpha.value = value
-	
+
 	var _albedoColor: PBField
 	func get_albedoColor() -> PB_Color3:
 		return _albedoColor.value
@@ -6671,7 +6671,7 @@ class PB_Material:
 	func new_albedoColor() -> PB_Color3:
 		_albedoColor.value = PB_Color3.new()
 		return _albedoColor.value
-	
+
 	var _emissiveColor: PBField
 	func get_emissiveColor() -> PB_Color3:
 		return _emissiveColor.value
@@ -6681,7 +6681,7 @@ class PB_Material:
 	func new_emissiveColor() -> PB_Color3:
 		_emissiveColor.value = PB_Color3.new()
 		return _emissiveColor.value
-	
+
 	var _metallic: PBField
 	func get_metallic() -> float:
 		return _metallic.value
@@ -6690,7 +6690,7 @@ class PB_Material:
 		_metallic.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_metallic(value : float) -> void:
 		_metallic.value = value
-	
+
 	var _roughness: PBField
 	func get_roughness() -> float:
 		return _roughness.value
@@ -6699,7 +6699,7 @@ class PB_Material:
 		_roughness.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_roughness(value : float) -> void:
 		_roughness.value = value
-	
+
 	var _ambientColor: PBField
 	func get_ambientColor() -> PB_Color3:
 		return _ambientColor.value
@@ -6709,7 +6709,7 @@ class PB_Material:
 	func new_ambientColor() -> PB_Color3:
 		_ambientColor.value = PB_Color3.new()
 		return _ambientColor.value
-	
+
 	var _reflectionColor: PBField
 	func get_reflectionColor() -> PB_Color3:
 		return _reflectionColor.value
@@ -6719,7 +6719,7 @@ class PB_Material:
 	func new_reflectionColor() -> PB_Color3:
 		_reflectionColor.value = PB_Color3.new()
 		return _reflectionColor.value
-	
+
 	var _reflectivityColor: PBField
 	func get_reflectivityColor() -> PB_Color3:
 		return _reflectivityColor.value
@@ -6729,7 +6729,7 @@ class PB_Material:
 	func new_reflectivityColor() -> PB_Color3:
 		_reflectivityColor.value = PB_Color3.new()
 		return _reflectivityColor.value
-	
+
 	var _directIntensity: PBField
 	func get_directIntensity() -> float:
 		return _directIntensity.value
@@ -6738,7 +6738,7 @@ class PB_Material:
 		_directIntensity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_directIntensity(value : float) -> void:
 		_directIntensity.value = value
-	
+
 	var _microSurface: PBField
 	func get_microSurface() -> float:
 		return _microSurface.value
@@ -6747,7 +6747,7 @@ class PB_Material:
 		_microSurface.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_microSurface(value : float) -> void:
 		_microSurface.value = value
-	
+
 	var _emissiveIntensity: PBField
 	func get_emissiveIntensity() -> float:
 		return _emissiveIntensity.value
@@ -6756,7 +6756,7 @@ class PB_Material:
 		_emissiveIntensity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_emissiveIntensity(value : float) -> void:
 		_emissiveIntensity.value = value
-	
+
 	var _environmentIntensity: PBField
 	func get_environmentIntensity() -> float:
 		return _environmentIntensity.value
@@ -6765,7 +6765,7 @@ class PB_Material:
 		_environmentIntensity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_environmentIntensity(value : float) -> void:
 		_environmentIntensity.value = value
-	
+
 	var _specularIntensity: PBField
 	func get_specularIntensity() -> float:
 		return _specularIntensity.value
@@ -6774,7 +6774,7 @@ class PB_Material:
 		_specularIntensity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_specularIntensity(value : float) -> void:
 		_specularIntensity.value = value
-	
+
 	var _albedoTexture: PBField
 	func get_albedoTexture() -> PB_Texture:
 		return _albedoTexture.value
@@ -6784,7 +6784,7 @@ class PB_Material:
 	func new_albedoTexture() -> PB_Texture:
 		_albedoTexture.value = PB_Texture.new()
 		return _albedoTexture.value
-	
+
 	var _alphaTexture: PBField
 	func get_alphaTexture() -> PB_Texture:
 		return _alphaTexture.value
@@ -6794,7 +6794,7 @@ class PB_Material:
 	func new_alphaTexture() -> PB_Texture:
 		_alphaTexture.value = PB_Texture.new()
 		return _alphaTexture.value
-	
+
 	var _emissiveTexture: PBField
 	func get_emissiveTexture() -> PB_Texture:
 		return _emissiveTexture.value
@@ -6804,7 +6804,7 @@ class PB_Material:
 	func new_emissiveTexture() -> PB_Texture:
 		_emissiveTexture.value = PB_Texture.new()
 		return _emissiveTexture.value
-	
+
 	var _bumpTexture: PBField
 	func get_bumpTexture() -> PB_Texture:
 		return _bumpTexture.value
@@ -6814,7 +6814,7 @@ class PB_Material:
 	func new_bumpTexture() -> PB_Texture:
 		_bumpTexture.value = PB_Texture.new()
 		return _bumpTexture.value
-	
+
 	var _refractionTexture: PBField
 	func get_refractionTexture() -> PB_Texture:
 		return _refractionTexture.value
@@ -6824,7 +6824,7 @@ class PB_Material:
 	func new_refractionTexture() -> PB_Texture:
 		_refractionTexture.value = PB_Texture.new()
 		return _refractionTexture.value
-	
+
 	var _disableLighting: PBField
 	func get_disableLighting() -> bool:
 		return _disableLighting.value
@@ -6833,7 +6833,7 @@ class PB_Material:
 		_disableLighting.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_disableLighting(value : bool) -> void:
 		_disableLighting.value = value
-	
+
 	var _transparencyMode: PBField
 	func get_transparencyMode() -> float:
 		return _transparencyMode.value
@@ -6842,7 +6842,7 @@ class PB_Material:
 		_transparencyMode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_transparencyMode(value : float) -> void:
 		_transparencyMode.value = value
-	
+
 	var _hasAlpha: PBField
 	func get_hasAlpha() -> bool:
 		return _hasAlpha.value
@@ -6851,13 +6851,13 @@ class PB_Material:
 		_hasAlpha.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_hasAlpha(value : bool) -> void:
 		_hasAlpha.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -6872,34 +6872,34 @@ class PB_Material:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_NFTShape:
 	func _init():
 		var service
-		
+
 		_withCollisions = PBField.new("withCollisions", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _withCollisions
 		data[_withCollisions.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_src = PBField.new("src", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _src
 		data[_src.tag] = service
-		
+
 		_color = PBField.new("color", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _color
 		service.func_ref = Callable(self, "new_color")
 		data[_color.tag] = service
-		
+
 	var data = {}
-	
+
 	var _withCollisions: PBField
 	func get_withCollisions() -> bool:
 		return _withCollisions.value
@@ -6908,7 +6908,7 @@ class PB_NFTShape:
 		_withCollisions.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_withCollisions(value : bool) -> void:
 		_withCollisions.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -6917,7 +6917,7 @@ class PB_NFTShape:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _src: PBField
 	func get_src() -> String:
 		return _src.value
@@ -6926,7 +6926,7 @@ class PB_NFTShape:
 		_src.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_src(value : String) -> void:
 		_src.value = value
-	
+
 	var _color: PBField
 	func get_color() -> PB_Color3:
 		return _color.value
@@ -6936,13 +6936,13 @@ class PB_NFTShape:
 	func new_color() -> PB_Color3:
 		_color.value = PB_Color3.new()
 		return _color.value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -6957,28 +6957,28 @@ class PB_NFTShape:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_OBJShape:
 	func _init():
 		var service
-		
+
 		_withCollisions = PBField.new("withCollisions", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _withCollisions
 		data[_withCollisions.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_src = PBField.new("src", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _src
 		data[_src.tag] = service
-		
+
 	var data = {}
-	
+
 	var _withCollisions: PBField
 	func get_withCollisions() -> bool:
 		return _withCollisions.value
@@ -6987,7 +6987,7 @@ class PB_OBJShape:
 		_withCollisions.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_withCollisions(value : bool) -> void:
 		_withCollisions.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -6996,7 +6996,7 @@ class PB_OBJShape:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _src: PBField
 	func get_src() -> String:
 		return _src.value
@@ -7005,13 +7005,13 @@ class PB_OBJShape:
 		_src.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_src(value : String) -> void:
 		_src.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -7026,38 +7026,38 @@ class PB_OBJShape:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_PlaneShape:
 	func _init():
 		var service
-		
+
 		_withCollisions = PBField.new("withCollisions", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _withCollisions
 		data[_withCollisions.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_width = PBField.new("width", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _width
 		data[_width.tag] = service
-		
+
 		_height = PBField.new("height", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _height
 		data[_height.tag] = service
-		
+
 		_uvs = PBField.new("uvs", PB_DATA_TYPE.FLOAT, PB_RULE.REPEATED, 5, true, [])
 		service = PBServiceField.new()
 		service.field = _uvs
 		data[_uvs.tag] = service
-		
+
 	var data = {}
-	
+
 	var _withCollisions: PBField
 	func get_withCollisions() -> bool:
 		return _withCollisions.value
@@ -7066,7 +7066,7 @@ class PB_PlaneShape:
 		_withCollisions.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_withCollisions(value : bool) -> void:
 		_withCollisions.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -7075,7 +7075,7 @@ class PB_PlaneShape:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _width: PBField
 	func get_width() -> float:
 		return _width.value
@@ -7084,7 +7084,7 @@ class PB_PlaneShape:
 		_width.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_width(value : float) -> void:
 		_width.value = value
-	
+
 	var _height: PBField
 	func get_height() -> float:
 		return _height.value
@@ -7093,7 +7093,7 @@ class PB_PlaneShape:
 		_height.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_height(value : float) -> void:
 		_height.value = value
-	
+
 	var _uvs: PBField
 	func get_uvs() -> Array:
 		return _uvs.value
@@ -7102,13 +7102,13 @@ class PB_PlaneShape:
 		_uvs.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func add_uvs(value : float) -> void:
 		_uvs.value.append(value)
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -7123,23 +7123,23 @@ class PB_PlaneShape:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Shape:
 	func _init():
 		var service
-		
+
 		_withCollisions = PBField.new("withCollisions", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _withCollisions
 		data[_withCollisions.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 	var data = {}
-	
+
 	var _withCollisions: PBField
 	func get_withCollisions() -> bool:
 		return _withCollisions.value
@@ -7148,7 +7148,7 @@ class PB_Shape:
 		_withCollisions.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_withCollisions(value : bool) -> void:
 		_withCollisions.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -7157,13 +7157,13 @@ class PB_Shape:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -7178,23 +7178,23 @@ class PB_Shape:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_SphereShape:
 	func _init():
 		var service
-		
+
 		_withCollisions = PBField.new("withCollisions", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _withCollisions
 		data[_withCollisions.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 	var data = {}
-	
+
 	var _withCollisions: PBField
 	func get_withCollisions() -> bool:
 		return _withCollisions.value
@@ -7203,7 +7203,7 @@ class PB_SphereShape:
 		_withCollisions.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_withCollisions(value : bool) -> void:
 		_withCollisions.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -7212,13 +7212,13 @@ class PB_SphereShape:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -7233,156 +7233,156 @@ class PB_SphereShape:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_TextShape:
 	func _init():
 		var service
-		
+
 		_withCollisions = PBField.new("withCollisions", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _withCollisions
 		data[_withCollisions.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_outlineWidth = PBField.new("outlineWidth", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _outlineWidth
 		data[_outlineWidth.tag] = service
-		
+
 		_outlineColor = PBField.new("outlineColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _outlineColor
 		service.func_ref = Callable(self, "new_outlineColor")
 		data[_outlineColor.tag] = service
-		
+
 		_color = PBField.new("color", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _color
 		service.func_ref = Callable(self, "new_color")
 		data[_color.tag] = service
-		
+
 		_fontSize = PBField.new("fontSize", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _fontSize
 		data[_fontSize.tag] = service
-		
+
 		_fontWeight = PBField.new("fontWeight", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _fontWeight
 		data[_fontWeight.tag] = service
-		
+
 		_opacity = PBField.new("opacity", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _opacity
 		data[_opacity.tag] = service
-		
+
 		_value = PBField.new("value", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _value
 		data[_value.tag] = service
-		
+
 		_lineSpacing = PBField.new("lineSpacing", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _lineSpacing
 		data[_lineSpacing.tag] = service
-		
+
 		_lineCount = PBField.new("lineCount", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _lineCount
 		data[_lineCount.tag] = service
-		
+
 		_resizeToFit = PBField.new("resizeToFit", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _resizeToFit
 		data[_resizeToFit.tag] = service
-		
+
 		_textWrapping = PBField.new("textWrapping", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _textWrapping
 		data[_textWrapping.tag] = service
-		
+
 		_shadowBlur = PBField.new("shadowBlur", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _shadowBlur
 		data[_shadowBlur.tag] = service
-		
+
 		_shadowOffsetX = PBField.new("shadowOffsetX", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 15, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _shadowOffsetX
 		data[_shadowOffsetX.tag] = service
-		
+
 		_shadowOffsetY = PBField.new("shadowOffsetY", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 16, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _shadowOffsetY
 		data[_shadowOffsetY.tag] = service
-		
+
 		_shadowColor = PBField.new("shadowColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 17, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _shadowColor
 		service.func_ref = Callable(self, "new_shadowColor")
 		data[_shadowColor.tag] = service
-		
+
 		_zIndex = PBField.new("zIndex", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 18, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _zIndex
 		data[_zIndex.tag] = service
-		
+
 		_hTextAlign = PBField.new("hTextAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 19, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _hTextAlign
 		data[_hTextAlign.tag] = service
-		
+
 		_vTextAlign = PBField.new("vTextAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 20, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _vTextAlign
 		data[_vTextAlign.tag] = service
-		
+
 		_width = PBField.new("width", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 21, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _width
 		data[_width.tag] = service
-		
+
 		_height = PBField.new("height", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 22, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _height
 		data[_height.tag] = service
-		
+
 		_paddingTop = PBField.new("paddingTop", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 23, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingTop
 		data[_paddingTop.tag] = service
-		
+
 		_paddingRight = PBField.new("paddingRight", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 24, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingRight
 		data[_paddingRight.tag] = service
-		
+
 		_paddingBottom = PBField.new("paddingBottom", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 25, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingBottom
 		data[_paddingBottom.tag] = service
-		
+
 		_paddingLeft = PBField.new("paddingLeft", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 26, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingLeft
 		data[_paddingLeft.tag] = service
-		
+
 		_isPickable = PBField.new("isPickable", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 27, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _isPickable
 		data[_isPickable.tag] = service
-		
+
 		_billboard = PBField.new("billboard", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 28, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _billboard
 		data[_billboard.tag] = service
-		
+
 	var data = {}
-	
+
 	var _withCollisions: PBField
 	func get_withCollisions() -> bool:
 		return _withCollisions.value
@@ -7391,7 +7391,7 @@ class PB_TextShape:
 		_withCollisions.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_withCollisions(value : bool) -> void:
 		_withCollisions.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -7400,7 +7400,7 @@ class PB_TextShape:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _outlineWidth: PBField
 	func get_outlineWidth() -> float:
 		return _outlineWidth.value
@@ -7409,7 +7409,7 @@ class PB_TextShape:
 		_outlineWidth.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_outlineWidth(value : float) -> void:
 		_outlineWidth.value = value
-	
+
 	var _outlineColor: PBField
 	func get_outlineColor() -> PB_Color3:
 		return _outlineColor.value
@@ -7419,7 +7419,7 @@ class PB_TextShape:
 	func new_outlineColor() -> PB_Color3:
 		_outlineColor.value = PB_Color3.new()
 		return _outlineColor.value
-	
+
 	var _color: PBField
 	func get_color() -> PB_Color3:
 		return _color.value
@@ -7429,7 +7429,7 @@ class PB_TextShape:
 	func new_color() -> PB_Color3:
 		_color.value = PB_Color3.new()
 		return _color.value
-	
+
 	var _fontSize: PBField
 	func get_fontSize() -> float:
 		return _fontSize.value
@@ -7438,7 +7438,7 @@ class PB_TextShape:
 		_fontSize.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_fontSize(value : float) -> void:
 		_fontSize.value = value
-	
+
 	var _fontWeight: PBField
 	func get_fontWeight() -> String:
 		return _fontWeight.value
@@ -7447,7 +7447,7 @@ class PB_TextShape:
 		_fontWeight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_fontWeight(value : String) -> void:
 		_fontWeight.value = value
-	
+
 	var _opacity: PBField
 	func get_opacity() -> float:
 		return _opacity.value
@@ -7456,7 +7456,7 @@ class PB_TextShape:
 		_opacity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_opacity(value : float) -> void:
 		_opacity.value = value
-	
+
 	var _value: PBField
 	func get_value() -> String:
 		return _value.value
@@ -7465,7 +7465,7 @@ class PB_TextShape:
 		_value.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_value(value : String) -> void:
 		_value.value = value
-	
+
 	var _lineSpacing: PBField
 	func get_lineSpacing() -> String:
 		return _lineSpacing.value
@@ -7474,7 +7474,7 @@ class PB_TextShape:
 		_lineSpacing.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_lineSpacing(value : String) -> void:
 		_lineSpacing.value = value
-	
+
 	var _lineCount: PBField
 	func get_lineCount() -> float:
 		return _lineCount.value
@@ -7483,7 +7483,7 @@ class PB_TextShape:
 		_lineCount.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_lineCount(value : float) -> void:
 		_lineCount.value = value
-	
+
 	var _resizeToFit: PBField
 	func get_resizeToFit() -> bool:
 		return _resizeToFit.value
@@ -7492,7 +7492,7 @@ class PB_TextShape:
 		_resizeToFit.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_resizeToFit(value : bool) -> void:
 		_resizeToFit.value = value
-	
+
 	var _textWrapping: PBField
 	func get_textWrapping() -> bool:
 		return _textWrapping.value
@@ -7501,7 +7501,7 @@ class PB_TextShape:
 		_textWrapping.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_textWrapping(value : bool) -> void:
 		_textWrapping.value = value
-	
+
 	var _shadowBlur: PBField
 	func get_shadowBlur() -> float:
 		return _shadowBlur.value
@@ -7510,7 +7510,7 @@ class PB_TextShape:
 		_shadowBlur.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_shadowBlur(value : float) -> void:
 		_shadowBlur.value = value
-	
+
 	var _shadowOffsetX: PBField
 	func get_shadowOffsetX() -> float:
 		return _shadowOffsetX.value
@@ -7519,7 +7519,7 @@ class PB_TextShape:
 		_shadowOffsetX.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_shadowOffsetX(value : float) -> void:
 		_shadowOffsetX.value = value
-	
+
 	var _shadowOffsetY: PBField
 	func get_shadowOffsetY() -> float:
 		return _shadowOffsetY.value
@@ -7528,7 +7528,7 @@ class PB_TextShape:
 		_shadowOffsetY.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_shadowOffsetY(value : float) -> void:
 		_shadowOffsetY.value = value
-	
+
 	var _shadowColor: PBField
 	func get_shadowColor() -> PB_Color3:
 		return _shadowColor.value
@@ -7538,7 +7538,7 @@ class PB_TextShape:
 	func new_shadowColor() -> PB_Color3:
 		_shadowColor.value = PB_Color3.new()
 		return _shadowColor.value
-	
+
 	var _zIndex: PBField
 	func get_zIndex() -> float:
 		return _zIndex.value
@@ -7547,7 +7547,7 @@ class PB_TextShape:
 		_zIndex.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_zIndex(value : float) -> void:
 		_zIndex.value = value
-	
+
 	var _hTextAlign: PBField
 	func get_hTextAlign() -> String:
 		return _hTextAlign.value
@@ -7556,7 +7556,7 @@ class PB_TextShape:
 		_hTextAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_hTextAlign(value : String) -> void:
 		_hTextAlign.value = value
-	
+
 	var _vTextAlign: PBField
 	func get_vTextAlign() -> String:
 		return _vTextAlign.value
@@ -7565,7 +7565,7 @@ class PB_TextShape:
 		_vTextAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_vTextAlign(value : String) -> void:
 		_vTextAlign.value = value
-	
+
 	var _width: PBField
 	func get_width() -> float:
 		return _width.value
@@ -7574,7 +7574,7 @@ class PB_TextShape:
 		_width.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_width(value : float) -> void:
 		_width.value = value
-	
+
 	var _height: PBField
 	func get_height() -> float:
 		return _height.value
@@ -7583,7 +7583,7 @@ class PB_TextShape:
 		_height.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_height(value : float) -> void:
 		_height.value = value
-	
+
 	var _paddingTop: PBField
 	func get_paddingTop() -> float:
 		return _paddingTop.value
@@ -7592,7 +7592,7 @@ class PB_TextShape:
 		_paddingTop.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingTop(value : float) -> void:
 		_paddingTop.value = value
-	
+
 	var _paddingRight: PBField
 	func get_paddingRight() -> float:
 		return _paddingRight.value
@@ -7601,7 +7601,7 @@ class PB_TextShape:
 		_paddingRight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingRight(value : float) -> void:
 		_paddingRight.value = value
-	
+
 	var _paddingBottom: PBField
 	func get_paddingBottom() -> float:
 		return _paddingBottom.value
@@ -7610,7 +7610,7 @@ class PB_TextShape:
 		_paddingBottom.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingBottom(value : float) -> void:
 		_paddingBottom.value = value
-	
+
 	var _paddingLeft: PBField
 	func get_paddingLeft() -> float:
 		return _paddingLeft.value
@@ -7619,7 +7619,7 @@ class PB_TextShape:
 		_paddingLeft.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingLeft(value : float) -> void:
 		_paddingLeft.value = value
-	
+
 	var _isPickable: PBField
 	func get_isPickable() -> bool:
 		return _isPickable.value
@@ -7628,7 +7628,7 @@ class PB_TextShape:
 		_isPickable.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_isPickable(value : bool) -> void:
 		_isPickable.value = value
-	
+
 	var _billboard: PBField
 	func get_billboard() -> bool:
 		return _billboard.value
@@ -7637,13 +7637,13 @@ class PB_TextShape:
 		_billboard.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_billboard(value : bool) -> void:
 		_billboard.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -7658,33 +7658,33 @@ class PB_TextShape:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_Texture:
 	func _init():
 		var service
-		
+
 		_src = PBField.new("src", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _src
 		data[_src.tag] = service
-		
+
 		_samplingMode = PBField.new("samplingMode", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _samplingMode
 		data[_samplingMode.tag] = service
-		
+
 		_wrap = PBField.new("wrap", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _wrap
 		data[_wrap.tag] = service
-		
+
 		_hasAlpha = PBField.new("hasAlpha", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _hasAlpha
 		data[_hasAlpha.tag] = service
-		
+
 	var data = {}
-	
+
 	var _src: PBField
 	func get_src() -> String:
 		return _src.value
@@ -7693,7 +7693,7 @@ class PB_Texture:
 		_src.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_src(value : String) -> void:
 		_src.value = value
-	
+
 	var _samplingMode: PBField
 	func get_samplingMode() -> float:
 		return _samplingMode.value
@@ -7702,7 +7702,7 @@ class PB_Texture:
 		_samplingMode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_samplingMode(value : float) -> void:
 		_samplingMode.value = value
-	
+
 	var _wrap: PBField
 	func get_wrap() -> float:
 		return _wrap.value
@@ -7711,7 +7711,7 @@ class PB_Texture:
 		_wrap.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_wrap(value : float) -> void:
 		_wrap.value = value
-	
+
 	var _hasAlpha: PBField
 	func get_hasAlpha() -> bool:
 		return _hasAlpha.value
@@ -7720,13 +7720,13 @@ class PB_Texture:
 		_hasAlpha.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_hasAlpha(value : bool) -> void:
 		_hasAlpha.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -7741,147 +7741,147 @@ class PB_Texture:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_UIButton:
 	func _init():
 		var service
-		
+
 		_name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _name
 		data[_name.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_opacity = PBField.new("opacity", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _opacity
 		data[_opacity.tag] = service
-		
+
 		_hAlign = PBField.new("hAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _hAlign
 		data[_hAlign.tag] = service
-		
+
 		_vAlign = PBField.new("vAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _vAlign
 		data[_vAlign.tag] = service
-		
+
 		_width = PBField.new("width", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _width
 		data[_width.tag] = service
-		
+
 		_height = PBField.new("height", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _height
 		data[_height.tag] = service
-		
+
 		_positionX = PBField.new("positionX", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionX
 		data[_positionX.tag] = service
-		
+
 		_positionY = PBField.new("positionY", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionY
 		data[_positionY.tag] = service
-		
+
 		_isPointerBlocker = PBField.new("isPointerBlocker", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _isPointerBlocker
 		data[_isPointerBlocker.tag] = service
-		
+
 		_parent = PBField.new("parent", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _parent
 		service.func_ref = Callable(self, "new_parent")
 		data[_parent.tag] = service
-		
+
 		_fontSize = PBField.new("fontSize", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _fontSize
 		data[_fontSize.tag] = service
-		
+
 		_fontWeight = PBField.new("fontWeight", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _fontWeight
 		data[_fontWeight.tag] = service
-		
+
 		_thickness = PBField.new("thickness", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _thickness
 		data[_thickness.tag] = service
-		
+
 		_cornerRadius = PBField.new("cornerRadius", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 15, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _cornerRadius
 		data[_cornerRadius.tag] = service
-		
+
 		_color = PBField.new("color", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 16, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _color
 		service.func_ref = Callable(self, "new_color")
 		data[_color.tag] = service
-		
+
 		_background = PBField.new("background", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 17, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _background
 		service.func_ref = Callable(self, "new_background")
 		data[_background.tag] = service
-		
+
 		_paddingTop = PBField.new("paddingTop", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 18, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingTop
 		data[_paddingTop.tag] = service
-		
+
 		_paddingRight = PBField.new("paddingRight", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 19, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingRight
 		data[_paddingRight.tag] = service
-		
+
 		_paddingBottom = PBField.new("paddingBottom", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 20, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingBottom
 		data[_paddingBottom.tag] = service
-		
+
 		_paddingLeft = PBField.new("paddingLeft", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 21, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingLeft
 		data[_paddingLeft.tag] = service
-		
+
 		_shadowBlur = PBField.new("shadowBlur", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 22, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _shadowBlur
 		data[_shadowBlur.tag] = service
-		
+
 		_shadowOffsetX = PBField.new("shadowOffsetX", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 23, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _shadowOffsetX
 		data[_shadowOffsetX.tag] = service
-		
+
 		_shadowOffsetY = PBField.new("shadowOffsetY", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 24, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _shadowOffsetY
 		data[_shadowOffsetY.tag] = service
-		
+
 		_shadowColor = PBField.new("shadowColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 25, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _shadowColor
 		service.func_ref = Callable(self, "new_shadowColor")
 		data[_shadowColor.tag] = service
-		
+
 		_text = PBField.new("text", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 26, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _text
 		data[_text.tag] = service
-		
+
 	var data = {}
-	
+
 	var _name: PBField
 	func get_name() -> String:
 		return _name.value
@@ -7890,7 +7890,7 @@ class PB_UIButton:
 		_name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_name(value : String) -> void:
 		_name.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -7899,7 +7899,7 @@ class PB_UIButton:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _opacity: PBField
 	func get_opacity() -> float:
 		return _opacity.value
@@ -7908,7 +7908,7 @@ class PB_UIButton:
 		_opacity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_opacity(value : float) -> void:
 		_opacity.value = value
-	
+
 	var _hAlign: PBField
 	func get_hAlign() -> String:
 		return _hAlign.value
@@ -7917,7 +7917,7 @@ class PB_UIButton:
 		_hAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_hAlign(value : String) -> void:
 		_hAlign.value = value
-	
+
 	var _vAlign: PBField
 	func get_vAlign() -> String:
 		return _vAlign.value
@@ -7926,7 +7926,7 @@ class PB_UIButton:
 		_vAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_vAlign(value : String) -> void:
 		_vAlign.value = value
-	
+
 	var _width: PBField
 	func get_width() -> String:
 		return _width.value
@@ -7935,7 +7935,7 @@ class PB_UIButton:
 		_width.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_width(value : String) -> void:
 		_width.value = value
-	
+
 	var _height: PBField
 	func get_height() -> String:
 		return _height.value
@@ -7944,7 +7944,7 @@ class PB_UIButton:
 		_height.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_height(value : String) -> void:
 		_height.value = value
-	
+
 	var _positionX: PBField
 	func get_positionX() -> String:
 		return _positionX.value
@@ -7953,7 +7953,7 @@ class PB_UIButton:
 		_positionX.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionX(value : String) -> void:
 		_positionX.value = value
-	
+
 	var _positionY: PBField
 	func get_positionY() -> String:
 		return _positionY.value
@@ -7962,7 +7962,7 @@ class PB_UIButton:
 		_positionY.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionY(value : String) -> void:
 		_positionY.value = value
-	
+
 	var _isPointerBlocker: PBField
 	func get_isPointerBlocker() -> bool:
 		return _isPointerBlocker.value
@@ -7971,7 +7971,7 @@ class PB_UIButton:
 		_isPointerBlocker.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_isPointerBlocker(value : bool) -> void:
 		_isPointerBlocker.value = value
-	
+
 	var _parent: PBField
 	func get_parent() -> PB_UIShape:
 		return _parent.value
@@ -7981,7 +7981,7 @@ class PB_UIButton:
 	func new_parent() -> PB_UIShape:
 		_parent.value = PB_UIShape.new()
 		return _parent.value
-	
+
 	var _fontSize: PBField
 	func get_fontSize() -> float:
 		return _fontSize.value
@@ -7990,7 +7990,7 @@ class PB_UIButton:
 		_fontSize.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_fontSize(value : float) -> void:
 		_fontSize.value = value
-	
+
 	var _fontWeight: PBField
 	func get_fontWeight() -> String:
 		return _fontWeight.value
@@ -7999,7 +7999,7 @@ class PB_UIButton:
 		_fontWeight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_fontWeight(value : String) -> void:
 		_fontWeight.value = value
-	
+
 	var _thickness: PBField
 	func get_thickness() -> float:
 		return _thickness.value
@@ -8008,7 +8008,7 @@ class PB_UIButton:
 		_thickness.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_thickness(value : float) -> void:
 		_thickness.value = value
-	
+
 	var _cornerRadius: PBField
 	func get_cornerRadius() -> float:
 		return _cornerRadius.value
@@ -8017,7 +8017,7 @@ class PB_UIButton:
 		_cornerRadius.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_cornerRadius(value : float) -> void:
 		_cornerRadius.value = value
-	
+
 	var _color: PBField
 	func get_color() -> PB_Color4:
 		return _color.value
@@ -8027,7 +8027,7 @@ class PB_UIButton:
 	func new_color() -> PB_Color4:
 		_color.value = PB_Color4.new()
 		return _color.value
-	
+
 	var _background: PBField
 	func get_background() -> PB_Color4:
 		return _background.value
@@ -8037,7 +8037,7 @@ class PB_UIButton:
 	func new_background() -> PB_Color4:
 		_background.value = PB_Color4.new()
 		return _background.value
-	
+
 	var _paddingTop: PBField
 	func get_paddingTop() -> float:
 		return _paddingTop.value
@@ -8046,7 +8046,7 @@ class PB_UIButton:
 		_paddingTop.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingTop(value : float) -> void:
 		_paddingTop.value = value
-	
+
 	var _paddingRight: PBField
 	func get_paddingRight() -> float:
 		return _paddingRight.value
@@ -8055,7 +8055,7 @@ class PB_UIButton:
 		_paddingRight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingRight(value : float) -> void:
 		_paddingRight.value = value
-	
+
 	var _paddingBottom: PBField
 	func get_paddingBottom() -> float:
 		return _paddingBottom.value
@@ -8064,7 +8064,7 @@ class PB_UIButton:
 		_paddingBottom.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingBottom(value : float) -> void:
 		_paddingBottom.value = value
-	
+
 	var _paddingLeft: PBField
 	func get_paddingLeft() -> float:
 		return _paddingLeft.value
@@ -8073,7 +8073,7 @@ class PB_UIButton:
 		_paddingLeft.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingLeft(value : float) -> void:
 		_paddingLeft.value = value
-	
+
 	var _shadowBlur: PBField
 	func get_shadowBlur() -> float:
 		return _shadowBlur.value
@@ -8082,7 +8082,7 @@ class PB_UIButton:
 		_shadowBlur.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_shadowBlur(value : float) -> void:
 		_shadowBlur.value = value
-	
+
 	var _shadowOffsetX: PBField
 	func get_shadowOffsetX() -> float:
 		return _shadowOffsetX.value
@@ -8091,7 +8091,7 @@ class PB_UIButton:
 		_shadowOffsetX.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_shadowOffsetX(value : float) -> void:
 		_shadowOffsetX.value = value
-	
+
 	var _shadowOffsetY: PBField
 	func get_shadowOffsetY() -> float:
 		return _shadowOffsetY.value
@@ -8100,7 +8100,7 @@ class PB_UIButton:
 		_shadowOffsetY.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_shadowOffsetY(value : float) -> void:
 		_shadowOffsetY.value = value
-	
+
 	var _shadowColor: PBField
 	func get_shadowColor() -> PB_Color4:
 		return _shadowColor.value
@@ -8110,7 +8110,7 @@ class PB_UIButton:
 	func new_shadowColor() -> PB_Color4:
 		_shadowColor.value = PB_Color4.new()
 		return _shadowColor.value
-	
+
 	var _text: PBField
 	func get_text() -> String:
 		return _text.value
@@ -8119,13 +8119,13 @@ class PB_UIButton:
 		_text.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_text(value : String) -> void:
 		_text.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -8140,69 +8140,69 @@ class PB_UIButton:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_UICanvas:
 	func _init():
 		var service
-		
+
 		_name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _name
 		data[_name.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_opacity = PBField.new("opacity", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _opacity
 		data[_opacity.tag] = service
-		
+
 		_hAlign = PBField.new("hAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _hAlign
 		data[_hAlign.tag] = service
-		
+
 		_vAlign = PBField.new("vAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _vAlign
 		data[_vAlign.tag] = service
-		
+
 		_width = PBField.new("width", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _width
 		data[_width.tag] = service
-		
+
 		_height = PBField.new("height", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _height
 		data[_height.tag] = service
-		
+
 		_positionX = PBField.new("positionX", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionX
 		data[_positionX.tag] = service
-		
+
 		_positionY = PBField.new("positionY", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionY
 		data[_positionY.tag] = service
-		
+
 		_isPointerBlocker = PBField.new("isPointerBlocker", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _isPointerBlocker
 		data[_isPointerBlocker.tag] = service
-		
+
 		_parent = PBField.new("parent", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _parent
 		service.func_ref = Callable(self, "new_parent")
 		data[_parent.tag] = service
-		
+
 	var data = {}
-	
+
 	var _name: PBField
 	func get_name() -> String:
 		return _name.value
@@ -8211,7 +8211,7 @@ class PB_UICanvas:
 		_name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_name(value : String) -> void:
 		_name.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -8220,7 +8220,7 @@ class PB_UICanvas:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _opacity: PBField
 	func get_opacity() -> float:
 		return _opacity.value
@@ -8229,7 +8229,7 @@ class PB_UICanvas:
 		_opacity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_opacity(value : float) -> void:
 		_opacity.value = value
-	
+
 	var _hAlign: PBField
 	func get_hAlign() -> String:
 		return _hAlign.value
@@ -8238,7 +8238,7 @@ class PB_UICanvas:
 		_hAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_hAlign(value : String) -> void:
 		_hAlign.value = value
-	
+
 	var _vAlign: PBField
 	func get_vAlign() -> String:
 		return _vAlign.value
@@ -8247,7 +8247,7 @@ class PB_UICanvas:
 		_vAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_vAlign(value : String) -> void:
 		_vAlign.value = value
-	
+
 	var _width: PBField
 	func get_width() -> String:
 		return _width.value
@@ -8256,7 +8256,7 @@ class PB_UICanvas:
 		_width.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_width(value : String) -> void:
 		_width.value = value
-	
+
 	var _height: PBField
 	func get_height() -> String:
 		return _height.value
@@ -8265,7 +8265,7 @@ class PB_UICanvas:
 		_height.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_height(value : String) -> void:
 		_height.value = value
-	
+
 	var _positionX: PBField
 	func get_positionX() -> String:
 		return _positionX.value
@@ -8274,7 +8274,7 @@ class PB_UICanvas:
 		_positionX.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionX(value : String) -> void:
 		_positionX.value = value
-	
+
 	var _positionY: PBField
 	func get_positionY() -> String:
 		return _positionY.value
@@ -8283,7 +8283,7 @@ class PB_UICanvas:
 		_positionY.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionY(value : String) -> void:
 		_positionY.value = value
-	
+
 	var _isPointerBlocker: PBField
 	func get_isPointerBlocker() -> bool:
 		return _isPointerBlocker.value
@@ -8292,7 +8292,7 @@ class PB_UICanvas:
 		_isPointerBlocker.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_isPointerBlocker(value : bool) -> void:
 		_isPointerBlocker.value = value
-	
+
 	var _parent: PBField
 	func get_parent() -> PB_UIShape:
 		return _parent.value
@@ -8302,13 +8302,13 @@ class PB_UICanvas:
 	func new_parent() -> PB_UIShape:
 		_parent.value = PB_UIShape.new()
 		return _parent.value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -8323,95 +8323,95 @@ class PB_UICanvas:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_UIContainerRect:
 	func _init():
 		var service
-		
+
 		_name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _name
 		data[_name.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_opacity = PBField.new("opacity", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _opacity
 		data[_opacity.tag] = service
-		
+
 		_hAlign = PBField.new("hAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _hAlign
 		data[_hAlign.tag] = service
-		
+
 		_vAlign = PBField.new("vAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _vAlign
 		data[_vAlign.tag] = service
-		
+
 		_width = PBField.new("width", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _width
 		data[_width.tag] = service
-		
+
 		_height = PBField.new("height", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _height
 		data[_height.tag] = service
-		
+
 		_positionX = PBField.new("positionX", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionX
 		data[_positionX.tag] = service
-		
+
 		_positionY = PBField.new("positionY", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionY
 		data[_positionY.tag] = service
-		
+
 		_isPointerBlocker = PBField.new("isPointerBlocker", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _isPointerBlocker
 		data[_isPointerBlocker.tag] = service
-		
+
 		_parent = PBField.new("parent", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _parent
 		service.func_ref = Callable(self, "new_parent")
 		data[_parent.tag] = service
-		
+
 		_adaptWidth = PBField.new("adaptWidth", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _adaptWidth
 		data[_adaptWidth.tag] = service
-		
+
 		_adaptHeight = PBField.new("adaptHeight", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _adaptHeight
 		data[_adaptHeight.tag] = service
-		
+
 		_thickness = PBField.new("thickness", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _thickness
 		data[_thickness.tag] = service
-		
+
 		_color = PBField.new("color", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 15, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _color
 		service.func_ref = Callable(self, "new_color")
 		data[_color.tag] = service
-		
+
 		_alignmentUsesSize = PBField.new("alignmentUsesSize", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 16, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _alignmentUsesSize
 		data[_alignmentUsesSize.tag] = service
-		
+
 	var data = {}
-	
+
 	var _name: PBField
 	func get_name() -> String:
 		return _name.value
@@ -8420,7 +8420,7 @@ class PB_UIContainerRect:
 		_name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_name(value : String) -> void:
 		_name.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -8429,7 +8429,7 @@ class PB_UIContainerRect:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _opacity: PBField
 	func get_opacity() -> float:
 		return _opacity.value
@@ -8438,7 +8438,7 @@ class PB_UIContainerRect:
 		_opacity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_opacity(value : float) -> void:
 		_opacity.value = value
-	
+
 	var _hAlign: PBField
 	func get_hAlign() -> String:
 		return _hAlign.value
@@ -8447,7 +8447,7 @@ class PB_UIContainerRect:
 		_hAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_hAlign(value : String) -> void:
 		_hAlign.value = value
-	
+
 	var _vAlign: PBField
 	func get_vAlign() -> String:
 		return _vAlign.value
@@ -8456,7 +8456,7 @@ class PB_UIContainerRect:
 		_vAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_vAlign(value : String) -> void:
 		_vAlign.value = value
-	
+
 	var _width: PBField
 	func get_width() -> String:
 		return _width.value
@@ -8465,7 +8465,7 @@ class PB_UIContainerRect:
 		_width.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_width(value : String) -> void:
 		_width.value = value
-	
+
 	var _height: PBField
 	func get_height() -> String:
 		return _height.value
@@ -8474,7 +8474,7 @@ class PB_UIContainerRect:
 		_height.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_height(value : String) -> void:
 		_height.value = value
-	
+
 	var _positionX: PBField
 	func get_positionX() -> String:
 		return _positionX.value
@@ -8483,7 +8483,7 @@ class PB_UIContainerRect:
 		_positionX.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionX(value : String) -> void:
 		_positionX.value = value
-	
+
 	var _positionY: PBField
 	func get_positionY() -> String:
 		return _positionY.value
@@ -8492,7 +8492,7 @@ class PB_UIContainerRect:
 		_positionY.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionY(value : String) -> void:
 		_positionY.value = value
-	
+
 	var _isPointerBlocker: PBField
 	func get_isPointerBlocker() -> bool:
 		return _isPointerBlocker.value
@@ -8501,7 +8501,7 @@ class PB_UIContainerRect:
 		_isPointerBlocker.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_isPointerBlocker(value : bool) -> void:
 		_isPointerBlocker.value = value
-	
+
 	var _parent: PBField
 	func get_parent() -> PB_UIShape:
 		return _parent.value
@@ -8511,7 +8511,7 @@ class PB_UIContainerRect:
 	func new_parent() -> PB_UIShape:
 		_parent.value = PB_UIShape.new()
 		return _parent.value
-	
+
 	var _adaptWidth: PBField
 	func get_adaptWidth() -> bool:
 		return _adaptWidth.value
@@ -8520,7 +8520,7 @@ class PB_UIContainerRect:
 		_adaptWidth.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_adaptWidth(value : bool) -> void:
 		_adaptWidth.value = value
-	
+
 	var _adaptHeight: PBField
 	func get_adaptHeight() -> bool:
 		return _adaptHeight.value
@@ -8529,7 +8529,7 @@ class PB_UIContainerRect:
 		_adaptHeight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_adaptHeight(value : bool) -> void:
 		_adaptHeight.value = value
-	
+
 	var _thickness: PBField
 	func get_thickness() -> float:
 		return _thickness.value
@@ -8538,7 +8538,7 @@ class PB_UIContainerRect:
 		_thickness.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_thickness(value : float) -> void:
 		_thickness.value = value
-	
+
 	var _color: PBField
 	func get_color() -> PB_Color4:
 		return _color.value
@@ -8548,7 +8548,7 @@ class PB_UIContainerRect:
 	func new_color() -> PB_Color4:
 		_color.value = PB_Color4.new()
 		return _color.value
-	
+
 	var _alignmentUsesSize: PBField
 	func get_alignmentUsesSize() -> bool:
 		return _alignmentUsesSize.value
@@ -8557,13 +8557,13 @@ class PB_UIContainerRect:
 		_alignmentUsesSize.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_alignmentUsesSize(value : bool) -> void:
 		_alignmentUsesSize.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -8578,95 +8578,95 @@ class PB_UIContainerRect:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_UIContainerStack:
 	func _init():
 		var service
-		
+
 		_name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _name
 		data[_name.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_opacity = PBField.new("opacity", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _opacity
 		data[_opacity.tag] = service
-		
+
 		_hAlign = PBField.new("hAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _hAlign
 		data[_hAlign.tag] = service
-		
+
 		_vAlign = PBField.new("vAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _vAlign
 		data[_vAlign.tag] = service
-		
+
 		_width = PBField.new("width", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _width
 		data[_width.tag] = service
-		
+
 		_height = PBField.new("height", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _height
 		data[_height.tag] = service
-		
+
 		_positionX = PBField.new("positionX", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionX
 		data[_positionX.tag] = service
-		
+
 		_positionY = PBField.new("positionY", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionY
 		data[_positionY.tag] = service
-		
+
 		_isPointerBlocker = PBField.new("isPointerBlocker", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _isPointerBlocker
 		data[_isPointerBlocker.tag] = service
-		
+
 		_parent = PBField.new("parent", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _parent
 		service.func_ref = Callable(self, "new_parent")
 		data[_parent.tag] = service
-		
+
 		_adaptWidth = PBField.new("adaptWidth", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _adaptWidth
 		data[_adaptWidth.tag] = service
-		
+
 		_adaptHeight = PBField.new("adaptHeight", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _adaptHeight
 		data[_adaptHeight.tag] = service
-		
+
 		_color = PBField.new("color", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _color
 		service.func_ref = Callable(self, "new_color")
 		data[_color.tag] = service
-		
+
 		_stackOrientation = PBField.new("stackOrientation", PB_DATA_TYPE.ENUM, PB_RULE.OPTIONAL, 15, true, DEFAULT_VALUES_3[PB_DATA_TYPE.ENUM])
 		service = PBServiceField.new()
 		service.field = _stackOrientation
 		data[_stackOrientation.tag] = service
-		
+
 		_spacing = PBField.new("spacing", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 16, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _spacing
 		data[_spacing.tag] = service
-		
+
 	var data = {}
-	
+
 	var _name: PBField
 	func get_name() -> String:
 		return _name.value
@@ -8675,7 +8675,7 @@ class PB_UIContainerStack:
 		_name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_name(value : String) -> void:
 		_name.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -8684,7 +8684,7 @@ class PB_UIContainerStack:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _opacity: PBField
 	func get_opacity() -> float:
 		return _opacity.value
@@ -8693,7 +8693,7 @@ class PB_UIContainerStack:
 		_opacity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_opacity(value : float) -> void:
 		_opacity.value = value
-	
+
 	var _hAlign: PBField
 	func get_hAlign() -> String:
 		return _hAlign.value
@@ -8702,7 +8702,7 @@ class PB_UIContainerStack:
 		_hAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_hAlign(value : String) -> void:
 		_hAlign.value = value
-	
+
 	var _vAlign: PBField
 	func get_vAlign() -> String:
 		return _vAlign.value
@@ -8711,7 +8711,7 @@ class PB_UIContainerStack:
 		_vAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_vAlign(value : String) -> void:
 		_vAlign.value = value
-	
+
 	var _width: PBField
 	func get_width() -> String:
 		return _width.value
@@ -8720,7 +8720,7 @@ class PB_UIContainerStack:
 		_width.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_width(value : String) -> void:
 		_width.value = value
-	
+
 	var _height: PBField
 	func get_height() -> String:
 		return _height.value
@@ -8729,7 +8729,7 @@ class PB_UIContainerStack:
 		_height.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_height(value : String) -> void:
 		_height.value = value
-	
+
 	var _positionX: PBField
 	func get_positionX() -> String:
 		return _positionX.value
@@ -8738,7 +8738,7 @@ class PB_UIContainerStack:
 		_positionX.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionX(value : String) -> void:
 		_positionX.value = value
-	
+
 	var _positionY: PBField
 	func get_positionY() -> String:
 		return _positionY.value
@@ -8747,7 +8747,7 @@ class PB_UIContainerStack:
 		_positionY.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionY(value : String) -> void:
 		_positionY.value = value
-	
+
 	var _isPointerBlocker: PBField
 	func get_isPointerBlocker() -> bool:
 		return _isPointerBlocker.value
@@ -8756,7 +8756,7 @@ class PB_UIContainerStack:
 		_isPointerBlocker.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_isPointerBlocker(value : bool) -> void:
 		_isPointerBlocker.value = value
-	
+
 	var _parent: PBField
 	func get_parent() -> PB_UIShape:
 		return _parent.value
@@ -8766,7 +8766,7 @@ class PB_UIContainerStack:
 	func new_parent() -> PB_UIShape:
 		_parent.value = PB_UIShape.new()
 		return _parent.value
-	
+
 	var _adaptWidth: PBField
 	func get_adaptWidth() -> bool:
 		return _adaptWidth.value
@@ -8775,7 +8775,7 @@ class PB_UIContainerStack:
 		_adaptWidth.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_adaptWidth(value : bool) -> void:
 		_adaptWidth.value = value
-	
+
 	var _adaptHeight: PBField
 	func get_adaptHeight() -> bool:
 		return _adaptHeight.value
@@ -8784,7 +8784,7 @@ class PB_UIContainerStack:
 		_adaptHeight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_adaptHeight(value : bool) -> void:
 		_adaptHeight.value = value
-	
+
 	var _color: PBField
 	func get_color() -> PB_Color4:
 		return _color.value
@@ -8794,7 +8794,7 @@ class PB_UIContainerStack:
 	func new_color() -> PB_Color4:
 		_color.value = PB_Color4.new()
 		return _color.value
-	
+
 	var _stackOrientation: PBField
 	func get_stackOrientation():
 		return _stackOrientation.value
@@ -8803,7 +8803,7 @@ class PB_UIContainerStack:
 		_stackOrientation.value = DEFAULT_VALUES_3[PB_DATA_TYPE.ENUM]
 	func set_stackOrientation(value) -> void:
 		_stackOrientation.value = value
-	
+
 	var _spacing: PBField
 	func get_spacing() -> float:
 		return _spacing.value
@@ -8812,13 +8812,13 @@ class PB_UIContainerStack:
 		_spacing.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_spacing(value : float) -> void:
 		_spacing.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -8833,7 +8833,7 @@ class PB_UIContainerStack:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 enum PB_UIStackOrientation {
 	VERTICAL = 0,
 	HORIZONTAL = 1
@@ -8842,122 +8842,122 @@ enum PB_UIStackOrientation {
 class PB_UIImage:
 	func _init():
 		var service
-		
+
 		_name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _name
 		data[_name.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_opacity = PBField.new("opacity", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _opacity
 		data[_opacity.tag] = service
-		
+
 		_hAlign = PBField.new("hAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _hAlign
 		data[_hAlign.tag] = service
-		
+
 		_vAlign = PBField.new("vAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _vAlign
 		data[_vAlign.tag] = service
-		
+
 		_width = PBField.new("width", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _width
 		data[_width.tag] = service
-		
+
 		_height = PBField.new("height", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _height
 		data[_height.tag] = service
-		
+
 		_positionX = PBField.new("positionX", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionX
 		data[_positionX.tag] = service
-		
+
 		_positionY = PBField.new("positionY", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionY
 		data[_positionY.tag] = service
-		
+
 		_isPointerBlocker = PBField.new("isPointerBlocker", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _isPointerBlocker
 		data[_isPointerBlocker.tag] = service
-		
+
 		_parent = PBField.new("parent", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _parent
 		service.func_ref = Callable(self, "new_parent")
 		data[_parent.tag] = service
-		
+
 		_sourceLeft = PBField.new("sourceLeft", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _sourceLeft
 		data[_sourceLeft.tag] = service
-		
+
 		_sourceTop = PBField.new("sourceTop", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _sourceTop
 		data[_sourceTop.tag] = service
-		
+
 		_sourceWidth = PBField.new("sourceWidth", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _sourceWidth
 		data[_sourceWidth.tag] = service
-		
+
 		_sourceHeight = PBField.new("sourceHeight", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 15, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _sourceHeight
 		data[_sourceHeight.tag] = service
-		
+
 		_source = PBField.new("source", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 16, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _source
 		service.func_ref = Callable(self, "new_source")
 		data[_source.tag] = service
-		
+
 		_paddingTop = PBField.new("paddingTop", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 17, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingTop
 		data[_paddingTop.tag] = service
-		
+
 		_paddingRight = PBField.new("paddingRight", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 18, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingRight
 		data[_paddingRight.tag] = service
-		
+
 		_paddingBottom = PBField.new("paddingBottom", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 19, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingBottom
 		data[_paddingBottom.tag] = service
-		
+
 		_paddingLeft = PBField.new("paddingLeft", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 20, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingLeft
 		data[_paddingLeft.tag] = service
-		
+
 		_sizeInPixels = PBField.new("sizeInPixels", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 21, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _sizeInPixels
 		data[_sizeInPixels.tag] = service
-		
+
 		_onClick = PBField.new("onClick", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 22, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _onClick
 		service.func_ref = Callable(self, "new_onClick")
 		data[_onClick.tag] = service
-		
+
 	var data = {}
-	
+
 	var _name: PBField
 	func get_name() -> String:
 		return _name.value
@@ -8966,7 +8966,7 @@ class PB_UIImage:
 		_name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_name(value : String) -> void:
 		_name.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -8975,7 +8975,7 @@ class PB_UIImage:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _opacity: PBField
 	func get_opacity() -> float:
 		return _opacity.value
@@ -8984,7 +8984,7 @@ class PB_UIImage:
 		_opacity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_opacity(value : float) -> void:
 		_opacity.value = value
-	
+
 	var _hAlign: PBField
 	func get_hAlign() -> String:
 		return _hAlign.value
@@ -8993,7 +8993,7 @@ class PB_UIImage:
 		_hAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_hAlign(value : String) -> void:
 		_hAlign.value = value
-	
+
 	var _vAlign: PBField
 	func get_vAlign() -> String:
 		return _vAlign.value
@@ -9002,7 +9002,7 @@ class PB_UIImage:
 		_vAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_vAlign(value : String) -> void:
 		_vAlign.value = value
-	
+
 	var _width: PBField
 	func get_width() -> String:
 		return _width.value
@@ -9011,7 +9011,7 @@ class PB_UIImage:
 		_width.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_width(value : String) -> void:
 		_width.value = value
-	
+
 	var _height: PBField
 	func get_height() -> String:
 		return _height.value
@@ -9020,7 +9020,7 @@ class PB_UIImage:
 		_height.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_height(value : String) -> void:
 		_height.value = value
-	
+
 	var _positionX: PBField
 	func get_positionX() -> String:
 		return _positionX.value
@@ -9029,7 +9029,7 @@ class PB_UIImage:
 		_positionX.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionX(value : String) -> void:
 		_positionX.value = value
-	
+
 	var _positionY: PBField
 	func get_positionY() -> String:
 		return _positionY.value
@@ -9038,7 +9038,7 @@ class PB_UIImage:
 		_positionY.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionY(value : String) -> void:
 		_positionY.value = value
-	
+
 	var _isPointerBlocker: PBField
 	func get_isPointerBlocker() -> bool:
 		return _isPointerBlocker.value
@@ -9047,7 +9047,7 @@ class PB_UIImage:
 		_isPointerBlocker.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_isPointerBlocker(value : bool) -> void:
 		_isPointerBlocker.value = value
-	
+
 	var _parent: PBField
 	func get_parent() -> PB_UIShape:
 		return _parent.value
@@ -9057,7 +9057,7 @@ class PB_UIImage:
 	func new_parent() -> PB_UIShape:
 		_parent.value = PB_UIShape.new()
 		return _parent.value
-	
+
 	var _sourceLeft: PBField
 	func get_sourceLeft() -> float:
 		return _sourceLeft.value
@@ -9066,7 +9066,7 @@ class PB_UIImage:
 		_sourceLeft.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_sourceLeft(value : float) -> void:
 		_sourceLeft.value = value
-	
+
 	var _sourceTop: PBField
 	func get_sourceTop() -> float:
 		return _sourceTop.value
@@ -9075,7 +9075,7 @@ class PB_UIImage:
 		_sourceTop.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_sourceTop(value : float) -> void:
 		_sourceTop.value = value
-	
+
 	var _sourceWidth: PBField
 	func get_sourceWidth() -> float:
 		return _sourceWidth.value
@@ -9084,7 +9084,7 @@ class PB_UIImage:
 		_sourceWidth.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_sourceWidth(value : float) -> void:
 		_sourceWidth.value = value
-	
+
 	var _sourceHeight: PBField
 	func get_sourceHeight() -> float:
 		return _sourceHeight.value
@@ -9093,7 +9093,7 @@ class PB_UIImage:
 		_sourceHeight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_sourceHeight(value : float) -> void:
 		_sourceHeight.value = value
-	
+
 	var _source: PBField
 	func get_source() -> PB_Texture:
 		return _source.value
@@ -9103,7 +9103,7 @@ class PB_UIImage:
 	func new_source() -> PB_Texture:
 		_source.value = PB_Texture.new()
 		return _source.value
-	
+
 	var _paddingTop: PBField
 	func get_paddingTop() -> float:
 		return _paddingTop.value
@@ -9112,7 +9112,7 @@ class PB_UIImage:
 		_paddingTop.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingTop(value : float) -> void:
 		_paddingTop.value = value
-	
+
 	var _paddingRight: PBField
 	func get_paddingRight() -> float:
 		return _paddingRight.value
@@ -9121,7 +9121,7 @@ class PB_UIImage:
 		_paddingRight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingRight(value : float) -> void:
 		_paddingRight.value = value
-	
+
 	var _paddingBottom: PBField
 	func get_paddingBottom() -> float:
 		return _paddingBottom.value
@@ -9130,7 +9130,7 @@ class PB_UIImage:
 		_paddingBottom.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingBottom(value : float) -> void:
 		_paddingBottom.value = value
-	
+
 	var _paddingLeft: PBField
 	func get_paddingLeft() -> float:
 		return _paddingLeft.value
@@ -9139,7 +9139,7 @@ class PB_UIImage:
 		_paddingLeft.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingLeft(value : float) -> void:
 		_paddingLeft.value = value
-	
+
 	var _sizeInPixels: PBField
 	func get_sizeInPixels() -> bool:
 		return _sizeInPixels.value
@@ -9148,7 +9148,7 @@ class PB_UIImage:
 		_sizeInPixels.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_sizeInPixels(value : bool) -> void:
 		_sizeInPixels.value = value
-	
+
 	var _onClick: PBField
 	func get_onClick() -> PB_UUIDCallback:
 		return _onClick.value
@@ -9158,13 +9158,13 @@ class PB_UIImage:
 	func new_onClick() -> PB_UUIDCallback:
 		_onClick.value = PB_UUIDCallback.new()
 		return _onClick.value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -9179,23 +9179,23 @@ class PB_UIImage:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_UUIDCallback:
 	func _init():
 		var service
-		
+
 		_type = PBField.new("type", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _type
 		data[_type.tag] = service
-		
+
 		_uuid = PBField.new("uuid", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _uuid
 		data[_uuid.tag] = service
-		
+
 	var data = {}
-	
+
 	var _type: PBField
 	func get_type() -> String:
 		return _type.value
@@ -9204,7 +9204,7 @@ class PB_UUIDCallback:
 		_type.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_type(value : String) -> void:
 		_type.value = value
-	
+
 	var _uuid: PBField
 	func get_uuid() -> String:
 		return _uuid.value
@@ -9213,13 +9213,13 @@ class PB_UUIDCallback:
 		_uuid.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_uuid(value : String) -> void:
 		_uuid.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -9234,224 +9234,224 @@ class PB_UUIDCallback:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_UIInputText:
 	func _init():
 		var service
-		
+
 		_name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _name
 		data[_name.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_opacity = PBField.new("opacity", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _opacity
 		data[_opacity.tag] = service
-		
+
 		_hAlign = PBField.new("hAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _hAlign
 		data[_hAlign.tag] = service
-		
+
 		_vAlign = PBField.new("vAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _vAlign
 		data[_vAlign.tag] = service
-		
+
 		_width = PBField.new("width", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _width
 		data[_width.tag] = service
-		
+
 		_height = PBField.new("height", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _height
 		data[_height.tag] = service
-		
+
 		_positionX = PBField.new("positionX", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionX
 		data[_positionX.tag] = service
-		
+
 		_positionY = PBField.new("positionY", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionY
 		data[_positionY.tag] = service
-		
+
 		_isPointerBlocker = PBField.new("isPointerBlocker", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _isPointerBlocker
 		data[_isPointerBlocker.tag] = service
-		
+
 		_parent = PBField.new("parent", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _parent
 		service.func_ref = Callable(self, "new_parent")
 		data[_parent.tag] = service
-		
+
 		_outlineWidth = PBField.new("outlineWidth", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _outlineWidth
 		data[_outlineWidth.tag] = service
-		
+
 		_outlineColor = PBField.new("outlineColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _outlineColor
 		service.func_ref = Callable(self, "new_outlineColor")
 		data[_outlineColor.tag] = service
-		
+
 		_color = PBField.new("color", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _color
 		service.func_ref = Callable(self, "new_color")
 		data[_color.tag] = service
-		
+
 		_thickness = PBField.new("thickness", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 15, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _thickness
 		data[_thickness.tag] = service
-		
+
 		_fontSize = PBField.new("fontSize", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 16, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _fontSize
 		data[_fontSize.tag] = service
-		
+
 		_fontWeight = PBField.new("fontWeight", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 17, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _fontWeight
 		data[_fontWeight.tag] = service
-		
+
 		_value = PBField.new("value", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 18, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _value
 		data[_value.tag] = service
-		
+
 		_placeholderColor = PBField.new("placeholderColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 19, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _placeholderColor
 		service.func_ref = Callable(self, "new_placeholderColor")
 		data[_placeholderColor.tag] = service
-		
+
 		_placeholder = PBField.new("placeholder", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 20, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _placeholder
 		data[_placeholder.tag] = service
-		
+
 		_margin = PBField.new("margin", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 21, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _margin
 		data[_margin.tag] = service
-		
+
 		_maxWidth = PBField.new("maxWidth", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 22, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _maxWidth
 		data[_maxWidth.tag] = service
-		
+
 		_hTextAlign = PBField.new("hTextAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 23, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _hTextAlign
 		data[_hTextAlign.tag] = service
-		
+
 		_vTextAlign = PBField.new("vTextAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 24, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _vTextAlign
 		data[_vTextAlign.tag] = service
-		
+
 		_autoStretchWidth = PBField.new("autoStretchWidth", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 25, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _autoStretchWidth
 		data[_autoStretchWidth.tag] = service
-		
+
 		_background = PBField.new("background", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 26, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _background
 		service.func_ref = Callable(self, "new_background")
 		data[_background.tag] = service
-		
+
 		_focusedBackground = PBField.new("focusedBackground", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 27, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _focusedBackground
 		service.func_ref = Callable(self, "new_focusedBackground")
 		data[_focusedBackground.tag] = service
-		
+
 		_textWrapping = PBField.new("textWrapping", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 28, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _textWrapping
 		data[_textWrapping.tag] = service
-		
+
 		_shadowBlur = PBField.new("shadowBlur", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 29, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _shadowBlur
 		data[_shadowBlur.tag] = service
-		
+
 		_shadowOffsetX = PBField.new("shadowOffsetX", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 30, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _shadowOffsetX
 		data[_shadowOffsetX.tag] = service
-		
+
 		_shadowOffsetY = PBField.new("shadowOffsetY", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 31, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _shadowOffsetY
 		data[_shadowOffsetY.tag] = service
-		
+
 		_shadowColor = PBField.new("shadowColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 32, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _shadowColor
 		service.func_ref = Callable(self, "new_shadowColor")
 		data[_shadowColor.tag] = service
-		
+
 		_paddingTop = PBField.new("paddingTop", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 33, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingTop
 		data[_paddingTop.tag] = service
-		
+
 		_paddingRight = PBField.new("paddingRight", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 34, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingRight
 		data[_paddingRight.tag] = service
-		
+
 		_paddingBottom = PBField.new("paddingBottom", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 35, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingBottom
 		data[_paddingBottom.tag] = service
-		
+
 		_paddingLeft = PBField.new("paddingLeft", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 36, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingLeft
 		data[_paddingLeft.tag] = service
-		
+
 		_onTextSubmit = PBField.new("onTextSubmit", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 37, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _onTextSubmit
 		service.func_ref = Callable(self, "new_onTextSubmit")
 		data[_onTextSubmit.tag] = service
-		
+
 		_onChanged = PBField.new("onChanged", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 38, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _onChanged
 		service.func_ref = Callable(self, "new_onChanged")
 		data[_onChanged.tag] = service
-		
+
 		_onFocus = PBField.new("onFocus", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 39, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _onFocus
 		service.func_ref = Callable(self, "new_onFocus")
 		data[_onFocus.tag] = service
-		
+
 		_onBlur = PBField.new("onBlur", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 40, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _onBlur
 		service.func_ref = Callable(self, "new_onBlur")
 		data[_onBlur.tag] = service
-		
+
 	var data = {}
-	
+
 	var _name: PBField
 	func get_name() -> String:
 		return _name.value
@@ -9460,7 +9460,7 @@ class PB_UIInputText:
 		_name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_name(value : String) -> void:
 		_name.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -9469,7 +9469,7 @@ class PB_UIInputText:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _opacity: PBField
 	func get_opacity() -> float:
 		return _opacity.value
@@ -9478,7 +9478,7 @@ class PB_UIInputText:
 		_opacity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_opacity(value : float) -> void:
 		_opacity.value = value
-	
+
 	var _hAlign: PBField
 	func get_hAlign() -> String:
 		return _hAlign.value
@@ -9487,7 +9487,7 @@ class PB_UIInputText:
 		_hAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_hAlign(value : String) -> void:
 		_hAlign.value = value
-	
+
 	var _vAlign: PBField
 	func get_vAlign() -> String:
 		return _vAlign.value
@@ -9496,7 +9496,7 @@ class PB_UIInputText:
 		_vAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_vAlign(value : String) -> void:
 		_vAlign.value = value
-	
+
 	var _width: PBField
 	func get_width() -> String:
 		return _width.value
@@ -9505,7 +9505,7 @@ class PB_UIInputText:
 		_width.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_width(value : String) -> void:
 		_width.value = value
-	
+
 	var _height: PBField
 	func get_height() -> String:
 		return _height.value
@@ -9514,7 +9514,7 @@ class PB_UIInputText:
 		_height.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_height(value : String) -> void:
 		_height.value = value
-	
+
 	var _positionX: PBField
 	func get_positionX() -> String:
 		return _positionX.value
@@ -9523,7 +9523,7 @@ class PB_UIInputText:
 		_positionX.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionX(value : String) -> void:
 		_positionX.value = value
-	
+
 	var _positionY: PBField
 	func get_positionY() -> String:
 		return _positionY.value
@@ -9532,7 +9532,7 @@ class PB_UIInputText:
 		_positionY.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionY(value : String) -> void:
 		_positionY.value = value
-	
+
 	var _isPointerBlocker: PBField
 	func get_isPointerBlocker() -> bool:
 		return _isPointerBlocker.value
@@ -9541,7 +9541,7 @@ class PB_UIInputText:
 		_isPointerBlocker.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_isPointerBlocker(value : bool) -> void:
 		_isPointerBlocker.value = value
-	
+
 	var _parent: PBField
 	func get_parent() -> PB_UIShape:
 		return _parent.value
@@ -9551,7 +9551,7 @@ class PB_UIInputText:
 	func new_parent() -> PB_UIShape:
 		_parent.value = PB_UIShape.new()
 		return _parent.value
-	
+
 	var _outlineWidth: PBField
 	func get_outlineWidth() -> float:
 		return _outlineWidth.value
@@ -9560,7 +9560,7 @@ class PB_UIInputText:
 		_outlineWidth.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_outlineWidth(value : float) -> void:
 		_outlineWidth.value = value
-	
+
 	var _outlineColor: PBField
 	func get_outlineColor() -> PB_Color4:
 		return _outlineColor.value
@@ -9570,7 +9570,7 @@ class PB_UIInputText:
 	func new_outlineColor() -> PB_Color4:
 		_outlineColor.value = PB_Color4.new()
 		return _outlineColor.value
-	
+
 	var _color: PBField
 	func get_color() -> PB_Color4:
 		return _color.value
@@ -9580,7 +9580,7 @@ class PB_UIInputText:
 	func new_color() -> PB_Color4:
 		_color.value = PB_Color4.new()
 		return _color.value
-	
+
 	var _thickness: PBField
 	func get_thickness() -> float:
 		return _thickness.value
@@ -9589,7 +9589,7 @@ class PB_UIInputText:
 		_thickness.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_thickness(value : float) -> void:
 		_thickness.value = value
-	
+
 	var _fontSize: PBField
 	func get_fontSize() -> float:
 		return _fontSize.value
@@ -9598,7 +9598,7 @@ class PB_UIInputText:
 		_fontSize.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_fontSize(value : float) -> void:
 		_fontSize.value = value
-	
+
 	var _fontWeight: PBField
 	func get_fontWeight() -> String:
 		return _fontWeight.value
@@ -9607,7 +9607,7 @@ class PB_UIInputText:
 		_fontWeight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_fontWeight(value : String) -> void:
 		_fontWeight.value = value
-	
+
 	var _value: PBField
 	func get_value() -> String:
 		return _value.value
@@ -9616,7 +9616,7 @@ class PB_UIInputText:
 		_value.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_value(value : String) -> void:
 		_value.value = value
-	
+
 	var _placeholderColor: PBField
 	func get_placeholderColor() -> PB_Color4:
 		return _placeholderColor.value
@@ -9626,7 +9626,7 @@ class PB_UIInputText:
 	func new_placeholderColor() -> PB_Color4:
 		_placeholderColor.value = PB_Color4.new()
 		return _placeholderColor.value
-	
+
 	var _placeholder: PBField
 	func get_placeholder() -> String:
 		return _placeholder.value
@@ -9635,7 +9635,7 @@ class PB_UIInputText:
 		_placeholder.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_placeholder(value : String) -> void:
 		_placeholder.value = value
-	
+
 	var _margin: PBField
 	func get_margin() -> float:
 		return _margin.value
@@ -9644,7 +9644,7 @@ class PB_UIInputText:
 		_margin.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_margin(value : float) -> void:
 		_margin.value = value
-	
+
 	var _maxWidth: PBField
 	func get_maxWidth() -> float:
 		return _maxWidth.value
@@ -9653,7 +9653,7 @@ class PB_UIInputText:
 		_maxWidth.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_maxWidth(value : float) -> void:
 		_maxWidth.value = value
-	
+
 	var _hTextAlign: PBField
 	func get_hTextAlign() -> String:
 		return _hTextAlign.value
@@ -9662,7 +9662,7 @@ class PB_UIInputText:
 		_hTextAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_hTextAlign(value : String) -> void:
 		_hTextAlign.value = value
-	
+
 	var _vTextAlign: PBField
 	func get_vTextAlign() -> String:
 		return _vTextAlign.value
@@ -9671,7 +9671,7 @@ class PB_UIInputText:
 		_vTextAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_vTextAlign(value : String) -> void:
 		_vTextAlign.value = value
-	
+
 	var _autoStretchWidth: PBField
 	func get_autoStretchWidth() -> bool:
 		return _autoStretchWidth.value
@@ -9680,7 +9680,7 @@ class PB_UIInputText:
 		_autoStretchWidth.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_autoStretchWidth(value : bool) -> void:
 		_autoStretchWidth.value = value
-	
+
 	var _background: PBField
 	func get_background() -> PB_Color4:
 		return _background.value
@@ -9690,7 +9690,7 @@ class PB_UIInputText:
 	func new_background() -> PB_Color4:
 		_background.value = PB_Color4.new()
 		return _background.value
-	
+
 	var _focusedBackground: PBField
 	func get_focusedBackground() -> PB_Color4:
 		return _focusedBackground.value
@@ -9700,7 +9700,7 @@ class PB_UIInputText:
 	func new_focusedBackground() -> PB_Color4:
 		_focusedBackground.value = PB_Color4.new()
 		return _focusedBackground.value
-	
+
 	var _textWrapping: PBField
 	func get_textWrapping() -> bool:
 		return _textWrapping.value
@@ -9709,7 +9709,7 @@ class PB_UIInputText:
 		_textWrapping.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_textWrapping(value : bool) -> void:
 		_textWrapping.value = value
-	
+
 	var _shadowBlur: PBField
 	func get_shadowBlur() -> float:
 		return _shadowBlur.value
@@ -9718,7 +9718,7 @@ class PB_UIInputText:
 		_shadowBlur.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_shadowBlur(value : float) -> void:
 		_shadowBlur.value = value
-	
+
 	var _shadowOffsetX: PBField
 	func get_shadowOffsetX() -> float:
 		return _shadowOffsetX.value
@@ -9727,7 +9727,7 @@ class PB_UIInputText:
 		_shadowOffsetX.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_shadowOffsetX(value : float) -> void:
 		_shadowOffsetX.value = value
-	
+
 	var _shadowOffsetY: PBField
 	func get_shadowOffsetY() -> float:
 		return _shadowOffsetY.value
@@ -9736,7 +9736,7 @@ class PB_UIInputText:
 		_shadowOffsetY.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_shadowOffsetY(value : float) -> void:
 		_shadowOffsetY.value = value
-	
+
 	var _shadowColor: PBField
 	func get_shadowColor() -> PB_Color4:
 		return _shadowColor.value
@@ -9746,7 +9746,7 @@ class PB_UIInputText:
 	func new_shadowColor() -> PB_Color4:
 		_shadowColor.value = PB_Color4.new()
 		return _shadowColor.value
-	
+
 	var _paddingTop: PBField
 	func get_paddingTop() -> float:
 		return _paddingTop.value
@@ -9755,7 +9755,7 @@ class PB_UIInputText:
 		_paddingTop.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingTop(value : float) -> void:
 		_paddingTop.value = value
-	
+
 	var _paddingRight: PBField
 	func get_paddingRight() -> float:
 		return _paddingRight.value
@@ -9764,7 +9764,7 @@ class PB_UIInputText:
 		_paddingRight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingRight(value : float) -> void:
 		_paddingRight.value = value
-	
+
 	var _paddingBottom: PBField
 	func get_paddingBottom() -> float:
 		return _paddingBottom.value
@@ -9773,7 +9773,7 @@ class PB_UIInputText:
 		_paddingBottom.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingBottom(value : float) -> void:
 		_paddingBottom.value = value
-	
+
 	var _paddingLeft: PBField
 	func get_paddingLeft() -> float:
 		return _paddingLeft.value
@@ -9782,7 +9782,7 @@ class PB_UIInputText:
 		_paddingLeft.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingLeft(value : float) -> void:
 		_paddingLeft.value = value
-	
+
 	var _onTextSubmit: PBField
 	func get_onTextSubmit() -> PB_UUIDCallback:
 		return _onTextSubmit.value
@@ -9792,7 +9792,7 @@ class PB_UIInputText:
 	func new_onTextSubmit() -> PB_UUIDCallback:
 		_onTextSubmit.value = PB_UUIDCallback.new()
 		return _onTextSubmit.value
-	
+
 	var _onChanged: PBField
 	func get_onChanged() -> PB_UUIDCallback:
 		return _onChanged.value
@@ -9802,7 +9802,7 @@ class PB_UIInputText:
 	func new_onChanged() -> PB_UUIDCallback:
 		_onChanged.value = PB_UUIDCallback.new()
 		return _onChanged.value
-	
+
 	var _onFocus: PBField
 	func get_onFocus() -> PB_UUIDCallback:
 		return _onFocus.value
@@ -9812,7 +9812,7 @@ class PB_UIInputText:
 	func new_onFocus() -> PB_UUIDCallback:
 		_onFocus.value = PB_UUIDCallback.new()
 		return _onFocus.value
-	
+
 	var _onBlur: PBField
 	func get_onBlur() -> PB_UUIDCallback:
 		return _onBlur.value
@@ -9822,13 +9822,13 @@ class PB_UIInputText:
 	func new_onBlur() -> PB_UUIDCallback:
 		_onBlur.value = PB_UUIDCallback.new()
 		return _onBlur.value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -9843,127 +9843,127 @@ class PB_UIInputText:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_UIScrollRect:
 	func _init():
 		var service
-		
+
 		_name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _name
 		data[_name.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_opacity = PBField.new("opacity", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _opacity
 		data[_opacity.tag] = service
-		
+
 		_hAlign = PBField.new("hAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _hAlign
 		data[_hAlign.tag] = service
-		
+
 		_vAlign = PBField.new("vAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _vAlign
 		data[_vAlign.tag] = service
-		
+
 		_width = PBField.new("width", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _width
 		data[_width.tag] = service
-		
+
 		_height = PBField.new("height", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _height
 		data[_height.tag] = service
-		
+
 		_positionX = PBField.new("positionX", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionX
 		data[_positionX.tag] = service
-		
+
 		_positionY = PBField.new("positionY", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionY
 		data[_positionY.tag] = service
-		
+
 		_isPointerBlocker = PBField.new("isPointerBlocker", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _isPointerBlocker
 		data[_isPointerBlocker.tag] = service
-		
+
 		_parent = PBField.new("parent", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _parent
 		service.func_ref = Callable(self, "new_parent")
 		data[_parent.tag] = service
-		
+
 		_valueX = PBField.new("valueX", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _valueX
 		data[_valueX.tag] = service
-		
+
 		_valueY = PBField.new("valueY", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _valueY
 		data[_valueY.tag] = service
-		
+
 		_borderColor = PBField.new("borderColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _borderColor
 		service.func_ref = Callable(self, "new_borderColor")
 		data[_borderColor.tag] = service
-		
+
 		_backgroundColor = PBField.new("backgroundColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 15, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _backgroundColor
 		service.func_ref = Callable(self, "new_backgroundColor")
 		data[_backgroundColor.tag] = service
-		
+
 		_isHorizontal = PBField.new("isHorizontal", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 16, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _isHorizontal
 		data[_isHorizontal.tag] = service
-		
+
 		_isVertical = PBField.new("isVertical", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 17, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _isVertical
 		data[_isVertical.tag] = service
-		
+
 		_paddingTop = PBField.new("paddingTop", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 18, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingTop
 		data[_paddingTop.tag] = service
-		
+
 		_paddingRight = PBField.new("paddingRight", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 19, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingRight
 		data[_paddingRight.tag] = service
-		
+
 		_paddingBottom = PBField.new("paddingBottom", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 20, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingBottom
 		data[_paddingBottom.tag] = service
-		
+
 		_paddingLeft = PBField.new("paddingLeft", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 21, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingLeft
 		data[_paddingLeft.tag] = service
-		
+
 		_onChanged = PBField.new("onChanged", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 22, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _onChanged
 		service.func_ref = Callable(self, "new_onChanged")
 		data[_onChanged.tag] = service
-		
+
 	var data = {}
-	
+
 	var _name: PBField
 	func get_name() -> String:
 		return _name.value
@@ -9972,7 +9972,7 @@ class PB_UIScrollRect:
 		_name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_name(value : String) -> void:
 		_name.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -9981,7 +9981,7 @@ class PB_UIScrollRect:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _opacity: PBField
 	func get_opacity() -> float:
 		return _opacity.value
@@ -9990,7 +9990,7 @@ class PB_UIScrollRect:
 		_opacity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_opacity(value : float) -> void:
 		_opacity.value = value
-	
+
 	var _hAlign: PBField
 	func get_hAlign() -> String:
 		return _hAlign.value
@@ -9999,7 +9999,7 @@ class PB_UIScrollRect:
 		_hAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_hAlign(value : String) -> void:
 		_hAlign.value = value
-	
+
 	var _vAlign: PBField
 	func get_vAlign() -> String:
 		return _vAlign.value
@@ -10008,7 +10008,7 @@ class PB_UIScrollRect:
 		_vAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_vAlign(value : String) -> void:
 		_vAlign.value = value
-	
+
 	var _width: PBField
 	func get_width() -> String:
 		return _width.value
@@ -10017,7 +10017,7 @@ class PB_UIScrollRect:
 		_width.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_width(value : String) -> void:
 		_width.value = value
-	
+
 	var _height: PBField
 	func get_height() -> String:
 		return _height.value
@@ -10026,7 +10026,7 @@ class PB_UIScrollRect:
 		_height.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_height(value : String) -> void:
 		_height.value = value
-	
+
 	var _positionX: PBField
 	func get_positionX() -> String:
 		return _positionX.value
@@ -10035,7 +10035,7 @@ class PB_UIScrollRect:
 		_positionX.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionX(value : String) -> void:
 		_positionX.value = value
-	
+
 	var _positionY: PBField
 	func get_positionY() -> String:
 		return _positionY.value
@@ -10044,7 +10044,7 @@ class PB_UIScrollRect:
 		_positionY.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionY(value : String) -> void:
 		_positionY.value = value
-	
+
 	var _isPointerBlocker: PBField
 	func get_isPointerBlocker() -> bool:
 		return _isPointerBlocker.value
@@ -10053,7 +10053,7 @@ class PB_UIScrollRect:
 		_isPointerBlocker.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_isPointerBlocker(value : bool) -> void:
 		_isPointerBlocker.value = value
-	
+
 	var _parent: PBField
 	func get_parent() -> PB_UIShape:
 		return _parent.value
@@ -10063,7 +10063,7 @@ class PB_UIScrollRect:
 	func new_parent() -> PB_UIShape:
 		_parent.value = PB_UIShape.new()
 		return _parent.value
-	
+
 	var _valueX: PBField
 	func get_valueX() -> float:
 		return _valueX.value
@@ -10072,7 +10072,7 @@ class PB_UIScrollRect:
 		_valueX.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_valueX(value : float) -> void:
 		_valueX.value = value
-	
+
 	var _valueY: PBField
 	func get_valueY() -> float:
 		return _valueY.value
@@ -10081,7 +10081,7 @@ class PB_UIScrollRect:
 		_valueY.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_valueY(value : float) -> void:
 		_valueY.value = value
-	
+
 	var _borderColor: PBField
 	func get_borderColor() -> PB_Color4:
 		return _borderColor.value
@@ -10091,7 +10091,7 @@ class PB_UIScrollRect:
 	func new_borderColor() -> PB_Color4:
 		_borderColor.value = PB_Color4.new()
 		return _borderColor.value
-	
+
 	var _backgroundColor: PBField
 	func get_backgroundColor() -> PB_Color4:
 		return _backgroundColor.value
@@ -10101,7 +10101,7 @@ class PB_UIScrollRect:
 	func new_backgroundColor() -> PB_Color4:
 		_backgroundColor.value = PB_Color4.new()
 		return _backgroundColor.value
-	
+
 	var _isHorizontal: PBField
 	func get_isHorizontal() -> bool:
 		return _isHorizontal.value
@@ -10110,7 +10110,7 @@ class PB_UIScrollRect:
 		_isHorizontal.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_isHorizontal(value : bool) -> void:
 		_isHorizontal.value = value
-	
+
 	var _isVertical: PBField
 	func get_isVertical() -> bool:
 		return _isVertical.value
@@ -10119,7 +10119,7 @@ class PB_UIScrollRect:
 		_isVertical.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_isVertical(value : bool) -> void:
 		_isVertical.value = value
-	
+
 	var _paddingTop: PBField
 	func get_paddingTop() -> float:
 		return _paddingTop.value
@@ -10128,7 +10128,7 @@ class PB_UIScrollRect:
 		_paddingTop.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingTop(value : float) -> void:
 		_paddingTop.value = value
-	
+
 	var _paddingRight: PBField
 	func get_paddingRight() -> float:
 		return _paddingRight.value
@@ -10137,7 +10137,7 @@ class PB_UIScrollRect:
 		_paddingRight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingRight(value : float) -> void:
 		_paddingRight.value = value
-	
+
 	var _paddingBottom: PBField
 	func get_paddingBottom() -> float:
 		return _paddingBottom.value
@@ -10146,7 +10146,7 @@ class PB_UIScrollRect:
 		_paddingBottom.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingBottom(value : float) -> void:
 		_paddingBottom.value = value
-	
+
 	var _paddingLeft: PBField
 	func get_paddingLeft() -> float:
 		return _paddingLeft.value
@@ -10155,7 +10155,7 @@ class PB_UIScrollRect:
 		_paddingLeft.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingLeft(value : float) -> void:
 		_paddingLeft.value = value
-	
+
 	var _onChanged: PBField
 	func get_onChanged() -> PB_UUIDCallback:
 		return _onChanged.value
@@ -10165,13 +10165,13 @@ class PB_UIScrollRect:
 	func new_onChanged() -> PB_UUIDCallback:
 		_onChanged.value = PB_UUIDCallback.new()
 		return _onChanged.value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -10186,69 +10186,69 @@ class PB_UIScrollRect:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_UIShape:
 	func _init():
 		var service
-		
+
 		_name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _name
 		data[_name.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_opacity = PBField.new("opacity", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _opacity
 		data[_opacity.tag] = service
-		
+
 		_hAlign = PBField.new("hAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _hAlign
 		data[_hAlign.tag] = service
-		
+
 		_vAlign = PBField.new("vAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _vAlign
 		data[_vAlign.tag] = service
-		
+
 		_width = PBField.new("width", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _width
 		data[_width.tag] = service
-		
+
 		_height = PBField.new("height", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _height
 		data[_height.tag] = service
-		
+
 		_positionX = PBField.new("positionX", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionX
 		data[_positionX.tag] = service
-		
+
 		_positionY = PBField.new("positionY", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionY
 		data[_positionY.tag] = service
-		
+
 		_isPointerBlocker = PBField.new("isPointerBlocker", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _isPointerBlocker
 		data[_isPointerBlocker.tag] = service
-		
+
 		_parent = PBField.new("parent", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _parent
 		service.func_ref = Callable(self, "new_parent")
 		data[_parent.tag] = service
-		
+
 	var data = {}
-	
+
 	var _name: PBField
 	func get_name() -> String:
 		return _name.value
@@ -10257,7 +10257,7 @@ class PB_UIShape:
 		_name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_name(value : String) -> void:
 		_name.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -10266,7 +10266,7 @@ class PB_UIShape:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _opacity: PBField
 	func get_opacity() -> float:
 		return _opacity.value
@@ -10275,7 +10275,7 @@ class PB_UIShape:
 		_opacity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_opacity(value : float) -> void:
 		_opacity.value = value
-	
+
 	var _hAlign: PBField
 	func get_hAlign() -> String:
 		return _hAlign.value
@@ -10284,7 +10284,7 @@ class PB_UIShape:
 		_hAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_hAlign(value : String) -> void:
 		_hAlign.value = value
-	
+
 	var _vAlign: PBField
 	func get_vAlign() -> String:
 		return _vAlign.value
@@ -10293,7 +10293,7 @@ class PB_UIShape:
 		_vAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_vAlign(value : String) -> void:
 		_vAlign.value = value
-	
+
 	var _width: PBField
 	func get_width() -> String:
 		return _width.value
@@ -10302,7 +10302,7 @@ class PB_UIShape:
 		_width.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_width(value : String) -> void:
 		_width.value = value
-	
+
 	var _height: PBField
 	func get_height() -> String:
 		return _height.value
@@ -10311,7 +10311,7 @@ class PB_UIShape:
 		_height.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_height(value : String) -> void:
 		_height.value = value
-	
+
 	var _positionX: PBField
 	func get_positionX() -> String:
 		return _positionX.value
@@ -10320,7 +10320,7 @@ class PB_UIShape:
 		_positionX.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionX(value : String) -> void:
 		_positionX.value = value
-	
+
 	var _positionY: PBField
 	func get_positionY() -> String:
 		return _positionY.value
@@ -10329,7 +10329,7 @@ class PB_UIShape:
 		_positionY.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionY(value : String) -> void:
 		_positionY.value = value
-	
+
 	var _isPointerBlocker: PBField
 	func get_isPointerBlocker() -> bool:
 		return _isPointerBlocker.value
@@ -10338,7 +10338,7 @@ class PB_UIShape:
 		_isPointerBlocker.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_isPointerBlocker(value : bool) -> void:
 		_isPointerBlocker.value = value
-	
+
 	var _parent: PBField
 	func get_parent() -> PB_UIShape:
 		return _parent.value
@@ -10348,13 +10348,13 @@ class PB_UIShape:
 	func new_parent() -> PB_UIShape:
 		_parent.value = PB_UIShape.new()
 		return _parent.value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -10369,182 +10369,182 @@ class PB_UIShape:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_UITextShape:
 	func _init():
 		var service
-		
+
 		_name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _name
 		data[_name.tag] = service
-		
+
 		_visible = PBField.new("visible", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _visible
 		data[_visible.tag] = service
-		
+
 		_opacity = PBField.new("opacity", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _opacity
 		data[_opacity.tag] = service
-		
+
 		_hAlign = PBField.new("hAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _hAlign
 		data[_hAlign.tag] = service
-		
+
 		_vAlign = PBField.new("vAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _vAlign
 		data[_vAlign.tag] = service
-		
+
 		_width = PBField.new("width", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _width
 		data[_width.tag] = service
-		
+
 		_height = PBField.new("height", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _height
 		data[_height.tag] = service
-		
+
 		_positionX = PBField.new("positionX", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionX
 		data[_positionX.tag] = service
-		
+
 		_positionY = PBField.new("positionY", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _positionY
 		data[_positionY.tag] = service
-		
+
 		_isPointerBlocker = PBField.new("isPointerBlocker", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _isPointerBlocker
 		data[_isPointerBlocker.tag] = service
-		
+
 		_parent = PBField.new("parent", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _parent
 		service.func_ref = Callable(self, "new_parent")
 		data[_parent.tag] = service
-		
+
 		_outlineWidth = PBField.new("outlineWidth", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _outlineWidth
 		data[_outlineWidth.tag] = service
-		
+
 		_outlineColor = PBField.new("outlineColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _outlineColor
 		service.func_ref = Callable(self, "new_outlineColor")
 		data[_outlineColor.tag] = service
-		
+
 		_color = PBField.new("color", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _color
 		service.func_ref = Callable(self, "new_color")
 		data[_color.tag] = service
-		
+
 		_fontSize = PBField.new("fontSize", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 15, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _fontSize
 		data[_fontSize.tag] = service
-		
+
 		_fontAutoSize = PBField.new("fontAutoSize", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 16, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _fontAutoSize
 		data[_fontAutoSize.tag] = service
-		
+
 		_fontWeight = PBField.new("fontWeight", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 17, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _fontWeight
 		data[_fontWeight.tag] = service
-		
+
 		_value = PBField.new("value", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 18, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _value
 		data[_value.tag] = service
-		
+
 		_lineSpacing = PBField.new("lineSpacing", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 19, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _lineSpacing
 		data[_lineSpacing.tag] = service
-		
+
 		_lineCount = PBField.new("lineCount", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 20, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _lineCount
 		data[_lineCount.tag] = service
-		
+
 		_adaptWidth = PBField.new("adaptWidth", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 21, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _adaptWidth
 		data[_adaptWidth.tag] = service
-		
+
 		_adaptHeight = PBField.new("adaptHeight", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 22, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _adaptHeight
 		data[_adaptHeight.tag] = service
-		
+
 		_textWrapping = PBField.new("textWrapping", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 23, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
 		service.field = _textWrapping
 		data[_textWrapping.tag] = service
-		
+
 		_shadowBlur = PBField.new("shadowBlur", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 24, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _shadowBlur
 		data[_shadowBlur.tag] = service
-		
+
 		_shadowOffsetX = PBField.new("shadowOffsetX", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 25, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _shadowOffsetX
 		data[_shadowOffsetX.tag] = service
-		
+
 		_shadowOffsetY = PBField.new("shadowOffsetY", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 26, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _shadowOffsetY
 		data[_shadowOffsetY.tag] = service
-		
+
 		_shadowColor = PBField.new("shadowColor", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 27, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
 		service.field = _shadowColor
 		service.func_ref = Callable(self, "new_shadowColor")
 		data[_shadowColor.tag] = service
-		
+
 		_hTextAlign = PBField.new("hTextAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 28, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _hTextAlign
 		data[_hTextAlign.tag] = service
-		
+
 		_vTextAlign = PBField.new("vTextAlign", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 29, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _vTextAlign
 		data[_vTextAlign.tag] = service
-		
+
 		_paddingTop = PBField.new("paddingTop", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 30, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingTop
 		data[_paddingTop.tag] = service
-		
+
 		_paddingRight = PBField.new("paddingRight", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 31, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingRight
 		data[_paddingRight.tag] = service
-		
+
 		_paddingBottom = PBField.new("paddingBottom", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 32, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingBottom
 		data[_paddingBottom.tag] = service
-		
+
 		_paddingLeft = PBField.new("paddingLeft", PB_DATA_TYPE.FLOAT, PB_RULE.OPTIONAL, 33, true, DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT])
 		service = PBServiceField.new()
 		service.field = _paddingLeft
 		data[_paddingLeft.tag] = service
-		
+
 	var data = {}
-	
+
 	var _name: PBField
 	func get_name() -> String:
 		return _name.value
@@ -10553,7 +10553,7 @@ class PB_UITextShape:
 		_name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_name(value : String) -> void:
 		_name.value = value
-	
+
 	var _visible: PBField
 	func get_visible() -> bool:
 		return _visible.value
@@ -10562,7 +10562,7 @@ class PB_UITextShape:
 		_visible.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_visible(value : bool) -> void:
 		_visible.value = value
-	
+
 	var _opacity: PBField
 	func get_opacity() -> float:
 		return _opacity.value
@@ -10571,7 +10571,7 @@ class PB_UITextShape:
 		_opacity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_opacity(value : float) -> void:
 		_opacity.value = value
-	
+
 	var _hAlign: PBField
 	func get_hAlign() -> String:
 		return _hAlign.value
@@ -10580,7 +10580,7 @@ class PB_UITextShape:
 		_hAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_hAlign(value : String) -> void:
 		_hAlign.value = value
-	
+
 	var _vAlign: PBField
 	func get_vAlign() -> String:
 		return _vAlign.value
@@ -10589,7 +10589,7 @@ class PB_UITextShape:
 		_vAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_vAlign(value : String) -> void:
 		_vAlign.value = value
-	
+
 	var _width: PBField
 	func get_width() -> String:
 		return _width.value
@@ -10598,7 +10598,7 @@ class PB_UITextShape:
 		_width.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_width(value : String) -> void:
 		_width.value = value
-	
+
 	var _height: PBField
 	func get_height() -> String:
 		return _height.value
@@ -10607,7 +10607,7 @@ class PB_UITextShape:
 		_height.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_height(value : String) -> void:
 		_height.value = value
-	
+
 	var _positionX: PBField
 	func get_positionX() -> String:
 		return _positionX.value
@@ -10616,7 +10616,7 @@ class PB_UITextShape:
 		_positionX.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionX(value : String) -> void:
 		_positionX.value = value
-	
+
 	var _positionY: PBField
 	func get_positionY() -> String:
 		return _positionY.value
@@ -10625,7 +10625,7 @@ class PB_UITextShape:
 		_positionY.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_positionY(value : String) -> void:
 		_positionY.value = value
-	
+
 	var _isPointerBlocker: PBField
 	func get_isPointerBlocker() -> bool:
 		return _isPointerBlocker.value
@@ -10634,7 +10634,7 @@ class PB_UITextShape:
 		_isPointerBlocker.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_isPointerBlocker(value : bool) -> void:
 		_isPointerBlocker.value = value
-	
+
 	var _parent: PBField
 	func get_parent() -> PB_UIShape:
 		return _parent.value
@@ -10644,7 +10644,7 @@ class PB_UITextShape:
 	func new_parent() -> PB_UIShape:
 		_parent.value = PB_UIShape.new()
 		return _parent.value
-	
+
 	var _outlineWidth: PBField
 	func get_outlineWidth() -> float:
 		return _outlineWidth.value
@@ -10653,7 +10653,7 @@ class PB_UITextShape:
 		_outlineWidth.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_outlineWidth(value : float) -> void:
 		_outlineWidth.value = value
-	
+
 	var _outlineColor: PBField
 	func get_outlineColor() -> PB_Color4:
 		return _outlineColor.value
@@ -10663,7 +10663,7 @@ class PB_UITextShape:
 	func new_outlineColor() -> PB_Color4:
 		_outlineColor.value = PB_Color4.new()
 		return _outlineColor.value
-	
+
 	var _color: PBField
 	func get_color() -> PB_Color4:
 		return _color.value
@@ -10673,7 +10673,7 @@ class PB_UITextShape:
 	func new_color() -> PB_Color4:
 		_color.value = PB_Color4.new()
 		return _color.value
-	
+
 	var _fontSize: PBField
 	func get_fontSize() -> float:
 		return _fontSize.value
@@ -10682,7 +10682,7 @@ class PB_UITextShape:
 		_fontSize.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_fontSize(value : float) -> void:
 		_fontSize.value = value
-	
+
 	var _fontAutoSize: PBField
 	func get_fontAutoSize() -> bool:
 		return _fontAutoSize.value
@@ -10691,7 +10691,7 @@ class PB_UITextShape:
 		_fontAutoSize.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_fontAutoSize(value : bool) -> void:
 		_fontAutoSize.value = value
-	
+
 	var _fontWeight: PBField
 	func get_fontWeight() -> String:
 		return _fontWeight.value
@@ -10700,7 +10700,7 @@ class PB_UITextShape:
 		_fontWeight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_fontWeight(value : String) -> void:
 		_fontWeight.value = value
-	
+
 	var _value: PBField
 	func get_value() -> String:
 		return _value.value
@@ -10709,7 +10709,7 @@ class PB_UITextShape:
 		_value.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_value(value : String) -> void:
 		_value.value = value
-	
+
 	var _lineSpacing: PBField
 	func get_lineSpacing() -> float:
 		return _lineSpacing.value
@@ -10718,7 +10718,7 @@ class PB_UITextShape:
 		_lineSpacing.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_lineSpacing(value : float) -> void:
 		_lineSpacing.value = value
-	
+
 	var _lineCount: PBField
 	func get_lineCount() -> float:
 		return _lineCount.value
@@ -10727,7 +10727,7 @@ class PB_UITextShape:
 		_lineCount.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_lineCount(value : float) -> void:
 		_lineCount.value = value
-	
+
 	var _adaptWidth: PBField
 	func get_adaptWidth() -> bool:
 		return _adaptWidth.value
@@ -10736,7 +10736,7 @@ class PB_UITextShape:
 		_adaptWidth.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_adaptWidth(value : bool) -> void:
 		_adaptWidth.value = value
-	
+
 	var _adaptHeight: PBField
 	func get_adaptHeight() -> bool:
 		return _adaptHeight.value
@@ -10745,7 +10745,7 @@ class PB_UITextShape:
 		_adaptHeight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_adaptHeight(value : bool) -> void:
 		_adaptHeight.value = value
-	
+
 	var _textWrapping: PBField
 	func get_textWrapping() -> bool:
 		return _textWrapping.value
@@ -10754,7 +10754,7 @@ class PB_UITextShape:
 		_textWrapping.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
 	func set_textWrapping(value : bool) -> void:
 		_textWrapping.value = value
-	
+
 	var _shadowBlur: PBField
 	func get_shadowBlur() -> float:
 		return _shadowBlur.value
@@ -10763,7 +10763,7 @@ class PB_UITextShape:
 		_shadowBlur.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_shadowBlur(value : float) -> void:
 		_shadowBlur.value = value
-	
+
 	var _shadowOffsetX: PBField
 	func get_shadowOffsetX() -> float:
 		return _shadowOffsetX.value
@@ -10772,7 +10772,7 @@ class PB_UITextShape:
 		_shadowOffsetX.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_shadowOffsetX(value : float) -> void:
 		_shadowOffsetX.value = value
-	
+
 	var _shadowOffsetY: PBField
 	func get_shadowOffsetY() -> float:
 		return _shadowOffsetY.value
@@ -10781,7 +10781,7 @@ class PB_UITextShape:
 		_shadowOffsetY.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_shadowOffsetY(value : float) -> void:
 		_shadowOffsetY.value = value
-	
+
 	var _shadowColor: PBField
 	func get_shadowColor() -> PB_Color4:
 		return _shadowColor.value
@@ -10791,7 +10791,7 @@ class PB_UITextShape:
 	func new_shadowColor() -> PB_Color4:
 		_shadowColor.value = PB_Color4.new()
 		return _shadowColor.value
-	
+
 	var _hTextAlign: PBField
 	func get_hTextAlign() -> String:
 		return _hTextAlign.value
@@ -10800,7 +10800,7 @@ class PB_UITextShape:
 		_hTextAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_hTextAlign(value : String) -> void:
 		_hTextAlign.value = value
-	
+
 	var _vTextAlign: PBField
 	func get_vTextAlign() -> String:
 		return _vTextAlign.value
@@ -10809,7 +10809,7 @@ class PB_UITextShape:
 		_vTextAlign.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_vTextAlign(value : String) -> void:
 		_vTextAlign.value = value
-	
+
 	var _paddingTop: PBField
 	func get_paddingTop() -> float:
 		return _paddingTop.value
@@ -10818,7 +10818,7 @@ class PB_UITextShape:
 		_paddingTop.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingTop(value : float) -> void:
 		_paddingTop.value = value
-	
+
 	var _paddingRight: PBField
 	func get_paddingRight() -> float:
 		return _paddingRight.value
@@ -10827,7 +10827,7 @@ class PB_UITextShape:
 		_paddingRight.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingRight(value : float) -> void:
 		_paddingRight.value = value
-	
+
 	var _paddingBottom: PBField
 	func get_paddingBottom() -> float:
 		return _paddingBottom.value
@@ -10836,7 +10836,7 @@ class PB_UITextShape:
 		_paddingBottom.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingBottom(value : float) -> void:
 		_paddingBottom.value = value
-	
+
 	var _paddingLeft: PBField
 	func get_paddingLeft() -> float:
 		return _paddingLeft.value
@@ -10845,13 +10845,13 @@ class PB_UITextShape:
 		_paddingLeft.value = DEFAULT_VALUES_3[PB_DATA_TYPE.FLOAT]
 	func set_paddingLeft(value : float) -> void:
 		_paddingLeft.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -10866,18 +10866,18 @@ class PB_UITextShape:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_OpenExternalUrl:
 	func _init():
 		var service
-		
+
 		_url = PBField.new("url", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _url
 		data[_url.tag] = service
-		
+
 	var data = {}
-	
+
 	var _url: PBField
 	func get_url() -> String:
 		return _url.value
@@ -10886,13 +10886,13 @@ class PB_OpenExternalUrl:
 		_url.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_url(value : String) -> void:
 		_url.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -10907,28 +10907,28 @@ class PB_OpenExternalUrl:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 class PB_OpenNFTDialog:
 	func _init():
 		var service
-		
+
 		_assetContractAddress = PBField.new("assetContractAddress", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _assetContractAddress
 		data[_assetContractAddress.tag] = service
-		
+
 		_tokenId = PBField.new("tokenId", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _tokenId
 		data[_tokenId.tag] = service
-		
+
 		_comment = PBField.new("comment", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = _comment
 		data[_comment.tag] = service
-		
+
 	var data = {}
-	
+
 	var _assetContractAddress: PBField
 	func get_assetContractAddress() -> String:
 		return _assetContractAddress.value
@@ -10937,7 +10937,7 @@ class PB_OpenNFTDialog:
 		_assetContractAddress.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_assetContractAddress(value : String) -> void:
 		_assetContractAddress.value = value
-	
+
 	var _tokenId: PBField
 	func get_tokenId() -> String:
 		return _tokenId.value
@@ -10946,7 +10946,7 @@ class PB_OpenNFTDialog:
 		_tokenId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_tokenId(value : String) -> void:
 		_tokenId.value = value
-	
+
 	var _comment: PBField
 	func get_comment() -> String:
 		return _comment.value
@@ -10955,13 +10955,13 @@ class PB_OpenNFTDialog:
 		_comment.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_comment(value : String) -> void:
 		_comment.value = value
-	
+
 	func to_string() -> String:
 		return PBPacker.message_to_string(data)
-		
+
 	func to_bytes() -> PackedByteArray:
 		return PBPacker.pack_message(data)
-		
+
 	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
 		var cur_limit = bytes.size()
 		if limit != -1:
@@ -10976,5 +10976,5 @@ class PB_OpenNFTDialog:
 		elif limit == -1 && result > 0:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
-	
+
 ################ USER DATA END #################

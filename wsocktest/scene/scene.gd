@@ -4,6 +4,7 @@ extends Node3D
 
 signal received_event(scene)
 
+
 const COMPONENT = preload("res://interfaces/component.gd")
 const EVENT = preload("res://interfaces/event.gd")
 const PROTO = preload("res://server/engineinterface.gd")
@@ -14,12 +15,14 @@ var peer = null
 var global_scene
 var id
 
-
 var current_index = -1
 var entities = {"0": get_node(".")}
 var components: Dictionary
 
+var _raycast_queue := []
+
 var json = JSON.new()
+
 
 func create(msg, p_peer, is_global):
 	id = msg.payload.id
@@ -170,7 +173,16 @@ func message(scene_msg):
 #		])
 
 	if scene_msg.has_query():
-		pass#print("query ", scene_msg.get_query().get_payload())
+		# if another query is added, we chould componentize this
+		var query = PROTO.PB_RayQuery.new()
+		if query.from_bytes(Marshalls.base64_to_raw(scene_msg.get_query().get_payload())) == PROTO.PB_ERR.NO_ERRORS:
+			_raycast_queue.append(query)
+
+			var ray = query.get_ray()
+			var ray_origin = ray.get_origin()
+			var ray_direction = ray.get_direction()
+		else:
+			push_warning("**** queryError %s" % scene_msg.to_string())
 
 
 func reparent(src, dest):
@@ -187,3 +199,53 @@ func _get_configuration_warnings():
 				"\nRemoving the DebuggerDump off the tree will completely detach this scene from it.")
 
 	return warn
+
+func _physics_process(delta):
+	if not _raycast_queue.is_empty():
+		var space_state := get_world_3d().direct_space_state
+		var _raycast_parameters := PhysicsRayQueryParameters3D.new()
+		_raycast_parameters.collide_with_areas = true
+		_raycast_parameters.hit_from_inside = true
+
+		while not _raycast_queue.is_empty():
+			var queue = _raycast_queue.pop_front()
+			var raycast = queue.get_ray()
+			var origin = raycast.get_origin()
+			var direction = raycast.get_direction()
+			var distance = raycast.get_distance()
+
+			_raycast_parameters.from = rayQueryVector(origin)
+			_raycast_parameters.to = _raycast_parameters.from + rayQueryVector(direction) * distance
+
+			var result : Dictionary = space_state.intersect_ray(_raycast_parameters)
+			var response = {
+				"sceneId": id,
+				"eventType":"raycastResponse",
+				"payload": {
+					"queryId": queue.get_queryId(),
+					"queryType": queue.get_queryType(),
+					"payload": {
+						"didHit": !result.is_empty(),
+						"ray": {
+							"origin": {
+								"x": origin.get_x(),
+								"y": origin.get_y(),
+								"z": origin.get_z(),
+							},
+							"direction": {
+								"x": direction.get_x(),
+								"y": direction.get_y(),
+								"z": direction.get_z(),
+							},
+							"distance": raycast.get_distance()
+						},
+						"hitPoint": Vector3.ZERO if result.is_empty() else result.position,
+						"hitNormal":Vector3.ZERO if result.is_empty() else result.normal,
+						"entities": [] if result.is_empty() else [{"entity":{ "entityId": result.collider.get_parent().get_parent().name}}]
+					}
+				}
+			}
+			Server.send({"type": "SceneEvent", "payload": json.stringify(response)})
+
+func rayQueryVector(v) -> Vector3:
+	return Vector3(v.get_x(), v.get_y(), v.get_z())
