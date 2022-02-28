@@ -46,23 +46,26 @@ func _process(delta):
 	global_translate(dir.normalized() * speed * delta)
 
 	if dir != Vector3.ZERO:
-		var rot = transform.basis.get_rotation_quaternion()
-		var response = {
-			"position": {
-				"x": transform.origin.x,
-				"y": transform.origin.y,
-				"z": transform.origin.z
-			},
-			"rotation": {
-				"x": rot.x,
-				"y": rot.y,
-				"z": rot.z,
-				"w": rot.w
-			},
-			"playerHeight": $Camera.transform.origin.y - transform.origin.y
+		report_position()
 
-		}
-		Server.send({"type": "ReportPosition", "payload": json.stringify(response)})
+func report_position():
+	var rot = transform.basis.get_rotation_quaternion()
+	var response = {
+		"position": {
+			"x": transform.origin.x,
+			"y": transform.origin.y,
+			"z": transform.origin.z
+		},
+		"rotation": {
+			"x": rot.x,
+			"y": rot.y,
+			"z": rot.z,
+			"w": rot.w
+		},
+		"playerHeight": $Camera.transform.origin.y - transform.origin.y
+
+	}
+	Server.send({"type": "ReportPosition", "payload": json.stringify(response)})
 
 
 func _input(event):
@@ -79,3 +82,4 @@ func _input(event):
 		var camera_rot = $Camera.rotation
 		camera_rot.x = clamp(camera_rot.x, deg2rad(-70), deg2rad(70))
 		$Camera.rotation = camera_rot
+		report_position()
