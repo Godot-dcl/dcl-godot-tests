@@ -16,7 +16,10 @@ var global_scene
 var id
 
 var current_index = -1
-var entities = {"0": get_node(".")}
+var entities = {
+	"0": get_node("."),
+	"AvatarEntityReference": Server.player
+}
 var components: Dictionary
 
 var _raycast_queue := []
@@ -177,10 +180,6 @@ func message(scene_msg):
 		var query = PROTO.PB_RayQuery.new()
 		if query.from_bytes(Marshalls.base64_to_raw(scene_msg.get_query().get_payload())) == PROTO.PB_ERR.NO_ERRORS:
 			_raycast_queue.append(query)
-
-			var ray = query.get_ray()
-			var ray_origin = ray.get_origin()
-			var ray_direction = ray.get_direction()
 		else:
 			push_warning("**** queryError %s" % scene_msg.to_string())
 
