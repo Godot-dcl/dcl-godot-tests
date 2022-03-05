@@ -45,7 +45,7 @@ func update(data):
 				return
 
 			status = STATUS_PREPARING
-			var download = await _get_external_video(url)
+			await _get_external_video(url)
 			if url != json.url: #If it doesn't match a new url was set and we no longer want the file
 				return
 

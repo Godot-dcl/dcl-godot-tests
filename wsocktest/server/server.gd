@@ -46,7 +46,7 @@ func _process(_delta):
 		_server.poll()
 
 
-func _connected(id, _protocol, resource_name):
+func _connected(id, _protocol, _resource_name):
 	print("Client connected!")
 
 	var peer = _server.get_peer(id)

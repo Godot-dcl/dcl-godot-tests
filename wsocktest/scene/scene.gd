@@ -187,8 +187,9 @@ func message(scene_msg):
 func reparent(src, dest):
 	var src_node = entities[src]
 	var dest_node = entities[dest]
-	src_node.get_parent().remove_child(src_node)
-	dest_node.add_child(src_node)
+	if src_node.get_parent() != dest_node:
+		src_node.get_parent().remove_child(src_node)
+		dest_node.add_child(src_node)
 
 
 func _get_configuration_warnings():
@@ -203,8 +204,10 @@ func _physics_process(delta):
 	if not _raycast_queue.is_empty():
 		var space_state := get_world_3d().direct_space_state
 		var _raycast_parameters := PhysicsRayQueryParameters3D.new()
-		_raycast_parameters.collide_with_areas = true
-		_raycast_parameters.hit_from_inside = true
+		_raycast_parameters.collide_with_areas = false
+		_raycast_parameters.hit_from_inside = false
+		_raycast_parameters.hit_back_faces = false
+		_raycast_parameters.collision_mask = int(pow(2, 10) + pow(2, 11) + pow(2, 12))
 
 		while not _raycast_queue.is_empty():
 			var queue = _raycast_queue.pop_front()
@@ -236,11 +239,25 @@ func _physics_process(delta):
 								"y": direction.get_y(),
 								"z": direction.get_z(),
 							},
-							"distance": raycast.get_distance()
+							"distance": raycast.get_distance(),
 						},
-						"hitPoint": Vector3.ZERO if result.is_empty() else result.position,
-						"hitNormal":Vector3.ZERO if result.is_empty() else result.normal,
-						"entities": [] if result.is_empty() else [{"entity":{ "entityId": result.collider.get_parent().get_parent().name}}]
+						"entities": [] if result.is_empty() else [{
+							"entity": {
+								"entityId": result.collider.get_parent().get_parent().name,
+								"meshName": result.collider.name,
+							},
+							"didHit": true,
+							"hitPoint": {
+								"x": result.position.x,
+								"y": result.position.y,
+								"z": result.position.z,
+							},
+							"hitNormal": {
+								"x": result.normal.x,
+								"y": result.normal.y,
+								"z": result.normal.z,
+							},
+						}]
 					}
 				}
 			}
