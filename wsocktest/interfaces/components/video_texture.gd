@@ -11,7 +11,7 @@ var seek := -1.0
 var playing := false
 var videoClipId: String
 
-var video_player: VideoStreamPlayer
+var video_player
 
 const VIEWPORT_SCENE = preload("res://ui/video_texture/video_texture_placeholder.tscn")
 var viewport: SubViewport
@@ -19,12 +19,17 @@ var viewport: SubViewport
 var texture: Texture
 signal texture_changed(new_texture)
 
-
 func _init(_name, _scene, _id):
+	
 	super(_name, _scene, _id)
-	video_player = VideoStreamPlayer.new()
+
+	if ClassDB.class_exists("FFmpegNode"):
+		video_player = ClassDB.instantiate("FFmpegNode")
+	else:
+		video_player = VideoStreamPlayer.new()
+
 	video_player.connect("finished", Callable(self, "_on_finished"))
-	video_player.hide()
+	#video_player.hide()
 	video_player.name = name + str(get_instance_id())
 	viewport = VIEWPORT_SCENE.instantiate()
 	scene.add_child(viewport)
@@ -65,7 +70,8 @@ func update(data):
 	if json.has("playing"):
 		playing = json.playing
 		if playing:
-			video_player.stream = clip.video_clip
+			printt("************** video loading path", clip.video_clip)
+			video_player.load_path(clip.video_clip)
 			texture = video_player.get_video_texture()
 			emit_signal("texture_changed", texture)
 			video_player.play()
@@ -76,14 +82,14 @@ func update(data):
 
 	if json.has("volume"):
 		volume = json.volume
-		video_player.volume = volume
+		#video_player.volume = volume
 
 	if json.has("playbackRate"):
 		push_warning("VideoTexture.playbackRate not supported in Godot")
 
 	if json.has("seek"):
 		seek = json.seek
-		video_player.stream_position = seek
+		#video_player.stream_position = seek
 
 	loop = json.get("loop", loop)
 
