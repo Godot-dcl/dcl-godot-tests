@@ -8,13 +8,17 @@ script = ExtResource( "1" )
 __meta__ = {
 "_editor_description_": ""
 }
+third_person = true
+third_person_distance = 5
 mouse_sensitivity = 0.1
-speed = 5.0
 
-[node name="Camera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+[node name="SpringArm3D" type="SpringArm3D" parent="."]
+
+[node name="Base" type="Node3D" parent="SpringArm3D"]
+
+[node name="Camera" type="Camera3D" parent="SpringArm3D/Base"]
 far = 200.0
 
-[node name="RayCast" type="RayCast3D" parent="Camera"]
-target_position = Vector3(0, 0, -8)
+[node name="RayCast" type="RayCast3D" parent="SpringArm3D/Base/Camera"]
+target_position = Vector3(0, 0, 0)
 collision_mask = 3584

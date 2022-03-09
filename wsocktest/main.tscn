@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://d4cpe5fguxtbj"]
 
 [ext_resource type="Script" path="res://main.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://ufofpcnu4fkl" path="res://scene/camera.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://ui/debug_info/DebugInfo.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://ui/loading_screen/loading.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://i8t30p5chvt7" path="res://ui/crosshair/crosshairs-solid.svg" id="5"]
+[ext_resource type="PackedScene" uid="uid://xk8vawif2mgo" path="res://scene/player.tscn" id="5_c5jqn"]
 
 [node name="main" type="Node3D"]
 script = ExtResource( "1" )
@@ -69,4 +69,4 @@ __meta__ = {
 [node name="DebugInfo" parent="Control" instance=ExtResource( "3" )]
 theme_override_constants/margin_right = 20
 
-[node name="CameraRig" parent="." instance=ExtResource( "2" )]
+[node name="Player" parent="." instance=ExtResource( "5_c5jqn" )]

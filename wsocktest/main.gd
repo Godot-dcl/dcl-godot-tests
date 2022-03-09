@@ -12,7 +12,7 @@ var last_hovered_event
 
 func _ready():
 	Server.loading_screen = $Control/Loading
-	Server.player = $CameraRig
+	Server.player = $Player
 
 	EventManager.connect("entity_hover_changed", Callable(self, "_on_entity_hovered_changed"))
 

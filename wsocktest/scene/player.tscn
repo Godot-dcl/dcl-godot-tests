@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://xk8vawif2mgo"]
+
+[ext_resource type="Script" path="res://scene/player.gd" id="1_ljl0n"]
+[ext_resource type="PackedScene" uid="uid://ufofpcnu4fkl" path="res://scene/camera.tscn" id="2_qpg8u"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2w32j"]
+height = 2.5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_mrdqp"]
+height = 2.5
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource( "1_ljl0n" )
+god_mode = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource( "CapsuleShape3D_2w32j" )
+
+[node name="CameraRig" parent="." instance=ExtResource( "2_qpg8u" )]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+mesh = SubResource( "CapsuleMesh_mrdqp" )
