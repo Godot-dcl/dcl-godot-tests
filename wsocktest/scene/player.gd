@@ -19,12 +19,14 @@ func _ready():
 
 
 func _physics_process(delta):
-	# Fall down.
-	if not is_on_floor() and not god_mode:
-		motion_velocity.y -= gravity * delta
-
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-		motion_velocity.y = speed_jump
+	if not god_mode:
+		if not is_on_floor():
+			motion_velocity.y -= gravity * delta # Apply gravity.
+		elif Input.is_action_just_pressed("jump"):
+			motion_velocity.y = speed_jump
+	else:
+		motion_velocity.y =\
+				speed_jump if Input.is_action_pressed("jump") else 0
 
 	var input_vector = Input.get_vector(
 			"walk_left", "walk_right", "walk_down", "walk_up").normalized()
