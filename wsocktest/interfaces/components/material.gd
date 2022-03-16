@@ -25,6 +25,12 @@ func update(data):
 			json.albedoColor.g,
 			json.albedoColor.b
 		)
+	if json.has("ambientColor"):
+		material.albedo_color = Color(
+			json.ambientColor.r,
+			json.ambientColor.g,
+			json.ambientColor.b
+		)
 	if json.has("albedoTexture"):
 		var tex_component = scene.components[json.albedoTexture]
 		# the texture reference in the component can change after it was assigned. Keep it up to date
@@ -33,6 +39,22 @@ func update(data):
 		if tex_component.has_signal("texture_changed"):
 			tex_component.texture_changed.connect(_on_albedo_texture_changed)
 		material.albedo_texture = tex_component.texture
+
+	if json.has("refractionTexture"):
+		var tex_component = scene.components[json.refractionTexture]
+		if tex_component.has_signal("texture_changed"):
+			tex_component.texture_changed.connect(_on_texture_changed, ["refraction_texture"])
+		material.refraction_enabled = true
+		material.refraction_texture = tex_component.texture
+		material.refraction_texture_channel = BaseMaterial3D.TEXTURE_CHANNEL_GRAYSCALE
+		
+
+	if json.has("bumpTexture"):
+		var tex_component = scene.components[json.bumpTexture]
+		if tex_component.has_signal("texture_changed"):
+			tex_component.texture_changed.connect(_on_texture_changed, ["normal_texture"])
+		material.normal_enabled = true
+		material.normal_texture = tex_component.texture
 
 	if json.has("alpha"):
 		var new_color = material.albedo_color
@@ -68,6 +90,9 @@ func update(data):
 	if json.has("metallic"):
 		material.metallic = json.metallic
 
+	if json.has("specularIntensity"):
+		material.metallic = json.specularIntensity
+
 	if json.has("roughness"):
 		material.roughness = json.roughness
 
@@ -95,6 +120,8 @@ func detach_from(entity):
 func _on_albedo_texture_changed(value):
 	material.albedo_texture = value
 
+func _on_texture_changed(texture, name):
+	material.set(name, texture)
 
 func _on_emissive_texture_changed(value):
 	material.emission_texture = value

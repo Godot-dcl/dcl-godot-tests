@@ -12,11 +12,11 @@ anchor_bottom = 1.0
 color = Color(0.184314, 0.188235, 0.282353, 1)
 
 [node name="text" type="Label" parent="bg"]
+rect_min_size = Vector2(1024, 600)
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-rect_min_size = Vector2(1024, 600)
 theme_override_fonts/font = ExtResource( "1_lti13" )
 theme_override_font_sizes/font_size = 30
 horizontal_alignment = 1
