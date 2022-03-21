@@ -87,6 +87,9 @@ func message(scene_msg):
 
 			DCL_Material._classid:
 				components[c_id] = DCL_Material.new(c_name, self, c_id)
+				
+			DCL_BasicMaterial._classid:
+				components[c_id] = DCL_BasicMaterial.new(c_name, self, c_id)
 
 			DCL_GLTFShape._classid:
 				components[c_id] = DCL_GLTFShape.new(c_name, self, c_id)
@@ -99,6 +102,9 @@ func message(scene_msg):
 
 			DCL_VideoClip._classid:
 				components[c_id] = DCL_VideoClip.new(c_name, self, c_id)
+
+			DCL_Texture._classid:
+				components[c_id] = DCL_Texture.new(c_name, self, c_id)
 
 			DCL_VideoTexture._classid:
 				components[c_id] = DCL_VideoTexture.new(c_name, self, c_id)
