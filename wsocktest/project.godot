@@ -25,6 +25,11 @@ _global_script_classes=[{
 "path": "res://interfaces/components/audio_source.gd"
 }, {
 "base": "RefCounted",
+"class": &"DCL_BasicMaterial",
+"language": &"GDScript",
+"path": "res://interfaces/components/basic_material.gd"
+}, {
+"base": "RefCounted",
 "class": &"DCL_BoxShape",
 "language": &"GDScript",
 "path": "res://interfaces/components/shapes/box.gd"
@@ -75,6 +80,11 @@ _global_script_classes=[{
 "path": "res://interfaces/components/text_shape.gd"
 }, {
 "base": "RefCounted",
+"class": &"DCL_Texture",
+"language": &"GDScript",
+"path": "res://interfaces/components/texture.gd"
+}, {
+"base": "RefCounted",
 "class": &"DCL_Transform",
 "language": &"GDScript",
 "path": "res://interfaces/components/transform.gd"
@@ -113,6 +123,7 @@ _global_script_class_icons={
 "DCL_AnimationState": "",
 "DCL_AudioClip": "",
 "DCL_AudioSource": "",
+"DCL_BasicMaterial": "",
 "DCL_BoxShape": "",
 "DCL_Component": "",
 "DCL_ConeShape": "",
@@ -123,6 +134,7 @@ _global_script_class_icons={
 "DCL_PlaneShape": "",
 "DCL_SphereShape": "",
 "DCL_TextShape": "",
+"DCL_Texture": "",
 "DCL_Transform": "",
 "DCL_UUIDCallback": "",
 "DCL_VideoClip": "",
@@ -155,7 +167,7 @@ window/vsync/use_vsync=false
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gut/plugin.cfg", "res://addons/protobuf/plugin.cfg", "res://addons/scene_debugger/plugin.cfg")
+enabled=PackedStringArray("res://addons/protobuf/plugin.cfg", "res://addons/scene_debugger/plugin.cfg")
 
 [input]
 

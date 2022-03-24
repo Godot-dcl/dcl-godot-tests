@@ -47,7 +47,7 @@ func update(data):
 		material.refraction_enabled = true
 		material.refraction_texture = tex_component.texture
 		material.refraction_texture_channel = BaseMaterial3D.TEXTURE_CHANNEL_GRAYSCALE
-		
+
 
 	if json.has("bumpTexture"):
 		var tex_component = scene.components[json.bumpTexture]
