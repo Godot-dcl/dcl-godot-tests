@@ -13,24 +13,7 @@ $ nvm install 14
 $ nvm use 14
 ```
 
-*   Godot Engine with Dynamic GLTF Loader module
-
-    Run the following commands to get the engine and the module, and compile the editor
-
-```
-$ git clone https://github.com/godotengine/godot.git
-$ cd godot
-$ git checkout 3.3
-$ cd modules
-$ git clone https://github.com/you-win/godot-dynamic-gltf-loader.git
-$ mv godot-dynamic-gltf-loader/dynamic-gltf-loader .
-$ rm -rf godot-dynamic-gltf-loader
-$ scons tools=yes -j8 -u
-```
-
-Why do we need this? Godot can't load GLTF models at runtime. For that, we need to expose the module that loads those resources to be used at runtime. Coming up in version 4!
-
-[https://github.com/godotengine/godot-proposals/issues/3273#issuecomment-917664431](https://github.com/godotengine/godot-proposals/issues/3273#issuecomment-917664431)
+*   [https://downloads.tuxfamily.org/godotengine/4.0/alpha1/](Godot Engine version 4.0 alpha 1)
 
 ## Getting started
 
