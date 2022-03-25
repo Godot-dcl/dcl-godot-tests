@@ -13,7 +13,7 @@ $ nvm install 14
 $ nvm use 14
 ```
 
-*   [https://downloads.tuxfamily.org/godotengine/4.0/alpha1/](Godot Engine version 4.0 alpha 1)
+*   [Godot Engine version 4.0 alpha 1](https://downloads.tuxfamily.org/godotengine/4.0/alpha1/)
 
 ## Getting started
 
