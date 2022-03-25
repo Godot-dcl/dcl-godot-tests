@@ -56,6 +56,8 @@ func set_third_person(enabled):
 		raycast.target_position.z = -RAYCAST_DISTANCE
 		$SpringArm3D/Base/Camera.transform.origin.x = 0
 
+	emit_signal("third_person_changed", enabled)
+
 
 func add_raycast_exception(object):
 	raycast.add_exception(object)

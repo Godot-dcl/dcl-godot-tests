@@ -18,7 +18,7 @@ var id
 var current_index = -1
 var entities = {
 	"0": get_node("."),
-	"AvatarEntityReference": Server.player
+	"AvatarEntityReference": Server.player.mesh
 }
 var components: Dictionary
 

@@ -11,11 +11,13 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 @onready var height = $CollisionShape3D.shape.height
 @onready var camera_rig = $CameraRig
+@onready var mesh = $MeshInstance3D
 @onready var json = JSON.new()
 
 
 func _ready():
-	$CameraRig.add_raycast_exception(self)
+	_on_camera_rig_third_person_changed(camera_rig.third_person)
+	camera_rig.add_raycast_exception(self)
 
 
 func _physics_process(delta):
@@ -49,6 +51,12 @@ func _physics_process(delta):
 		move_and_slide()
 		report_position()
 
+func _process(delta):
+	if camera_rig.third_person:
+		if motion_velocity:
+			mesh.look_at(transform.origin - motion_velocity, Vector3.UP)
+			mesh.rotation.x = 0
+
 
 func report_position():
 	var rot = transform.basis.get_rotation_quaternion()
@@ -79,4 +87,5 @@ func current_scene_id():
 
 
 func _on_camera_rig_third_person_changed(enabled):
-	$MeshInstance3D.visible = enabled
+	$MeshInstance3D/View.visible = enabled
+	$CameraRig/RemoteTransform3D.update_rotation = !enabled
