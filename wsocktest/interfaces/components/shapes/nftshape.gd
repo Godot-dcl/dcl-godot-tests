@@ -25,9 +25,9 @@ func _init(_name, _scene, _id):
 	mesh_instance.mesh = plane
 	mesh_instance.set_surface_override_material(0, material)
 
-	material.params_cull_mode = StandardMaterial3D.CULL_DISABLED
-	material.flags_unshaded = true
-	material.flags_transparent = true
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_DEPTH_PRE_PASS
 
 	frame = PICTURE_FRAME_SCENE.instantiate()
 	mesh_instance.add_child(frame)
