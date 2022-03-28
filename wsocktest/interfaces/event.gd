@@ -41,12 +41,12 @@ func _init(_scene_id, _entity, data):
 	show_feedback = data.showFeedback if data.has("showFeedback") else false
 
 	if action == Action.ANY:
-		#var t = data.type.trim_prefix("pointer").to_lower()
+		var t = data.type.trim_prefix("pointer").to_lower()
 		for a in ActionsMap.keys():
 			if a != "ANY":
 				EventManager.connect("%s_%s" % [
 					a.to_lower(),
-					"down"
+					"down" if data.type == "onClick" else t
 				], Callable(self, "check"))
 	else:
 		EventManager.connect("%s_%s" % [
