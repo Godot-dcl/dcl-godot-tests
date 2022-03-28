@@ -9,6 +9,9 @@ signal primary_up(entity)
 signal secondary_down(entity)
 signal secondary_up(entity)
 
+signal hover_enter(entity)
+signal hover_exit(entity)
+
 # entity can be null here!
 signal entity_hover_changed(entity)
 
@@ -27,18 +30,22 @@ func _process(_delta):
 	if is_instance_valid(raycast):
 		if !raycast.is_colliding():
 			if last_entity_hovered != null:
+
+				emit_signal("hover_exit", last_entity_hovered, last_entity_collider_hovered)
+
 				last_entity_hovered = null
 				last_entity_collider_hovered = null
 
 				emit_signal("entity_hover_changed", null, null)
-			return
+		else:
 
-		var collider = raycast.get_collider()
-		last_entity_hovered = collider.get_parent().get_parent()
-		if collider != last_entity_collider_hovered:
-			last_entity_collider_hovered = collider
+			var collider = raycast.get_collider()
+			last_entity_hovered = collider.get_parent().get_parent()
+			if collider != last_entity_collider_hovered:
+				last_entity_collider_hovered = collider
 
-			emit_signal("entity_hover_changed", last_entity_hovered, collider)
+				emit_signal("entity_hover_changed", last_entity_hovered, collider)
+				emit_signal("hover_enter", last_entity_hovered, last_entity_collider_hovered)
 
 	check_input()
 

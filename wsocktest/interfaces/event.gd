@@ -40,23 +40,38 @@ func _init(_scene_id, _entity, data):
 	distance = data.distance if data.has("distance") else 0
 	show_feedback = data.showFeedback if data.has("showFeedback") else false
 
-	if action == Action.ANY:
-		var t = data.type.trim_prefix("pointer").to_lower()
-		for a in ActionsMap.keys():
-			if a != "ANY":
+	match type:
+		"pointerUp", "pointerDown":
+			var t = data.type.trim_prefix("pointer").to_lower()
+			if action == Action.ANY:
+				for a in ActionsMap.keys():
+					if a != "ANY":
+						EventManager.connect("%s_%s" % [
+							a.to_lower(),
+							t
+						], Callable(self, "check"))
+			else:
 				EventManager.connect("%s_%s" % [
-					a.to_lower(),
-					"down" if data.type == "onClick" else t
+					data.button.to_lower(),
+					t
 				], Callable(self, "check"))
-	else:
-		EventManager.connect("%s_%s" % [
-			data.button.to_lower(),
-			data.type.trim_prefix("pointer").to_lower()
-		], Callable(self, "check"))
 
-		for c in entity.get_children():
-			if c is PhysicsBody3D:
-				c.collision_layer = int(pow(2, action + 9))
+				for c in entity.get_children():
+					if c is PhysicsBody3D:
+						c.collision_layer = int(pow(2, action + 9))
+
+		"onClick":
+			for a in ActionsMap.keys():
+				if a != "ANY":
+					EventManager.connect("%s_%s" % [
+						a.to_lower(),
+						"down"
+					], Callable(self, "check"))
+
+		"pointerHoverEnter", "pointerHoverExit":
+			EventManager.connect("hover_%s" % [
+				data.type.trim_prefix("pointerHover").to_lower()
+			], Callable(self, "check"))
 
 
 func is_near_player():
