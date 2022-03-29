@@ -52,8 +52,8 @@ func _physics_process(delta):
 
 func _process(delta):
 	if camera_rig.third_person:
-		if motion_velocity:
-			mesh.look_at(transform.origin - motion_velocity, Vector3.UP)
+		if velocity:
+			mesh.look_at(transform.origin - velocity, Vector3.UP)
 			mesh.rotation.x = 0
 
 

@@ -22,9 +22,6 @@ shape = SubResource( "CapsuleShape3D_2w32j" )
 [node name="CameraRig" type="Node3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2, 0)
 script = ExtResource( "2_q26x2" )
-__meta__ = {
-"_editor_description_": ""
-}
 third_person = true
 third_person_distance = 5
 mouse_sensitivity = 0.1
