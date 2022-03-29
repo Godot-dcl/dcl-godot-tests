@@ -1,5 +1,5 @@
 var are_equal = null:
-	set = set_are_equal, get = get_are_equal
+	set = set_are_equal
 var summary = null:
 	set = set_summary, get = get_summary
 var max_differences = 30:
@@ -13,7 +13,7 @@ func _block_set(which, val):
 func _to_string():
 	return str(get_summary()) # could be null, gotta str it.
 
-func get_are_equal():
+func get_is_equal():
 	return are_equal
 
 func set_are_equal(r_eq):
@@ -48,4 +48,3 @@ func set_differences(diffs):
 
 func get_brackets():
 	return null
-

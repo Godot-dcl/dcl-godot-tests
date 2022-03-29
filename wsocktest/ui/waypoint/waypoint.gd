@@ -43,14 +43,14 @@ func _process(_delta):
 	# Otherwise, the viewport size is used directly.
 	var viewport_base_size = (
 			#get_viewport().get_size_override() if get_viewport().get_size_override() > Vector2(0, 0)
-			#else 
+			#else
 				get_viewport().size
 	)
 
 	if not sticky:
 		# For non-sticky waypoints, we don't need to clamp and calculate
 		# the position if the waypoint goes off screen.
-		rect_position = unprojected_position
+		position = unprojected_position
 		visible = not is_behind
 		return
 
@@ -75,36 +75,36 @@ func _process(_delta):
 		var diff = angle_diff(look.basis.get_euler().x, camera_transform.basis.get_euler().x)
 		unprojected_position.y = viewport_base_size.y * (0.5 + (diff / deg2rad(camera.fov)))
 
-	rect_position = Vector2(
+	position = Vector2(
 			clamp(unprojected_position.x, MARGIN, viewport_base_size.x - MARGIN),
 			clamp(unprojected_position.y, MARGIN, viewport_base_size.y - MARGIN)
 	)
 
 	label.visible = true
-	rect_rotation = 0
+	rotation = 0
 	# Used to display a diagonal arrow when the waypoint is displayed in
 	# one of the screen corners.
 	var overflow = 0
 
-	if rect_position.x <= MARGIN:
+	if position.x <= MARGIN:
 		# Left overflow.
 		overflow = -45
 		label.visible = false
-		rect_rotation = 90
-	elif rect_position.x >= viewport_base_size.x - MARGIN:
+		rotation = 90
+	elif position.x >= viewport_base_size.x - MARGIN:
 		# Right overflow.
 		overflow = 45
 		label.visible = false
-		rect_rotation = 270
+		rotation = 270
 
-	if rect_position.y <= MARGIN:
+	if position.y <= MARGIN:
 		# Top overflow.
 		label.visible = false
-		rect_rotation = 180 + overflow
-	elif rect_position.y >= viewport_base_size.y - MARGIN:
+		rotation = 180 + overflow
+	elif position.y >= viewport_base_size.y - MARGIN:
 		# Bottom overflow.
 		label.visible = false
-		rect_rotation = -overflow
+		rotation = -overflow
 
 
 func set_text(p_text):

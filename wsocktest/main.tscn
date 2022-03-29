@@ -13,9 +13,6 @@ script = ExtResource( "1" )
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Crosshair" type="TextureRect" parent="Control"]
 visible = false
@@ -29,9 +26,6 @@ offset_right = 13.0
 offset_bottom = 13.0
 texture = ExtResource( "5" )
 stretch_mode = 6
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="crosshair2" type="Sprite2D" parent="Control"]
 position = Vector2(512, 300)
@@ -51,18 +45,12 @@ offset_right = 148.0
 offset_bottom = 275.0
 grow_horizontal = 2
 theme_override_constants/margin_bottom = 20
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Action" type="Label" parent="Control/EntityHovered"]
 offset_right = 267.0
 offset_bottom = 33.0
 size_flags_vertical = 5
 horizontal_alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Loading" parent="Control" instance=ExtResource( "4" )]
 

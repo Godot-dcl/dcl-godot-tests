@@ -56,7 +56,7 @@ func simple(v1, v2, missing_string=''):
 		if(typeof(v1) == TYPE_ARRAY):
 			var array_result = _utils.DiffTool.new(v1, v2, _utils.DIFF.SHALLOW)
 			result.summary = array_result.get_short_summary()
-			if(!array_result.are_equal()):
+			if(!array_result.is_equal()):
 				extra = ".\n" + array_result.get_short_summary()
 
 	else:
