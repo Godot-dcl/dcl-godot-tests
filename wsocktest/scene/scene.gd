@@ -70,6 +70,9 @@ func message(scene_msg):
 		var c_id = scene_msg.get_componentCreated().get_id()
 		var c_name = scene_msg.get_componentCreated().get_name()
 		match classid:
+			DCL_AttachToAvatar._classid:
+				components[c_id] = DCL_AttachToAvatar.new(c_name, self, c_id)
+
 			DCL_BoxShape._classid:
 				components[c_id] = DCL_BoxShape.new(c_name, self, c_id)
 
@@ -156,6 +159,9 @@ func message(scene_msg):
 
 			DCL_Transform._classid:
 				DCL_Transform.update_component_in_entity(data, entities[entity_id], self)
+
+			DCL_AttachToAvatar._classid:
+				DCL_AttachToAvatar.update_component_in_entity(data, entities[entity_id], self)
 
 			DCL_TextShape._classid:
 				DCL_TextShape.update_component_in_entity(data, entities[entity_id], self)
