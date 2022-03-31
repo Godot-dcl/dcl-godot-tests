@@ -60,13 +60,13 @@ func update(data):
 									c.name = m.name
 									colliders.push_back(c)
 
-	if json.has("isPointerBlocker"):
-		for c in colliders:
-			if is_instance_valid(c):
-				if json.isPointerBlocker:
-					c.collision_layer = 2 + int(pow(2, 10) + pow(2, 11) + pow(2, 12))
-				else:
-					c.collision_layer = 2
+		if json.has("isPointerBlocker"):
+			for c in colliders:
+				if is_instance_valid(c):
+					if json.isPointerBlocker:
+						c.collision_layer = int(1 + pow(2, 9) + pow(2, 10) + pow(2, 11))
+					else:
+						c.collision_layer = 1
 
 	if json.has("visible"):
 		for m in meshes:

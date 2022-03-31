@@ -30,7 +30,7 @@ func update(data):
 		var collider = mesh_instance.get_child(mesh_instance.get_child_count() -1 )
 		collider.name = name
 		if json.has("isPointerBlocker"):
-			collider.collision_layer = int(pow(2, 10) + pow(2, 11) + pow(2, 12))
+			collider.collision_layer = int(1 + pow(2, 9) + pow(2, 10) + pow(2, 11))
 
 
 func attach_to(entity):

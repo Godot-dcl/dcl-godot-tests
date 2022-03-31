@@ -219,7 +219,7 @@ func _physics_process(delta):
 		_raycast_parameters.collide_with_areas = false
 		_raycast_parameters.hit_from_inside = false
 		_raycast_parameters.hit_back_faces = false
-		_raycast_parameters.collision_mask = int(pow(2, 10) + pow(2, 11) + pow(2, 12))
+		_raycast_parameters.collision_mask = int(pow(2, 9) + pow(2, 10) + pow(2, 11))
 
 		while not _raycast_queue.is_empty():
 			var queue = _raycast_queue.pop_front()

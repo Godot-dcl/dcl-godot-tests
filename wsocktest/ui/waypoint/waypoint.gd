@@ -43,7 +43,7 @@ func _process(_delta):
 	# Otherwise, the viewport size is used directly.
 	var viewport_base_size = (
 			#get_viewport().get_size_override() if get_viewport().get_size_override() > Vector2(0, 0)
-			#else 
+			#else
 				get_viewport().size
 	)
 
