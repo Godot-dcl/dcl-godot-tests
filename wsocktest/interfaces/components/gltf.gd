@@ -42,28 +42,31 @@ func update(data):
 						else:
 							meshes.push_back(child)
 
-					if child is Node3D and child.get_child_count() > 0:
+					elif child is Node3D and child.get_child_count() > 0:
 						if child.get_child(0) is Skeleton3D:
 							meshes.push_back(child)
 
-					if child is AnimationPlayer:
+					elif child is AnimationPlayer:
 						for anim_name in child.get_animation_list():
 							animations[anim_name] = child.get_animation(anim_name).duplicate()
 
-	if json.has("withCollisions"):
-		if colliders.is_empty():
-			for m in meshes:
-				if m is MeshInstance3D:
-					m.create_trimesh_collision()
-					var c = m.get_child(0)
-					if is_instance_valid(c):
-						c.name = m.name
-						colliders.push_back(c)
+	#if json.has("withCollisions"):
+					if colliders.is_empty():
+						for m in meshes:
+							if m is MeshInstance3D:
+								m.create_trimesh_collision()
+								var c = m.get_child(0)
+								if is_instance_valid(c):
+									c.name = m.name
+									colliders.push_back(c)
 
-		if json.has("isPointerBlocker"):
-			for c in colliders:
-				if is_instance_valid(c):
-					c.collision_layer = int(pow(2, 10) + pow(2, 11) + pow(2, 12))
+	if json.has("isPointerBlocker"):
+		for c in colliders:
+			if is_instance_valid(c):
+				if json.isPointerBlocker:
+					c.collision_layer = 2 + int(pow(2, 10) + pow(2, 11) + pow(2, 12))
+				else:
+					c.collision_layer = 2
 
 	if json.has("visible"):
 		for m in meshes:

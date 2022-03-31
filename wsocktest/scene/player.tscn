@@ -25,7 +25,6 @@ script = ExtResource( "2_q26x2" )
 __meta__ = {
 "_editor_description_": ""
 }
-third_person = true
 third_person_distance = 5
 mouse_sensitivity = 0.1
 
@@ -53,3 +52,6 @@ mesh = SubResource( "CapsuleMesh_mrdqp" )
 [node name="View" type="MeshInstance3D" parent="MeshInstance3D"]
 transform = Transform3D(1.19209e-08, 0, 0.7, -0.2, 2.98023e-08, 0, 0, -0.5, 4.17233e-08, 0, 0.5, 0.5)
 mesh = SubResource( "PrismMesh_inv2f" )
+
+[node name="AvatarEntityReference" type="Node3D" parent="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.13546e-07, 0, 0.6)

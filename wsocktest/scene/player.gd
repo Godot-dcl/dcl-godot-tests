@@ -12,6 +12,7 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var height = $CollisionShape3D.shape.height
 @onready var camera_rig = $CameraRig
 @onready var mesh = $MeshInstance3D
+@onready var attachable = $MeshInstance3D/AvatarEntityReference
 @onready var json = JSON.new()
 
 
@@ -27,8 +28,9 @@ func _physics_process(delta):
 		elif Input.is_action_just_pressed("jump"):
 			motion_velocity.y = speed_jump
 	else:
-		motion_velocity.y =\
-				speed_jump if Input.is_action_pressed("jump") else 0
+		var jump_force = speed_jump if Input.is_action_pressed("jump") else 0
+		jump_force = jump_force * -1 if Input.is_action_pressed("sink") else jump_force
+		motion_velocity.y = jump_force
 
 	var input_vector = Input.get_vector(
 			"walk_left", "walk_right", "walk_down", "walk_up").normalized()
@@ -38,6 +40,10 @@ func _physics_process(delta):
 		var direction = Vector3()
 		direction += -cam_xform.basis.z * input_vector.y
 		direction += cam_xform.basis.x * input_vector.x
+
+		if camera_rig.third_person:
+			mesh.look_at(transform.origin - direction)
+			mesh.rotation.x = 0
 
 		motion_velocity.x = direction.x * speed_walk
 		motion_velocity.z = direction.z * speed_walk
@@ -52,10 +58,7 @@ func _physics_process(delta):
 		report_position()
 
 func _process(delta):
-	if camera_rig.third_person:
-		if motion_velocity:
-			mesh.look_at(transform.origin - motion_velocity, Vector3.UP)
-			mesh.rotation.x = 0
+	pass
 
 
 func report_position():
