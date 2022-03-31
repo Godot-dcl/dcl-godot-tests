@@ -51,14 +51,14 @@ func update(data):
 							animations[anim_name] = child.get_animation(anim_name).duplicate()
 
 	#if json.has("withCollisions"):
-					if colliders.is_empty():
-						for m in meshes:
-							if m is MeshInstance3D:
-								m.create_trimesh_collision()
-								var c = m.get_child(0)
-								if is_instance_valid(c):
-									c.name = m.name
-									colliders.push_back(c)
+				if colliders.is_empty():
+					for m in meshes:
+						if m is MeshInstance3D:
+							m.create_trimesh_collision()
+							var c = m.get_child(0)
+							if is_instance_valid(c):
+								c.name = m.name
+								colliders.push_back(c)
 
 		if json.has("isPointerBlocker"):
 			for c in colliders:
