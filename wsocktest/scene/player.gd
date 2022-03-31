@@ -23,11 +23,12 @@ func _ready():
 func _physics_process(delta):
 	if not god_mode:
 		if not is_on_floor():
-			velocity.y -= gravity * delta # Apply gravity.
+			motion_velocity.y -= gravity * delta # Apply gravity.
 		elif Input.is_action_just_pressed("jump"):
-			velocity.y = speed_jump
+			motion_velocity.y = speed_jump
 	else:
-		velocity.y = speed_jump if Input.is_action_pressed("jump") else 0
+		motion_velocity.y =\
+				speed_jump if Input.is_action_pressed("jump") else 0
 
 	var input_vector = Input.get_vector(
 			"walk_left", "walk_right", "walk_down", "walk_up").normalized()
@@ -38,22 +39,22 @@ func _physics_process(delta):
 		direction += -cam_xform.basis.z * input_vector.y
 		direction += cam_xform.basis.x * input_vector.x
 
-		velocity.x = direction.x * speed_walk
-		velocity.z = direction.z * speed_walk
+		motion_velocity.x = direction.x * speed_walk
+		motion_velocity.z = direction.z * speed_walk
 
 		move_and_slide()
 		report_position()
-	elif velocity: # Slow down if not moving anymore.
-		velocity.x = move_toward(velocity.x, 0, speed_walk)
-		velocity.z = move_toward(velocity.z, 0, speed_walk)
+	elif motion_velocity: # Slow down if not moving anymore.
+		motion_velocity.x = move_toward(motion_velocity.x, 0, speed_walk)
+		motion_velocity.z = move_toward(motion_velocity.z, 0, speed_walk)
 
 		move_and_slide()
 		report_position()
 
 func _process(delta):
 	if camera_rig.third_person:
-		if velocity:
-			mesh.look_at(transform.origin - velocity, Vector3.UP)
+		if motion_velocity:
+			mesh.look_at(transform.origin - motion_velocity, Vector3.UP)
 			mesh.rotation.x = 0
 
 

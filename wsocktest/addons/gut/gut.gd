@@ -266,9 +266,9 @@ func _print_versions(send_all = true):
 # ##############################################################################
 func _setup_gui():
 	# This is how we get the size of the control to translate to the gui when
-	# the scene is run.  This is also another reason why the min_size
+	# the scene is run.  This is also another reason why the min_rect_size
 	# must match between both gut and the gui.
-	_gui.size = self.size
+	_gui.rect_size = self.rect_size
 	add_child(_gui)
 	_gui.set_anchor(SIDE_RIGHT, ANCHOR_END)
 	_gui.set_anchor(SIDE_BOTTOM, ANCHOR_END)

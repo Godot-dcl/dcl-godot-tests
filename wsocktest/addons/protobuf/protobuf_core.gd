@@ -32,8 +32,6 @@
 # DEBUG_TAB redefine this "  " if you need, example: const DEBUG_TAB = "\t"
 const DEBUG_TAB : String = "  "
 
-const PROTO = preload("res://server/engineinterface.gd")
-
 enum PB_ERR {
 	NO_ERRORS = 0,
 	VARINT_NOT_FOUND = -1,
@@ -358,11 +356,11 @@ class PBPacker:
 			else:
 				if field.type == int(PB_DATA_TYPE.STRING):
 					var str_bytes : PackedByteArray = field.value.to_utf8()
-					if PROTO.PROTO_VERSION == 2 || (PROTO.PROTO_VERSION == 3 && str_bytes.size() > 0):
+					if PROTO_VERSION == 2 || (PROTO_VERSION == 3 && str_bytes.size() > 0):
 						data.append_array(str_bytes)
 						return pack_length_delimeted(type, field.tag, data)
 				if field.type == int(PB_DATA_TYPE.BYTES):
-					if PROTO.PROTO_VERSION == 2 || (PROTO.PROTO_VERSION == 3 && field.value.size() > 0):
+					if PROTO_VERSION == 2 || (PROTO_VERSION == 3 && field.value.size() > 0):
 						data.append_array(field.value)
 						return pack_length_delimeted(type, field.tag, data)
 				elif typeof(field.value) == TYPE_OBJECT:
@@ -531,9 +529,9 @@ class PBPacker:
 
 	static func pack_message(data) -> PackedByteArray:
 		var DEFAULT_VALUES
-		if PROTO.PROTO_VERSION == 2:
+		if PROTO_VERSION == 2:
 			DEFAULT_VALUES = DEFAULT_VALUES_2
-		elif PROTO.PROTO_VERSION == 3:
+		elif PROTO_VERSION == 3:
 			DEFAULT_VALUES = DEFAULT_VALUES_3
 		var result : PackedByteArray = PackedByteArray()
 		var keys : Array = data.keys()
@@ -562,13 +560,13 @@ class PBPacker:
 		for kv in key_values:
 			result[kv.get_key()] = kv.get_value()
 		return result
-
+	
 	static func tabulate(text : String, nesting : int) -> String:
 		var tab : String = ""
 		for _i in range(nesting):
 			tab += DEBUG_TAB
 		return tab + text
-
+	
 	static func value_to_string(value, field : PBField, nesting : int) -> String:
 		var result : String = ""
 		var text : String
@@ -597,7 +595,7 @@ class PBPacker:
 		else:
 			result += String(value)
 		return result
-
+	
 	static func field_to_string(field : PBField, nesting : int) -> String:
 		var result : String = tabulate(field.name + ": ", nesting)
 		if field.type == int(PB_DATA_TYPE.MAP):
@@ -634,12 +632,12 @@ class PBPacker:
 			result += value_to_string(field.value, field, nesting)
 		result += ";\n"
 		return result
-
+		
 	static func message_to_string(data, nesting : int = 0) -> String:
 		var DEFAULT_VALUES
-		if PROTO.PROTO_VERSION == 2:
+		if PROTO_VERSION == 2:
 			DEFAULT_VALUES = DEFAULT_VALUES_2
-		elif PROTO.PROTO_VERSION == 3:
+		elif PROTO_VERSION == 3:
 			DEFAULT_VALUES = DEFAULT_VALUES_3
 		var result : String = ""
 		var keys : Array = data.keys()

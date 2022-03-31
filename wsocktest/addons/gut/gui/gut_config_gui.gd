@@ -92,7 +92,7 @@ func _on_ctrl_value_changed(which):
 	
 	
 func _on_title_cell_draw(which):
-	which.draw_rect(Rect2(Vector2(0, 0), which.size), Color(0, 0, 0, .15))
+	which.draw_rect(Rect2(Vector2(0, 0), which.rect_size), Color(0, 0, 0, .15))
 
 # ------------------
 # Public
