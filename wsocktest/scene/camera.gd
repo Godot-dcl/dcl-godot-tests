@@ -30,8 +30,11 @@ func _input(event):
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
+	if Input.is_action_just_pressed("toggle_third_person_view"):
+		third_person = not third_person
+
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		spring.rotate_x(deg2rad(event.relative.y * mouse_sensitivity * -1))
+		spring.rotate_x(deg2rad(event.relative.y * mouse_sensitivity))
 		rotate_y(deg2rad(event.relative.x * mouse_sensitivity * -1))
 
 		var camera_rot = spring.rotation
@@ -49,11 +52,11 @@ func set_third_person(enabled):
 
 	if enabled:
 		raycast.target_position.z =\
-				-(RAYCAST_DISTANCE + position.distance_to(spring.position))
+				RAYCAST_DISTANCE + position.distance_to(spring.position)
 		$SpringArm3D/Base/Camera.transform.origin.x =\
 				THIRD_PERSON_SHOLDER_DISTANCE
 	else:
-		raycast.target_position.z = -RAYCAST_DISTANCE
+		raycast.target_position.z = RAYCAST_DISTANCE
 		$SpringArm3D/Base/Camera.transform.origin.x = 0
 
 	emit_signal("third_person_changed", enabled)

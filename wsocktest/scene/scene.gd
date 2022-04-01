@@ -18,7 +18,8 @@ var id
 var current_index = -1
 var entities = {
 	"0": get_node("."),
-	"AvatarEntityReference": Server.player.attachable
+	"AvatarEntityReference": Server.player.attachable,
+	"FirstPersonCameraEntityReference": Server.player.first_person_ref,
 }
 var components: Dictionary
 
@@ -212,7 +213,7 @@ func _get_configuration_warnings():
 
 	return warn
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if not _raycast_queue.is_empty():
 		var space_state := get_world_3d().direct_space_state
 		var _raycast_parameters := PhysicsRayQueryParameters3D.new()

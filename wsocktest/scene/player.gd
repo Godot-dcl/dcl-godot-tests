@@ -1,5 +1,6 @@
 extends CharacterBody3D
 
+
 const PARCEL_SIZE = preload("res://scene/scene.gd").parcel_size
 
 @export var god_mode := false
@@ -13,6 +14,7 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var camera_rig = $CameraRig
 @onready var mesh = $MeshInstance3D
 @onready var attachable = $MeshInstance3D/AvatarEntityReference
+@onready var first_person_ref = $MeshInstance3D/ViewAnchor/FirstPersonReference
 @onready var json = JSON.new()
 
 
@@ -28,7 +30,7 @@ func _physics_process(delta):
 		elif Input.is_action_just_pressed("jump"):
 			motion_velocity.y = speed_jump
 	else:
-		var jump_force = speed_jump if Input.is_action_pressed("jump") else 0
+		var jump_force = speed_jump if Input.is_action_pressed("jump") else 0.0
 		jump_force = jump_force * -1 if Input.is_action_pressed("sink") else jump_force
 		motion_velocity.y = jump_force
 
@@ -38,8 +40,8 @@ func _physics_process(delta):
 	if input_vector: # Move accordingly to where the camera is pointing.
 		var cam_xform = camera_rig.get_global_transform()
 		var direction = Vector3()
-		direction += -cam_xform.basis.z * input_vector.y
-		direction += cam_xform.basis.x * input_vector.x
+		direction += cam_xform.basis.z * input_vector.y
+		direction += -cam_xform.basis.x * input_vector.x
 
 		if camera_rig.third_person:
 			mesh.look_at(transform.origin - direction)
@@ -56,9 +58,6 @@ func _physics_process(delta):
 
 		move_and_slide()
 		report_position()
-
-func _process(delta):
-	pass
 
 
 func report_position():
@@ -90,5 +89,14 @@ func current_scene_id():
 
 
 func _on_camera_rig_third_person_changed(enabled):
-	$MeshInstance3D/View.visible = enabled
-	$CameraRig/RemoteTransform3D.update_rotation = !enabled
+	$MeshInstance3D/ViewAnchor/View.visible = enabled
+	$CameraRig/RemoteTransform3D.update_rotation = not enabled
+
+	if first_person_ref == null:
+		await ready
+
+	first_person_ref.get_parent().remove_child(first_person_ref)
+	if enabled:
+		$MeshInstance3D/ViewAnchor.add_child(first_person_ref)
+	else:
+		camera_rig.raycast.add_child(first_person_ref)

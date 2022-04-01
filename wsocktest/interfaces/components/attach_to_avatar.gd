@@ -22,8 +22,10 @@ static func update_component_in_entity(data, entity, _scene):
 		entity.set_meta("AttachToAvatar", remote_transform)
 		remote_transform.remote_path = entity.get_path()
 
-		var avatar = Server.player
+		var avatar = Server.player.mesh
 		avatar.add_child(remote_transform)
+		# Stick it to the avatar's origin.
+		remote_transform.position.y -= avatar.position.y
 
 		if json.has("anchorPointId") and\
 				json.anchorPointId == AnchorPointId.NameTag:
