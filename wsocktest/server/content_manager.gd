@@ -4,9 +4,11 @@ extends Node
 
 var contents : Dictionary
 var available_extensions = ["gltf", "glb", "bin", "png", "mp3", "ogg", "ogv", "webm"]
+var loading_scenes := {}
 
 
-func load_contents(payload):
+func load_contents(scene, payload):
+	var contents_loaded := []
 	for i in range(payload.contents.size()):
 		var content = payload.contents[i]
 		if not contents.has(content.file.to_lower()) and \
@@ -15,6 +17,7 @@ func load_contents(payload):
 			content.thread = Thread.new()
 			content.hash = content.hash.trim_suffix("." + content.file.get_extension())
 			content.base_url = payload.baseUrl
+			content.loaded = false
 
 			contents[content.file.to_lower()] = content
 
@@ -33,6 +36,13 @@ func load_contents(payload):
 				content.thread.start(Callable(self, "cache_file"), content)
 			else:
 				content.thread.start(Callable(self, "download_file"), content)
+
+			contents_loaded.push_back(content)
+
+	if contents_loaded.is_empty():
+		scene.contents_loaded()
+	else:
+		loading_scenes[scene] = contents_loaded
 
 
 func load_external_contents(url):
@@ -137,6 +147,8 @@ func downloaded_bin(_result, response_code, _headers, body, content):
 
 func cache_file(content):
 	var f = content.file.to_lower()
+	contents[f].loaded = true
+
 	if not "asset" in contents[f]:
 		var ext = content.file.get_extension()
 		match ext:
@@ -190,6 +202,18 @@ func cache_file(content):
 
 			_:
 				printerr("Content Manager: Unknown file type for caching " + ext + " - " + str(content))
+
+	for s in loading_scenes.keys():
+		var loaded_contents = true
+		for c in loading_scenes[s]:
+			var file = c.file.to_lower()
+			loaded_contents = loaded_contents and \
+				contents.has(file) and \
+				contents[file].loaded
+
+		if loaded_contents:
+			s.contents_loaded()
+			loading_scenes.erase(s)
 
 
 func get_instance(file_hash):

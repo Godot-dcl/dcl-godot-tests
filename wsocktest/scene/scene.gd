@@ -34,11 +34,11 @@ func create(msg, p_peer, is_global):
 	peer = p_peer
 
 	if msg.payload.contents.size() > 0:
-		ContentManager.load_contents(msg.payload)
+		ContentManager.load_contents(self, msg.payload)
 		transform.origin = Vector3(msg.payload.basePosition.x, 0, msg.payload.basePosition.y) * parcel_size
 
-	# TODO: this should be called after all contents are loaded
-	await Server.get_tree().create_timer(2).timeout
+
+func contents_loaded():
 	var response = {"eventType":"SceneReady", "payload": {"sceneId": id}}
 	Server.send({"type": "ControlEvent", "payload": json.stringify(response)}, peer)
 
