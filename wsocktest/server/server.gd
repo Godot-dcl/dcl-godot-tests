@@ -25,6 +25,7 @@ var httprequests = []
 var loading_screen : Control
 
 var player : Node3D
+var world_root : Node3D
 
 var json
 
@@ -134,7 +135,7 @@ func create_scene(msg, peer, p_global):
 	scene.set_name(msg.payload.id)
 
 	if not Engine.is_editor_hint():
-		get_tree().root.add_child(scene)
+		world_root.add_child(scene)
 	scene.create(msg, peer, true)
 
 	if p_global:

@@ -13,9 +13,6 @@ script = ExtResource( "1" )
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Crosshair" type="TextureRect" parent="Control"]
 visible = false
@@ -69,4 +66,7 @@ __meta__ = {
 [node name="DebugInfo" parent="Control" instance=ExtResource( "3" )]
 theme_override_constants/margin_right = 20
 
-[node name="Player" parent="." instance=ExtResource( "5_c5jqn" )]
+[node name="world_root" type="Node3D" parent="."]
+top_level = true
+
+[node name="Player" parent="world_root" instance=ExtResource( "5_c5jqn" )]

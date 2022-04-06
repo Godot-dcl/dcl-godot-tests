@@ -14,8 +14,10 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var mesh = $MeshInstance3D
 @onready var json = JSON.new()
 
+var world_root : Node3D
 
 func _ready():
+	world_root = get_parent()
 	_on_camera_rig_third_person_changed(camera_rig.third_person)
 	camera_rig.add_raycast_exception(self)
 
@@ -35,7 +37,7 @@ func _physics_process(delta):
 
 	if input_vector: # Move accordingly to where the camera is pointing.
 		var cam_xform = camera_rig.get_global_transform()
-		var direction = Vector3()
+		var direction = Vector3() 
 		direction += -cam_xform.basis.z * input_vector.y
 		direction += cam_xform.basis.x * input_vector.x
 
@@ -54,7 +56,7 @@ func _physics_process(delta):
 func _process(delta):
 	if camera_rig.third_person:
 		if motion_velocity:
-			mesh.look_at(transform.origin - motion_velocity, Vector3.UP)
+			mesh.look_at(global_transform.origin - motion_velocity, Vector3.UP)
 			mesh.rotation.x = 0
 
 
@@ -62,7 +64,7 @@ func report_position():
 	var rot = transform.basis.get_rotation_quaternion()
 	var response = {
 		"position": {
-			"x": transform.origin.x,
+			"x": -transform.origin.x,
 			"y": transform.origin.y,
 			"z": transform.origin.z
 		},

@@ -10,9 +10,15 @@ const ActionsMap = {
 
 var last_hovered_event
 
+func _adjust_world_root():
+	pass
+	#$world_root.transform = Transform3D().scaled(Vector3(-1, 1, 1))
+
 func _ready():
 	Server.loading_screen = $Control/Loading
-	Server.player = $Player
+	Server.player = $world_root/Player
+	Server.world_root = $world_root
+	_adjust_world_root()
 
 	EventManager.connect("entity_hover_changed", Callable(self, "_on_entity_hovered_changed"))
 
