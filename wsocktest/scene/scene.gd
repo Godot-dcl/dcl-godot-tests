@@ -261,12 +261,12 @@ func _physics_process(_delta):
 							},
 							"didHit": true,
 							"hitPoint": {
-								"x": result.position.x,
+								"x": -result.position.x,
 								"y": result.position.y,
 								"z": result.position.z,
 							},
 							"hitNormal": {
-								"x": result.normal.x,
+								"x": -result.normal.x,
 								"y": result.normal.y,
 								"z": result.normal.z,
 							},
@@ -277,4 +277,4 @@ func _physics_process(_delta):
 			Server.send({"type": "SceneEvent", "payload": json.stringify(response)})
 
 func rayQueryVector(v) -> Vector3:
-	return Vector3(v.get_x(), v.get_y(), v.get_z())
+	return Vector3(-v.get_x(), v.get_y(), v.get_z())

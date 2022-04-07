@@ -18,10 +18,10 @@ static func update_component_in_entity(data, entity, _scene):
 		var q = Quaternion(
 			rot.get_x(),
 			rot.get_y(),
-			rot.get_z(),
+			-rot.get_z(),
 			rot.get_w()
 		)
 		entity.transform = Transform3D(q).scaled(Vector3(sca.get_x(), sca.get_y(), sca.get_z()))
-		entity.transform.origin = Vector3(pos.get_x(), pos.get_y(), pos.get_z())
+		entity.transform.origin = Vector3(-pos.get_x(), pos.get_y(), pos.get_z())
 	else:
 		push_warning("****** error decoding PB_Transform payload %s" % err)

@@ -64,14 +64,14 @@ func report_position():
 	var rot = transform.basis.get_rotation_quaternion()
 	var response = {
 		"position": {
-			"x": transform.origin.x,
+			"x": -transform.origin.x,
 			"y": transform.origin.y,
 			"z": transform.origin.z
 		},
 		"rotation": {
 			"x": rot.x,
 			"y": rot.y,
-			"z": rot.z,
+			"z": -rot.z,
 			"w": rot.w
 		},
 		"playerHeight": height
